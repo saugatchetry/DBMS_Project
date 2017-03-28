@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-route.min.js"></script>
+<script>
+
+var app = angular.module('myApp', ['ngRoute']);
+app.controller("myCtrl", function($scope, $http) {
+	$scope.currentPage = 1;
+	$scope.myWelcome = undefined;
+	
+	$scope.backPage = function() {
+		$scope.pageSelect = 1;
+	}
+
+	$scope.loginUser = function(){
+		$http({
+	        method : "POST",
+	        url : "secondPage",
+	        data : {
+	        	'emailId' : $scope.emailId,
+	        	'password' : $scope.password
+	        }
+	    }).then(function(response) {
+        	$scope.user = response.data;
+        	console.log($scope.myWelcome);
+        	$scope.pageSelect = 2;
+    	});
+}
+});
+</script>
+<link rel="stylesheet" type="text/css" href="style/loginModal.css">
+</head>
+<body ng-app="myApp" ng-controller="myCtrl" >
+<div class="container">
+
+<a href="#" data-toggle="modal" data-target="#login-modal">Login</a>
+<div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    	  <div class="modal-dialog">
+				<div class="loginmodal-container">
+					<h1>Login to Your Account</h1><br>
+				  <form>
+					<input type="text" name="user" placeholder="Username" data-ng-model="emailId">
+					<input type="password" name="pass" placeholder="Password" data-ng-model="password">
+					<input type="submit" name="login" class="login loginmodal-submit" value="Login" ng-click = "loginUser();">
+				  </form>
+					
+				  <div class="login-help">
+					<a href="#">Register</a> - <a href="#">Forgot Password</a>
+				  </div>
+				</div>
+			</div>
+		  </div>
+</div>
+</body>
+</html>
