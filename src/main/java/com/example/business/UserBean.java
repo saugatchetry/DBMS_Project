@@ -16,5 +16,9 @@ public class UserBean {
 	public User getUser(User user) {
 		return userDAO.getUser(user);
 	}
+	
+	public User insertUser(User user){
+		return userDAO.insertUser(user);
+	}
 
 }

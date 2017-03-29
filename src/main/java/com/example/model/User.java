@@ -1,6 +1,7 @@
 package com.example.model;
 
 public class User {
+	
 	private String id;
 	private String firstName;
 	private String lastName;
@@ -44,5 +45,10 @@ public class User {
 		this.password = password;
 	}
 	
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", phoneNumber=" + phoneNumber
+				+ ", emailId=" + emailId + ", password=" + password + "]";
+	}
 	
 }

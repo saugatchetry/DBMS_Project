@@ -13,11 +13,18 @@ import com.example.model.User;
 @RestController
 class DemoController2{
 	
-	@RequestMapping(value = "/secondPage",method=RequestMethod.POST, consumes="application/json",produces="application/json")
+	ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationcontext.xml");
+	UserBean userBean = (UserBean) applicationContext.getBean("userBean");
+	
+	@RequestMapping(value = "/login",method=RequestMethod.POST, consumes="application/json",produces="application/json")
 	public User secondPage(@RequestBody User user){
-		ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationcontext.xml");
-		UserBean userBean = (UserBean) applicationContext.getBean("userBean");
 		User userOutput = userBean.getUser(user);
+		return userOutput;
+	}
+	
+	@RequestMapping(value = "/signUp",method=RequestMethod.POST, consumes="application/json",produces="application/json")
+	public User signUp(@RequestBody User user){
+		User userOutput = userBean.insertUser(user);
 		return userOutput;
 	}
 }
