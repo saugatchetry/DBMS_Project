@@ -25,6 +25,7 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
 
+	<link href="style/app.css" rel="stylesheet">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -63,9 +64,17 @@ app.controller('myCtrl', ['$scope', '$http', function($scope, $http) {
 	        }
 	    }).then(function(response) {
         	$scope.user = response.data;
-        	console.log($scope.user);
-        	$scope.loginModal = false;
-        	$scope.loginStatus  = true;
+        	if($scope.user.statusCode == 1){
+        		console.log($scope.user);
+        		$scope.loginError = undefined;
+        		$scope.loginModal = false;
+        		$scope.loginStatus  = true;
+        	}
+        	else{
+        		$scope.loginError = $scope.user.errorMessage;
+        		$scope.loginStatus  = false;
+        		$scope.loginModal = false;
+        	}
     	});
 	}
 		$scope.signUp = function(){
@@ -90,7 +99,79 @@ app.controller('myCtrl', ['$scope', '$http', function($scope, $http) {
 			$scope.loginStatus = false;
 			$scope.user = undefined;
 		}
+		
+		/* $scope.getPopularProperties(){
+			$http({
+				method : "POST",
+				url: "getPopularProperties"
+			}).then(function(response){
+				$scope.properties = response.data;
+			})
+		} */
 
+
+		$scope.properties = [
+			{
+				image : 'cabin.png',
+				yearBuilt : '2010',
+				sqFt : '1520',
+				price :"145000",
+				bedrooms : "2",
+				bathrooms : "1.5",
+				floors : "2"
+			},
+			{
+				image : 'cake.png',
+				yearBuilt : '1993',
+				sqFt : '2000',
+				price :"300000",
+				bedrooms : "3",
+				bathrooms : "2",
+				floors : "1"
+			},
+			{
+				image : 'circus.png',
+				yearBuilt : '1990',
+				sqFt : '1000',
+				price :"100000",
+				bedrooms : "2",
+				bathrooms : "1",
+				floors : "2"
+			},
+			{
+				image : 'game.png',
+				yearBuilt : '2001',
+				sqFt : '750',
+				price :"150000",
+				bedrooms : "3",
+				bathrooms : "2",
+				floors : "1"
+			},{
+				image : 'safe.png',
+				yearBuilt : '2009',
+				sqFt : '1000',
+				price :"200000",
+				bedrooms : "2",
+				bathrooms : "2",
+				floors : "2"
+			},
+			{
+				image : 'submarine.png',
+				yearBuilt : '1980',
+				sqFt : '1000000',
+				price :"200000",
+				bedrooms : "2",
+				bathrooms : "2",
+				floors : "3"
+			}
+		];
+				
+		$scope.setProperty = function(index){
+			console.log(index);
+			$scope.property = $scope.properties[index];
+			console.log($scope.property);
+		}
+		
 }]);
 </script>
 </head>
@@ -153,9 +234,10 @@ app.controller('myCtrl', ['$scope', '$http', function($scope, $http) {
 			  <form name = "loginForm">
 				<input type="text" name="user" placeholder="Username" data-ng-model="emailId" ng-required>
 				<input type="password" name="pass" placeholder="Password" data-ng-model="password" ng-required>
+				<div class="login-error" ng-show="">Login Unsuccessful!</div> 
 				<input type="button" name="login" class="login loginmodal-submit" value="Login" ng-click = "loginUser();" ng-disabled="loginForm.$invalid" >
 			  </form>
-				
+			  	
 			  <div class="login-help">
 				<a href="#">Register</a> - <a href="#">Forgot Password</a>
 			  </div>
@@ -168,7 +250,7 @@ app.controller('myCtrl', ['$scope', '$http', function($scope, $http) {
         <div class="container" id="maincontent" tabindex="-1">
             <div class="row">
                 <div class="col-lg-12">
-                    <img class="img-responsive" src="img/profile.png" alt="">
+                    <img class="img-responsive" ng-src="img/profile.png" alt="">
                     <div class="intro-text">
                         <h1 class="name">GharWaale.com</h1>
                         <hr class="star-light">
@@ -179,7 +261,7 @@ app.controller('myCtrl', ['$scope', '$http', function($scope, $http) {
         </div>
     </header>
 
-    <!-- Portfolio Grid Section -->
+    <!-- Property Grid Section -->
     <section id="portfolio">
         <div class="container">
             <div class="row">
@@ -189,65 +271,19 @@ app.controller('myCtrl', ['$scope', '$http', function($scope, $http) {
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-4 portfolio-item">
-                    <a href="#portfolioModal1" class="portfolio-link" data-toggle="modal">
-                        <div class="caption">
-                            <div class="caption-content">
-                                <i class="fa fa-search-plus fa-3x"></i>
-                            </div>
-                        </div>
-                        <img src="img/portfolio/cabin.png" class="img-responsive" alt="Cabin">
-                    </a>
-                </div>
-                <div class="col-sm-4 portfolio-item">
-                    <a href="#portfolioModal2" class="portfolio-link" data-toggle="modal">
-                        <div class="caption">
-                            <div class="caption-content">
-                                <i class="fa fa-search-plus fa-3x"></i>
-                            </div>
-                        </div>
-                        <img src="img/portfolio/cake.png" class="img-responsive" alt="Slice of cake">
-                    </a>
-                </div>
-                <div class="col-sm-4 portfolio-item">
-                    <a href="#portfolioModal3" class="portfolio-link" data-toggle="modal">
-                        <div class="caption">
-                            <div class="caption-content">
-                                <i class="fa fa-search-plus fa-3x"></i>
-                            </div>
-                        </div>
-                        <img src="img/portfolio/circus.png" class="img-responsive" alt="Circus tent">
-                    </a>
-                </div>
-                <div class="col-sm-4 portfolio-item">
-                    <a href="#portfolioModal4" class="portfolio-link" data-toggle="modal">
-                        <div class="caption">
-                            <div class="caption-content">
-                                <i class="fa fa-search-plus fa-3x"></i>
-                            </div>
-                        </div>
-                        <img src="img/portfolio/game.png" class="img-responsive" alt="Game controller">
-                    </a>
-                </div>
-                <div class="col-sm-4 portfolio-item">
-                    <a href="#portfolioModal5" class="portfolio-link" data-toggle="modal">
-                        <div class="caption">
-                            <div class="caption-content">
-                                <i class="fa fa-search-plus fa-3x"></i>
-                            </div>
-                        </div>
-                        <img src="img/portfolio/safe.png" class="img-responsive" alt="Safe">
-                    </a>
-                </div>
-                <div class="col-sm-4 portfolio-item">
-                    <a href="#portfolioModal6" class="portfolio-link" data-toggle="modal">
-                        <div class="caption">
-                            <div class="caption-content">
-                                <i class="fa fa-search-plus fa-3x"></i>
-                            </div>
-                        </div>
-                        <img src="img/portfolio/submarine.png" class="img-responsive" alt="Submarine">
-                    </a>
+            	<div ng-repeat="property in properties ">
+	                <div class="col-sm-4 portfolio-item">
+	                    <a href="#portfolioModal" class="portfolio-link" data-toggle="modal" ng-click="setProperty($index)">
+	                        <div class="caption">
+	                            <div class="caption-content text-left">
+	                            	<i class="fa fa-bed"> {{property.bedrooms}}</i><br>
+	                           		<i class="fa fa-dollar"> {{property.price}}</i><br>
+	                            	
+	                            </div>
+	                        </div>
+	                        <img src="img/portfolio/{{property.image}}" class="img-responsive" >
+	                    </a>
+	                </div>
                 </div>
             </div>
         </div>
@@ -392,36 +428,41 @@ app.controller('myCtrl', ['$scope', '$http', function($scope, $http) {
     </div>
 
     <!-- Portfolio Modals -->
-    <div class="portfolio-modal modal fade" id="portfolioModal1" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-content">
-            <div class="close-modal" data-dismiss="modal">
-                <div class="lr">
-                    <div class="rl">
-                    </div>
-                </div>
-            </div>
+    <div class="portfolio-modal modal fade" id="portfolioModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-content" style="padding:20px">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-8 col-lg-offset-2">
                         <div class="modal-body">
-                            <h2>Project Title</h2>
-                            <hr class="star-primary">
-                            <img src="img/portfolio/cabin.png" class="img-responsive img-centered" alt="">
-                            <p>Use this area of the page to describe your project. The icon above is part of a free icon set by <a href="https://sellfy.com/p/8Q9P/jV3VZ/">Flat Icons</a>. On their website, you can download their free set with 16 icons, or you can purchase the entire set with 146 icons for only $12!</p>
+                            <img ng-src="img/portfolio/{{property.image}}" class="img-responsive img-centered" style="width:75%;height:75%;" alt="">
+                            <p>{{property.description}}</p>
                             <ul class="list-inline item-details">
-                                <li>Client:
-                                    <strong><a href="http://startbootstrap.com">Start Bootstrap</a>
+                                <li>Year Built:
+                                    <strong>{{property.yearBuilt}}
                                     </strong>
                                 </li>
-                                <li>Date:
-                                    <strong><a href="http://startbootstrap.com">April 2014</a>
+                                <li>Sq. Ft:
+                                    <strong>{{property.sqFt}}
                                     </strong>
                                 </li>
-                                <li>Service:
-                                    <strong><a href="http://startbootstrap.com">Web Development</a>
+                                <li>Price:
+                                    <strong>{{property.price}}
+                                    </strong>
+                                </li>
+                                <li>Bedrooms:
+                                    <strong>{{property.bedrooms}}
+                                    </strong>
+                                </li>
+                                <li>Bathrooms:
+                                    <strong>{{property.bathrooms}}
+                                    </strong>
+                                </li>
+                                <li>Floors:
+                                    <strong>{{property.floors}}
                                     </strong>
                                 </li>
                             </ul>
+                            <button type="button" class="btn btn-success" data-dismiss="modal"><i class="fa fa-check"></i> Buy</button>
                             <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
                         </div>
                     </div>
