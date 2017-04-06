@@ -8,6 +8,21 @@ public class User {
 	private String phoneNumber;
 	private String emailId;
 	private String password;
+	private int errorStatus; //0 is error 1 is success
+	private String errorMessage;
+	
+	public int getErrorStatus() {
+		return errorStatus;
+	}
+	public void setErrorStatus(int errorStatus) {
+		this.errorStatus = errorStatus;
+	}
+	public String getErrorMessage() {
+		return errorMessage;
+	}
+	public void setErrorMessage(String errorMessage) {
+		this.errorMessage = errorMessage;
+	}
 	public String getId() {
 		return id;
 	}
@@ -44,6 +59,8 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
+	
 	
 	@Override
 	public String toString() {

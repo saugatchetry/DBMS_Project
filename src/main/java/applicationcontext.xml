@@ -10,9 +10,18 @@
     <bean id="userBean" class="com.example.business.UserBean">
         <property name="userDAO" ref="userDAO" />
     </bean>
+    
+    <bean id="propertyBean" class="com.example.business.PropertyBean">
+        <property name="propertyDAO" ref="propertyDAO" />
+    </bean>
     <bean id="userDAO" class="com.example.DAO.UserDAOImpl">
         <property name="jdbcTemplate" ref="jdbcTemplate" />
         <property name="keyGenerator" ref="keyGenerator" />
+    </bean>
+    
+    <bean id="propertyDAO" class="com.example.DAO.PropertyDAOImpl">
+        <property name="jdbcTemplate" ref="jdbcTemplate" />
+        
     </bean>
     <bean id="keyGenerator" class="com.example.KeyGenerator">
     	<property name="jdbcTemplate" ref="jdbcTemplate" />
