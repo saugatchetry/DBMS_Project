@@ -1,12 +1,28 @@
 package com.example.model;
 
 public class User {
+	
 	private String id;
 	private String firstName;
 	private String lastName;
 	private String phoneNumber;
 	private String emailId;
 	private String password;
+	private int errorStatus; //0 is error 1 is success
+	private String errorMessage;
+	
+	public int getErrorStatus() {
+		return errorStatus;
+	}
+	public void setErrorStatus(int errorStatus) {
+		this.errorStatus = errorStatus;
+	}
+	public String getErrorMessage() {
+		return errorMessage;
+	}
+	public void setErrorMessage(String errorMessage) {
+		this.errorMessage = errorMessage;
+	}
 	public String getId() {
 		return id;
 	}
@@ -44,5 +60,12 @@ public class User {
 		this.password = password;
 	}
 	
+	
+	
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", phoneNumber=" + phoneNumber
+				+ ", emailId=" + emailId + ", password=" + password + "]";
+	}
 	
 }

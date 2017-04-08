@@ -10,8 +10,15 @@
     <meta name="author" content="">
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-route.min.js"></script>
+	
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
+	<script src="js/dist/angular-chart.js"></script>
+  	<!-- <script src="js/dist/angular-chart.min.js"></script> -->
+	
     <title>Home</title>
-
+    
+	<script src="js/angular-ui-bootstrap-modal.js"></script>
     <!-- Bootstrap Core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
@@ -32,9 +39,8 @@
 	<link rel="stylesheet" type="text/css" href="style/loginModal.css">
 	<script>
 
-var app = angular.module('myApp', ['ngRoute']);
-app.controller("myCtrl", function($scope, $http) {
-	$scope.currentPage = 1;
+var app = angular.module('myApp', ['ui.bootstrap.modal','chart.js']);
+app.controller('myCtrl', ['$scope', '$http', function($scope, $http) {
 	$scope.user = undefined;
 	$scope.loginStatus  = false;
 	
@@ -42,26 +48,65 @@ app.controller("myCtrl", function($scope, $http) {
 		$scope.pageSelect = 1;
 	}
 
+	$scope.openLoginModal = function(){
+		$scope.loginModal = true;
+		
+	}
+	
+	$scope.openSignUpModal = function(){
+		$scope.signUpModal = true;
+		
+	}
+	
 	$scope.loginUser = function(){
 		$http({
 	        method : "POST",
-	        url : "secondPage",
+	        url : "login",
 	        data : {
 	        	'emailId' : $scope.emailId,
 	        	'password' : $scope.password
 	        }
 	    }).then(function(response) {
         	$scope.user = response.data;
-        	console.log($scope.myWelcome);
-        	$scope.loginStatus  = true;
+        	console.log($scope.user);
+        	if($scope.user.emailId != null && $scope.user.emailId != undefined){
+	        	$scope.loginModal = false;
+	        	$scope.loginStatus  = true;
+        	}
     	});
+	}
+		$scope.signUp = function(){
+			$http({
+		        method : "POST",
+		        url : "signUp",
+		        data : {
+		        	'firstName' : $scope.firstName,
+		        	'lastName' : $scope.lastName,
+		        	'phoneNumber' : $scope.phoneNumber,
+		        	'emailId' : $scope.emailId,
+		        	'password' : $scope.password
+		        }
+		    }).then(function(response) {
+	        	$scope.user = response.data;
+	        	$scope.signUpModal = false;
+	        	$scope.loginStatus  = true;
+	    	});
+		}
 		
 		$scope.logoutUser = function(){
 			$scope.loginStatus = false;
 			$scope.user = undefined;
 		}
-}
-});
+		
+		$scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
+		$scope.series = ['Series A', 'Series B'];
+		$scope.data = [
+		    [65, 59, 80, 81, 56, 55, 40],
+		    [28, 48, 40, 19, 86, 27, 90]
+		  ];
+		$scope.colors=["#FF5733","#1DD50E"];
+
+}]);
 </script>
 </head>
 
@@ -86,10 +131,10 @@ app.controller("myCtrl", function($scope, $http) {
                         <a href="#page-top"></a>
                     </li>
                     <li class="page-scroll">
-                        <a href="#" data-toggle="modal" data-target="#login-modal">Login</a>
+                        <a href="#" ng-click="openLoginModal();">Login</a>
                     </li>
                     <li class="page-scroll">
-                        <a href="#contact">Sign Up</a>
+                        <a href="#" ng-click="openSignUpModal();">Sign Up</a>
                     </li>
                     <li class="page-scroll">
                         <a href="#about">About</a>
@@ -114,28 +159,25 @@ app.controller("myCtrl", function($scope, $http) {
         </div>
         <!-- /.container-fluid -->
     </nav>
-<div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
 
-    	  <div class="modal-dialog">
-    	  
-				<div class="loginmodal-container">
+	<div class="modal fade" modal="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+   	  <div class="modal-dialog">
+   		<div class="loginmodal-container">
+	   		<button type="button" class="close" ng-click="loginModal = false">&times;</button>
+       		<h1>Login</h1><br>
+			  <form name = "loginForm">
+				<input type="text" name="user" placeholder="Username" data-ng-model="emailId" ng-required>
+				<input type="password" name="pass" placeholder="Password" data-ng-model="password" ng-required>
+				<input type="button" name="login" class="login loginmodal-submit" value="Login" ng-click = "loginUser();" ng-disabled="loginForm.$invalid" >
+			  </form>
 				
-        		<button type="button" class="close" data-dismiss="modal">&times;</button>
-        
-      
-					<h1>Login</h1><br>
-				  <form>
-					<input type="text" name="user" placeholder="Username" data-ng-model="emailId" ng-required>
-					<input type="password" name="pass" placeholder="Password" data-ng-model="password" ng-required>
-					<input type="button" name="login" class="login loginmodal-submit" value="Login" ng-click = "loginUser();" >
-				  </form>
-					
-				  <div class="login-help">
-					<a href="#">Register</a> - <a href="#">Forgot Password</a>
-				  </div>
-				</div>
+			  <div class="login-help">
+				<a href="#">Register</a> - <a href="#">Forgot Password</a>
+			  </div>
 			</div>
-		  </div>
+		</div>
+	  </div>
+
     <!-- Header -->
     <header>
         <div class="container" id="maincontent" tabindex="-1">
@@ -226,6 +268,29 @@ app.controller("myCtrl", function($scope, $http) {
         </div>
     </section>
 
+
+	<!-- Charts section --> 
+	
+	<section id="charts">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2>Charts</h2>
+                    <hr class="star-primary">
+                </div>
+            </div>
+            <div class="row">
+               
+                <canvas id="pie" class="chart chart-pie"
+  						chart-data="data" chart-labels="labels" chart-colors="colors" chart-options="options">
+				</canvas> 
+                
+            
+            </div>
+        </div>
+    </section>
+
+
     <!-- About Section -->
     <section class="success" id="about">
         <div class="container">
@@ -250,61 +315,67 @@ app.controller("myCtrl", function($scope, $http) {
     </section>
 
     <!-- Contact Section -->
-    <section id="contact">
-        <div class="container">
-            <div class="row">
+    <div class="modal fade" modal="signUpModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+   	  <div class="modal-dialog ">
+        <div class="loginmodal-container">
+        <button type="button" class="close" ng-click="signUpModal = false">&times;</button>
+         
                 <div class="col-lg-12 text-center">
                     <h2>Sign Up</h2>
                     <hr class="star-primary">
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-8 col-lg-offset-2">
+           
+            
+                
                     <!-- To configure the contact form email address, go to mail/contact_me.php and update the email address in the PHP file on line 19. -->
                     <!-- The form should work on most web servers, but if the form is not working you may need to configure your web server differently. -->
                     <form name="sentMessage" id="contactForm" novalidate>
                         <div class="row control-group">
                             <div class="form-group col-xs-12 floating-label-form-group controls">
-                                <label for="name">Name</label>
-                                <input type="text" class="form-control" placeholder="Name" id="name" required data-validation-required-message="Please enter your name.">
+                                <label for="firstName">First Name</label>
+                                <input type="text" class="form-control" placeholder="First Name" id="firstName" data-ng-model="firstName" required data-validation-required-message="Please enter your first name.">
+                                <p class="help-block text-danger"></p>
+                            </div>
+                        </div>
+                        <div class="row control-group">
+                            <div class="form-group col-xs-12 floating-label-form-group controls">
+                                <label for="lastName">Last Name</label>
+                                <input type="text" class="form-control" placeholder="Last Name" id="lastName"  data-ng-model="lastName" required data-validation-required-message="Please enter your last name.">
                                 <p class="help-block text-danger"></p>
                             </div>
                         </div>
                         <div class="row control-group">
                             <div class="form-group col-xs-12 floating-label-form-group controls">
                                 <label for="phone">Phone Number</label>
-                                <input type="tel" class="form-control" placeholder="Phone Number" id="phone" required data-validation-required-message="Please enter your phone number.">
+                                <input type="tel" class="form-control" placeholder="Phone Number" id="phone"  data-ng-model="phoneNumber" required data-validation-required-message="Please enter your phone number.">
                                 <p class="help-block text-danger"></p>
                             </div>
                         </div>
                         <div class="row control-group">
                             <div class="form-group col-xs-12 floating-label-form-group controls">
                                 <label for="email">Email Address</label>
-                                <input type="email" class="form-control" placeholder="Email Address" id="email" required data-validation-required-message="Please enter your email address.">
+                                <input type="email" class="form-control" placeholder="Email Address" id="email"  data-ng-model="emailId" required data-validation-required-message="Please enter your email address.">
                                 <p class="help-block text-danger"></p>
                             </div>
                         </div>
                         <div class="row control-group">
                             <div class="form-group col-xs-12 floating-label-form-group controls">
-                                <label for="email">Password</label>
-                                <input type="email" class="form-control" placeholder="Password" id="password" required data-validation-required-message="Please enter your password.">
+                                <label for="password">Password</label>
+                                <input type="password" class="form-control" placeholder="Password" id="password"  data-ng-model="password" required data-validation-required-message="Please enter your password.">
                                 <p class="help-block text-danger"></p>
                             </div>
                         </div>
-                        
-                        
                         <br>
-                        <div id="success"></div>
-                        <div class="row">
-                            <div class="form-group col-xs-12">
-                                <button type="submit" class="btn btn-success btn-lg">Sign Up</button>
+                        <div class="form-group col-xs-12">
+                                <button type="submit" class="btn btn-success btn-lg" ng-click="signUp();">Sign Up</button>
                             </div>
-                        </div>
+                        
                     </form>
                 </div>
             </div>
         </div>
-    </section>
+    
+    
 
     <!-- Footer -->
     <footer class="text-center">
@@ -396,191 +467,7 @@ app.controller("myCtrl", function($scope, $http) {
             </div>
         </div>
     </div>
-    <div class="portfolio-modal modal fade" id="portfolioModal2" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-content">
-            <div class="close-modal" data-dismiss="modal">
-                <div class="lr">
-                    <div class="rl">
-                    </div>
-                </div>
-            </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-8 col-lg-offset-2">
-                        <div class="modal-body">
-                            <h2>Project Title</h2>
-                            <hr class="star-primary">
-                            <img src="img/portfolio/cake.png" class="img-responsive img-centered" alt="">
-                            <p>Use this area of the page to describe your project. The icon above is part of a free icon set by <a href="https://sellfy.com/p/8Q9P/jV3VZ/">Flat Icons</a>. On their website, you can download their free set with 16 icons, or you can purchase the entire set with 146 icons for only $12!</p>
-                            <ul class="list-inline item-details">
-                                <li>Client:
-                                    <strong><a href="http://startbootstrap.com">Start Bootstrap</a>
-                                    </strong>
-                                </li>
-                                <li>Date:
-                                    <strong><a href="http://startbootstrap.com">April 2014</a>
-                                    </strong>
-                                </li>
-                                <li>Service:
-                                    <strong><a href="http://startbootstrap.com">Web Development</a>
-                                    </strong>
-                                </li>
-                            </ul>
-                            <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="portfolio-modal modal fade" id="portfolioModal3" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-content">
-            <div class="close-modal" data-dismiss="modal">
-                <div class="lr">
-                    <div class="rl">
-                    </div>
-                </div>
-            </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-8 col-lg-offset-2">
-                        <div class="modal-body">
-                            <h2>Project Title</h2>
-                            <hr class="star-primary">
-                            <img src="img/portfolio/circus.png" class="img-responsive img-centered" alt="">
-                            <p>Use this area of the page to describe your project. The icon above is part of a free icon set by <a href="https://sellfy.com/p/8Q9P/jV3VZ/">Flat Icons</a>. On their website, you can download their free set with 16 icons, or you can purchase the entire set with 146 icons for only $12!</p>
-                            <ul class="list-inline item-details">
-                                <li>Client:
-                                    <strong><a href="http://startbootstrap.com">Start Bootstrap</a>
-                                    </strong>
-                                </li>
-                                <li>Date:
-                                    <strong><a href="http://startbootstrap.com">April 2014</a>
-                                    </strong>
-                                </li>
-                                <li>Service:
-                                    <strong><a href="http://startbootstrap.com">Web Development</a>
-                                    </strong>
-                                </li>
-                            </ul>
-                            <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="portfolio-modal modal fade" id="portfolioModal4" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-content">
-            <div class="close-modal" data-dismiss="modal">
-                <div class="lr">
-                    <div class="rl">
-                    </div>
-                </div>
-            </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-8 col-lg-offset-2">
-                        <div class="modal-body">
-                            <h2>Project Title</h2>
-                            <hr class="star-primary">
-                            <img src="img/portfolio/game.png" class="img-responsive img-centered" alt="">
-                            <p>Use this area of the page to describe your project. The icon above is part of a free icon set by <a href="https://sellfy.com/p/8Q9P/jV3VZ/">Flat Icons</a>. On their website, you can download their free set with 16 icons, or you can purchase the entire set with 146 icons for only $12!</p>
-                            <ul class="list-inline item-details">
-                                <li>Client:
-                                    <strong><a href="http://startbootstrap.com">Start Bootstrap</a>
-                                    </strong>
-                                </li>
-                                <li>Date:
-                                    <strong><a href="http://startbootstrap.com">April 2014</a>
-                                    </strong>
-                                </li>
-                                <li>Service:
-                                    <strong><a href="http://startbootstrap.com">Web Development</a>
-                                    </strong>
-                                </li>
-                            </ul>
-                            <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="portfolio-modal modal fade" id="portfolioModal5" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-content">
-            <div class="close-modal" data-dismiss="modal">
-                <div class="lr">
-                    <div class="rl">
-                    </div>
-                </div>
-            </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-8 col-lg-offset-2">
-                        <div class="modal-body">
-                            <h2>Project Title</h2>
-                            <hr class="star-primary">
-                            <img src="img/portfolio/safe.png" class="img-responsive img-centered" alt="">
-                            <p>Use this area of the page to describe your project. The icon above is part of a free icon set by <a href="https://sellfy.com/p/8Q9P/jV3VZ/">Flat Icons</a>. On their website, you can download their free set with 16 icons, or you can purchase the entire set with 146 icons for only $12!</p>
-                            <ul class="list-inline item-details">
-                                <li>Client:
-                                    <strong><a href="http://startbootstrap.com">Start Bootstrap</a>
-                                    </strong>
-                                </li>
-                                <li>Date:
-                                    <strong><a href="http://startbootstrap.com">April 2014</a>
-                                    </strong>
-                                </li>
-                                <li>Service:
-                                    <strong><a href="http://startbootstrap.com">Web Development</a>
-                                    </strong>
-                                </li>
-                            </ul>
-                            <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="portfolio-modal modal fade" id="portfolioModal6" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-content">
-            <div class="close-modal" data-dismiss="modal">
-                <div class="lr">
-                    <div class="rl">
-                    </div>
-                </div>
-            </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-8 col-lg-offset-2">
-                        <div class="modal-body">
-                            <h2>Project Title</h2>
-                            <hr class="star-primary">
-                            <img src="img/portfolio/submarine.png" class="img-responsive img-centered" alt="">
-                            <p>Use this area of the page to describe your project. The icon above is part of a free icon set by <a href="https://sellfy.com/p/8Q9P/jV3VZ/">Flat Icons</a>. On their website, you can download their free set with 16 icons, or you can purchase the entire set with 146 icons for only $12!</p>
-                            <ul class="list-inline item-details">
-                                <li>Client:
-                                    <strong><a href="http://startbootstrap.com">Start Bootstrap</a>
-                                    </strong>
-                                </li>
-                                <li>Date:
-                                    <strong><a href="http://startbootstrap.com">April 2014</a>
-                                    </strong>
-                                </li>
-                                <li>Service:
-                                    <strong><a href="http://startbootstrap.com">Web Development</a>
-                                    </strong>
-                                </li>
-                            </ul>
-                            <button id="btnSubmit" type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    
 
     <!-- jQuery -->
     <script src="vendor/jquery/jquery.min.js"></script>
@@ -597,7 +484,10 @@ app.controller("myCtrl", function($scope, $http) {
 
     <!-- Theme JavaScript -->
     <script src="js/freelancer.min.js"></script>
-
+    
+    <!-- Chart JS -->
+   
+    
 </body>
 
 </html>
