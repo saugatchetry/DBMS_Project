@@ -19,5 +19,8 @@ class DemoController2{
 		UserBean userBean = (UserBean) applicationContext.getBean("userBean");
 		User userOutput = userBean.getUser(user);
 		return userOutput;
+		
+		
+		/*anitha ranganathan*/
 	}
 }
