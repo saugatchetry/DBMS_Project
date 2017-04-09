@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.business.PredictBean;
 import com.example.business.PropertyBean;
 import com.example.business.UserBean;
+import com.example.model.PredictProperty;
 import com.example.model.Property;
 import com.example.model.User;
 
@@ -20,6 +22,7 @@ class DemoController2{
 	ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationcontext.xml");
 	UserBean userBean = (UserBean) applicationContext.getBean("userBean");
 	PropertyBean propertyBean = (PropertyBean)applicationContext.getBean("propertyBean");
+	PredictBean predictBean = (PredictBean)applicationContext.getBean("predictBean");//Anitha changes
 	
 	@RequestMapping(value = "/login",method=RequestMethod.POST, consumes="application/json",produces="application/json")
 	public User secondPage(@RequestBody User user){
@@ -41,5 +44,12 @@ class DemoController2{
 	public ArrayList<Property> getPopularProperties(){
 		ArrayList<Property> popularProperty = propertyBean.getProperty();
 		return popularProperty;
+	}
+	/*Anitha changes begin*/
+	
+	@RequestMapping(value = "/estimateValue",method=RequestMethod.POST,produces="application/json")
+	public double getEstimate(@RequestBody PredictProperty p){
+		double estimated_value = predictBean.predictValue(p);
+		return estimated_value;
 	}
 }
