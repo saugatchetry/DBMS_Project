@@ -8,12 +8,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-route.min.js"></script>
 	
     <title>Home</title>
     
 	<script src="js/angular-ui-bootstrap-modal.js"></script>
+	<script src="js/angular-chart/angular-chart.min.js"></script>
     <!-- Bootstrap Core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
@@ -35,7 +37,7 @@
 	<link rel="stylesheet" type="text/css" href="style/loginModal.css">
 	<script>
 
-var app = angular.module('myApp', ['ui.bootstrap.modal']);
+var app = angular.module('myApp', ['ui.bootstrap.modal', 'chart.js']);
 app.controller('myCtrl', ['$scope', '$http', function($scope, $http) {
 	$scope.user = undefined;
 	$scope.loginStatus  = false;
@@ -45,11 +47,13 @@ app.controller('myCtrl', ['$scope', '$http', function($scope, $http) {
 	}
 
 	$scope.openLoginModal = function(){
+		$scope.login = undefined;
 		$scope.loginModal = true;
 		
 	}
 	
 	$scope.openSignUpModal = function(){
+		$scope.singUp = undefined;
 		$scope.signUpModal = true;
 		
 	}
@@ -59,21 +63,20 @@ app.controller('myCtrl', ['$scope', '$http', function($scope, $http) {
 	        method : "POST",
 	        url : "login",
 	        data : {
-	        	'emailId' : $scope.emailId,
-	        	'password' : $scope.password
+	        	'emailId' : $scope.login.emailId,
+	        	'password' : $scope.login.password
 	        }
 	    }).then(function(response) {
         	$scope.user = response.data;
-        	if($scope.user.statusCode == 1){
+        	if($scope.user.errorStatus == 1){
         		console.log($scope.user);
         		$scope.loginError = undefined;
         		$scope.loginModal = false;
         		$scope.loginStatus  = true;
         	}
         	else{
-        		$scope.loginError = $scope.user.errorMessage;
         		$scope.loginStatus  = false;
-        		$scope.loginModal = false;
+        		$scope.loginModal = true;
         	}
     	});
 	}
@@ -82,11 +85,11 @@ app.controller('myCtrl', ['$scope', '$http', function($scope, $http) {
 		        method : "POST",
 		        url : "signUp",
 		        data : {
-		        	'firstName' : $scope.firstName,
-		        	'lastName' : $scope.lastName,
-		        	'phoneNumber' : $scope.phoneNumber,
-		        	'emailId' : $scope.emailId,
-		        	'password' : $scope.password
+		        	'firstName' : $scope.signUp.firstName,
+		        	'lastName' : $scope.signUp.lastName,
+		        	'phoneNumber' : $scope.signUp.phoneNumber,
+		        	'emailId' : $scope.signUp.emailId,
+		        	'password' : $scope.signUp.password
 		        }
 		    }).then(function(response) {
 	        	$scope.user = response.data;
@@ -96,81 +99,38 @@ app.controller('myCtrl', ['$scope', '$http', function($scope, $http) {
 		}
 		
 		$scope.logoutUser = function(){
+			$scope.user = undefined;
 			$scope.loginStatus = false;
 			$scope.user = undefined;
 		}
 		
-		/* $scope.getPopularProperties(){
+		$scope.getPopularProperties = function(){
 			$http({
-				method : "POST",
+				method : "GET",
 				url: "getPopularProperties"
 			}).then(function(response){
+				var images = ['prop1.jpg', 'prop2.jpg', 'prop3.jpg', 'prop4.jpg', 'prop5.jpg', 'prop6.png'];
 				$scope.properties = response.data;
+				console.log($scope.properties);
+				for(i = 0; i<6 ;i++){
+					$scope.properties[i].image = images[i];
+				}
 			})
-		} */
+		} 
 
 
-		$scope.properties = [
-			{
-				image : 'cabin.png',
-				yearBuilt : '2010',
-				sqFt : '1520',
-				price :"145000",
-				bedrooms : "2",
-				bathrooms : "1.5",
-				floors : "2"
-			},
-			{
-				image : 'cake.png',
-				yearBuilt : '1993',
-				sqFt : '2000',
-				price :"300000",
-				bedrooms : "3",
-				bathrooms : "2",
-				floors : "1"
-			},
-			{
-				image : 'circus.png',
-				yearBuilt : '1990',
-				sqFt : '1000',
-				price :"100000",
-				bedrooms : "2",
-				bathrooms : "1",
-				floors : "2"
-			},
-			{
-				image : 'game.png',
-				yearBuilt : '2001',
-				sqFt : '750',
-				price :"150000",
-				bedrooms : "3",
-				bathrooms : "2",
-				floors : "1"
-			},{
-				image : 'safe.png',
-				yearBuilt : '2009',
-				sqFt : '1000',
-				price :"200000",
-				bedrooms : "2",
-				bathrooms : "2",
-				floors : "2"
-			},
-			{
-				image : 'submarine.png',
-				yearBuilt : '1980',
-				sqFt : '1000000',
-				price :"200000",
-				bedrooms : "2",
-				bathrooms : "2",
-				floors : "3"
-			}
-		];
+		
 				
 		$scope.setProperty = function(index){
 			console.log(index);
 			$scope.property = $scope.properties[index];
 			console.log($scope.property);
 		}
+		
+		$scope.getPopularProperties();
+		
+		$scope.labels = ["Detroit", "San Diego","Nebraska","San Francisco","Mississippi"];
+		$scope.propertyData = [10,35,15,45,25];
 		
 }]);
 </script>
@@ -232,9 +192,9 @@ app.controller('myCtrl', ['$scope', '$http', function($scope, $http) {
 	   		<button type="button" class="close" ng-click="loginModal = false">&times;</button>
        		<h1>Login</h1><br>
 			  <form name = "loginForm">
-				<input type="text" name="user" placeholder="Username" data-ng-model="emailId" ng-required>
-				<input type="password" name="pass" placeholder="Password" data-ng-model="password" ng-required>
-				<div class="login-error" ng-show="">Login Unsuccessful!</div> 
+				<input type="text" name="user" placeholder="Username" data-ng-model="login.emailId" ng-required>
+				<input type="password" name="pass" placeholder="Password" data-ng-model="login.password" ng-required>
+				<div class="login-error" ng-show="user.errorStatus == 0">{{user.errorMessage}}</div> 
 				<input type="button" name="login" class="login loginmodal-submit" value="Login" ng-click = "loginUser();" ng-disabled="loginForm.$invalid" >
 			  </form>
 			  	
@@ -244,7 +204,7 @@ app.controller('myCtrl', ['$scope', '$http', function($scope, $http) {
 			</div>
 		</div>
 	  </div>
-
+	<div ng-view="">
     <!-- Header -->
     <header>
         <div class="container" id="maincontent" tabindex="-1">
@@ -276,21 +236,39 @@ app.controller('myCtrl', ['$scope', '$http', function($scope, $http) {
 	                    <a href="#portfolioModal" class="portfolio-link" data-toggle="modal" ng-click="setProperty($index)">
 	                        <div class="caption">
 	                            <div class="caption-content text-left">
-	                            	<i class="fa fa-bed"> {{property.bedrooms}}</i><br>
+	                            	<i class="fa fa-bed"> {{property.numberOfBedrooms}}</i><br>
 	                           		<i class="fa fa-dollar"> {{property.price}}</i><br>
 	                            	
 	                            </div>
 	                        </div>
-	                        <img src="img/portfolio/{{property.image}}" class="img-responsive" >
+	                        <img src="/img/{{property.image}}" class="img-responsive" >
 	                    </a>
 	                </div>
                 </div>
             </div>
         </div>
     </section>
+    
+    <section class="success" id="charts">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2>Charts</h2>
+                    <hr class="star-light">
+                </div>
+            </div>
+            <div class="row" >
+            
+                <canvas id = "pie" width='1200' height='300' class="chart chart-pie"	chart-data="propertyData" chart-labels="labels" chart-option="options">
+    				</canvas>
+             
+            </div>
+        </div>
+    </section>
+    
 
     <!-- About Section -->
-    <section class="success" id="about">
+    <section class="portfolio" id="about">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
@@ -315,7 +293,7 @@ app.controller('myCtrl', ['$scope', '$http', function($scope, $http) {
     <!-- Contact Section -->
     <div class="modal fade" modal="signUpModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
    	  <div class="modal-dialog ">
-        <div class="loginmodal-container">
+        <div class="signUpModal-container">
         <button type="button" class="close" ng-click="signUpModal = false">&times;</button>
          
                 <div class="col-lg-12 text-center">
@@ -327,45 +305,45 @@ app.controller('myCtrl', ['$scope', '$http', function($scope, $http) {
                 
                     <!-- To configure the contact form email address, go to mail/contact_me.php and update the email address in the PHP file on line 19. -->
                     <!-- The form should work on most web servers, but if the form is not working you may need to configure your web server differently. -->
-                    <form name="sentMessage" id="contactForm" novalidate>
+                    <form name="signUpForm" id="signUpForm" validate>
                         <div class="row control-group">
                             <div class="form-group col-xs-12 floating-label-form-group controls">
                                 <label for="firstName">First Name</label>
-                                <input type="text" class="form-control" placeholder="First Name" id="firstName" data-ng-model="firstName" required data-validation-required-message="Please enter your first name.">
+                                <input type="text" class="form-control input-text" placeholder="First Name" id="firstName" data-ng-model="signUp.firstName" required data-validation-required-message="Please enter your first name.">
                                 <p class="help-block text-danger"></p>
                             </div>
                         </div>
                         <div class="row control-group">
                             <div class="form-group col-xs-12 floating-label-form-group controls">
                                 <label for="lastName">Last Name</label>
-                                <input type="text" class="form-control" placeholder="Last Name" id="lastName"  data-ng-model="lastName" required data-validation-required-message="Please enter your last name.">
+                                <input type="text" class="form-control input-text" placeholder="Last Name" id="lastName"  data-ng-model="signUp.lastName" required data-validation-required-message="Please enter your last name.">
                                 <p class="help-block text-danger"></p>
                             </div>
                         </div>
                         <div class="row control-group">
                             <div class="form-group col-xs-12 floating-label-form-group controls">
                                 <label for="phone">Phone Number</label>
-                                <input type="tel" class="form-control" placeholder="Phone Number" id="phone"  data-ng-model="phoneNumber" required data-validation-required-message="Please enter your phone number.">
+                                <input type="tel" class="form-control" placeholder="Phone Number" id="phone"  data-ng-model="signUp.phoneNumber" required data-validation-required-message="Please enter your phone number.">
                                 <p class="help-block text-danger"></p>
                             </div>
                         </div>
                         <div class="row control-group">
                             <div class="form-group col-xs-12 floating-label-form-group controls">
                                 <label for="email">Email Address</label>
-                                <input type="email" class="form-control" placeholder="Email Address" id="email"  data-ng-model="emailId" required data-validation-required-message="Please enter your email address.">
+                                <input type="email" class="form-control" placeholder="Email Address" id="email"  data-ng-model="signUp.emailId" required data-validation-required-message="Please enter your email address.">
                                 <p class="help-block text-danger"></p>
                             </div>
                         </div>
                         <div class="row control-group">
                             <div class="form-group col-xs-12 floating-label-form-group controls">
                                 <label for="password">Password</label>
-                                <input type="password" class="form-control" placeholder="Password" id="password"  data-ng-model="password" required data-validation-required-message="Please enter your password.">
+                                <input type="password" class="form-control input-text" placeholder="Password" id="password"  data-ng-model="signUp.password" required data-validation-required-message="Please enter your password.">
                                 <p class="help-block text-danger"></p>
                             </div>
                         </div>
                         <br>
                         <div class="form-group col-xs-12">
-                                <button type="submit" class="btn btn-success btn-lg" ng-click="signUp();">Sign Up</button>
+                                <button type="submit" class="btn btn-success btn-lg" ng-click="signUp();" ng-disabled="signUpForm.invalid">Sign Up</button>
                             </div>
                         
                     </form>
@@ -374,7 +352,7 @@ app.controller('myCtrl', ['$scope', '$http', function($scope, $http) {
         </div>
     
     
-
+	</div>
     <!-- Footer -->
     <footer class="text-center">
         <div class="footer-above">
@@ -434,7 +412,7 @@ app.controller('myCtrl', ['$scope', '$http', function($scope, $http) {
                 <div class="row">
                     <div class="col-lg-8 col-lg-offset-2">
                         <div class="modal-body">
-                            <img ng-src="img/portfolio/{{property.image}}" class="img-responsive img-centered" style="width:75%;height:75%;" alt="">
+                            <img ng-src="img/{{property.image}}" class="img-responsive img-centered" style="width:75%;height:75%;" alt="">
                             <p>{{property.description}}</p>
                             <ul class="list-inline item-details">
                                 <li>Year Built:
@@ -442,7 +420,7 @@ app.controller('myCtrl', ['$scope', '$http', function($scope, $http) {
                                     </strong>
                                 </li>
                                 <li>Sq. Ft:
-                                    <strong>{{property.sqFt}}
+                                    <strong>{{property.squareFeet}}
                                     </strong>
                                 </li>
                                 <li>Price:
@@ -450,15 +428,15 @@ app.controller('myCtrl', ['$scope', '$http', function($scope, $http) {
                                     </strong>
                                 </li>
                                 <li>Bedrooms:
-                                    <strong>{{property.bedrooms}}
+                                    <strong>{{property.numberOfBedrooms}}
                                     </strong>
                                 </li>
                                 <li>Bathrooms:
-                                    <strong>{{property.bathrooms}}
+                                    <strong>{{property.numberOfBathrooms}}
                                     </strong>
                                 </li>
                                 <li>Floors:
-                                    <strong>{{property.floors}}
+                                    <strong>{{property.numberOfFloors}}
                                     </strong>
                                 </li>
                             </ul>
