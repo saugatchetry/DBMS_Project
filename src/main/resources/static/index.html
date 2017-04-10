@@ -8,17 +8,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-route.min.js"></script>
-	
-	
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
 	<!-- <script src="js/dist/angular-chart.js"></script>--> 
   	<!-- <script src="js/dist/angular-chart.min.js"></script> -->
-	
-    <title>Home</title>
+	<title>Home</title>
     
 	<script src="js/angular-ui-bootstrap-modal.js"></script>
+	<script src="js/angular-chart/angular-chart.min.js"></script>
     <!-- Bootstrap Core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
@@ -30,6 +29,7 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
 
+	<link href="style/app.css" rel="stylesheet">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -39,7 +39,7 @@
 	<link rel="stylesheet" type="text/css" href="style/loginModal.css">
 	<script>
 
-var app = angular.module('myApp', ['ui.bootstrap.modal','chart.js']);
+var app = angular.module('myApp', ['ui.bootstrap.modal', 'chart.js']);
 app.controller('myCtrl', ['$scope', '$http', function($scope, $http) {
 	$scope.user = undefined;
 	$scope.loginStatus  = false;
@@ -49,11 +49,13 @@ app.controller('myCtrl', ['$scope', '$http', function($scope, $http) {
 	}
 
 	$scope.openLoginModal = function(){
+		$scope.login = undefined;
 		$scope.loginModal = true;
 		
 	}
 	
 	$scope.openSignUpModal = function(){
+		$scope.singUp = undefined;
 		$scope.signUpModal = true;
 		
 	}
@@ -63,15 +65,20 @@ app.controller('myCtrl', ['$scope', '$http', function($scope, $http) {
 	        method : "POST",
 	        url : "login",
 	        data : {
-	        	'emailId' : $scope.emailId,
-	        	'password' : $scope.password
+	        	'emailId' : $scope.login.emailId,
+	        	'password' : $scope.login.password
 	        }
 	    }).then(function(response) {
         	$scope.user = response.data;
-        	console.log($scope.user);
-        	if($scope.user.emailId != null && $scope.user.emailId != undefined){
-	        	$scope.loginModal = false;
-	        	$scope.loginStatus  = true;
+        	if($scope.user.errorStatus == 1){
+        		console.log($scope.user);
+        		$scope.loginError = undefined;
+        		$scope.loginModal = false;
+        		$scope.loginStatus  = true;
+        	}
+        	else{
+        		$scope.loginStatus  = false;
+        		$scope.loginModal = true;
         	}
     	});
 	}
@@ -80,11 +87,11 @@ app.controller('myCtrl', ['$scope', '$http', function($scope, $http) {
 		        method : "POST",
 		        url : "signUp",
 		        data : {
-		        	'firstName' : $scope.firstName,
-		        	'lastName' : $scope.lastName,
-		        	'phoneNumber' : $scope.phoneNumber,
-		        	'emailId' : $scope.emailId,
-		        	'password' : $scope.password
+		        	'firstName' : $scope.signUp.firstName,
+		        	'lastName' : $scope.signUp.lastName,
+		        	'phoneNumber' : $scope.signUp.phoneNumber,
+		        	'emailId' : $scope.signUp.emailId,
+		        	'password' : $scope.signUp.password
 		        }
 		    }).then(function(response) {
 	        	$scope.user = response.data;
@@ -94,18 +101,37 @@ app.controller('myCtrl', ['$scope', '$http', function($scope, $http) {
 		}
 		
 		$scope.logoutUser = function(){
+			$scope.user = undefined;
 			$scope.loginStatus = false;
 			$scope.user = undefined;
 		}
+	
+		$scope.getPopularProperties = function(){
+			$http({
+				method : "GET",
+				url: "getPopularProperties"
+			}).then(function(response){
+				var images = ['prop1.jpg', 'prop2.jpg', 'prop3.jpg', 'prop4.jpg', 'prop5.jpg', 'prop6.png'];
+				$scope.properties = response.data;
+				console.log($scope.properties);
+				for(i = 0; i<6 ;i++){
+					$scope.properties[i].image = images[i];
+				}
+			})
+		} 
 		
-		/*$scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
-		$scope.series = ['Series A', 'Series B'];
-		$scope.data = [
-		    [65, 59, 80, 81, 56, 55, 40],
-		    [28, 48, 40, 19, 86, 27, 90]
-		  ];
-		$scope.colors=["#FF5733","#1DD50E"];*///Anitha
-
+				
+		$scope.setProperty = function(index){
+			console.log(index);
+			$scope.property = $scope.properties[index];
+			console.log($scope.property);
+		}
+		
+		$scope.getPopularProperties();
+		
+		$scope.labels = ["Detroit", "San Diego","Nebraska","San Francisco","Mississippi"];
+		$scope.propertyData = [10,35,15,45,25];
+		
 }]);
 </script>
 </head>
@@ -166,24 +192,25 @@ app.controller('myCtrl', ['$scope', '$http', function($scope, $http) {
 	   		<button type="button" class="close" ng-click="loginModal = false">&times;</button>
        		<h1>Login</h1><br>
 			  <form name = "loginForm">
-				<input type="text" name="user" placeholder="Username" data-ng-model="emailId" ng-required>
-				<input type="password" name="pass" placeholder="Password" data-ng-model="password" ng-required>
+				<input type="text" name="user" placeholder="Username" data-ng-model="login.emailId" ng-required>
+				<input type="password" name="pass" placeholder="Password" data-ng-model="login.password" ng-required>
+				<div class="login-error" ng-show="user.errorStatus == 0">{{user.errorMessage}}</div> 
 				<input type="button" name="login" class="login loginmodal-submit" value="Login" ng-click = "loginUser();" ng-disabled="loginForm.$invalid" >
 			  </form>
-				
+			  	
 			  <div class="login-help">
 				<a href="#">Register</a> - <a href="#">Forgot Password</a>
 			  </div>
 			</div>
 		</div>
 	  </div>
-
+	<div ng-view="">
     <!-- Header -->
     <header>
         <div class="container" id="maincontent" tabindex="-1">
             <div class="row">
                 <div class="col-lg-12">
-                    <img class="img-responsive" src="img/profile.png" alt="">
+                    <img class="img-responsive" ng-src="img/profile.png" alt="">
                     <div class="intro-text">
                         <h1 class="name">GharWaale.com</h1>
                         <hr class="star-light">
@@ -194,7 +221,7 @@ app.controller('myCtrl', ['$scope', '$http', function($scope, $http) {
         </div>
     </header>
 
-    <!-- Portfolio Grid Section -->
+    <!-- Property Grid Section -->
     <section id="portfolio">
         <div class="container">
             <div class="row">
@@ -204,94 +231,44 @@ app.controller('myCtrl', ['$scope', '$http', function($scope, $http) {
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-4 portfolio-item">
-                    <a href="#portfolioModal1" class="portfolio-link" data-toggle="modal">
-                        <div class="caption">
-                            <div class="caption-content">
-                                <i class="fa fa-search-plus fa-3x"></i>
-                            </div>
-                        </div>
-                        <img src="img/portfolio/cabin.png" class="img-responsive" alt="Cabin">
-                    </a>
-                </div>
-                <div class="col-sm-4 portfolio-item">
-                    <a href="#portfolioModal2" class="portfolio-link" data-toggle="modal">
-                        <div class="caption">
-                            <div class="caption-content">
-                                <i class="fa fa-search-plus fa-3x"></i>
-                            </div>
-                        </div>
-                        <img src="img/portfolio/cake.png" class="img-responsive" alt="Slice of cake">
-                    </a>
-                </div>
-                <div class="col-sm-4 portfolio-item">
-                    <a href="#portfolioModal3" class="portfolio-link" data-toggle="modal">
-                        <div class="caption">
-                            <div class="caption-content">
-                                <i class="fa fa-search-plus fa-3x"></i>
-                            </div>
-                        </div>
-                        <img src="img/portfolio/circus.png" class="img-responsive" alt="Circus tent">
-                    </a>
-                </div>
-                <div class="col-sm-4 portfolio-item">
-                    <a href="#portfolioModal4" class="portfolio-link" data-toggle="modal">
-                        <div class="caption">
-                            <div class="caption-content">
-                                <i class="fa fa-search-plus fa-3x"></i>
-                            </div>
-                        </div>
-                        <img src="img/portfolio/game.png" class="img-responsive" alt="Game controller">
-                    </a>
-                </div>
-                <div class="col-sm-4 portfolio-item">
-                    <a href="#portfolioModal5" class="portfolio-link" data-toggle="modal">
-                        <div class="caption">
-                            <div class="caption-content">
-                                <i class="fa fa-search-plus fa-3x"></i>
-                            </div>
-                        </div>
-                        <img src="img/portfolio/safe.png" class="img-responsive" alt="Safe">
-                    </a>
-                </div>
-                <div class="col-sm-4 portfolio-item">
-                    <a href="#portfolioModal6" class="portfolio-link" data-toggle="modal">
-                        <div class="caption">
-                            <div class="caption-content">
-                                <i class="fa fa-search-plus fa-3x"></i>
-                            </div>
-                        </div>
-                        <img src="img/portfolio/submarine.png" class="img-responsive" alt="Submarine">
-                    </a>
+            	<div ng-repeat="property in properties ">
+	                <div class="col-sm-4 portfolio-item">
+	                    <a href="#portfolioModal" class="portfolio-link" data-toggle="modal" ng-click="setProperty($index)">
+	                        <div class="caption">
+	                            <div class="caption-content text-left">
+	                            	<i class="fa fa-bed"> {{property.numberOfBedrooms}}</i><br>
+	                           		<i class="fa fa-dollar"> {{property.price}}</i><br>
+	                            	
+	                            </div>
+	                        </div>
+	                        <img src="/img/{{property.image}}" class="img-responsive" >
+	                    </a>
+	                </div>
                 </div>
             </div>
         </div>
     </section>
-
-
-	<!-- Charts section --> 
-	
-	<section id="charts">
+    
+    <section class="success" id="charts">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <h2>Charts</h2>
-                    <hr class="star-primary">
+                    <hr class="star-light">
                 </div>
             </div>
-            <div class="row">
-               
-                <canvas id="pie" class="chart chart-pie"
-  						chart-data="data" chart-labels="labels" chart-colors="colors" chart-options="options">
-				</canvas> 
-                
+            <div class="row" >
             
+                <canvas id = "pie" width='1200' height='300' class="chart chart-pie"	chart-data="propertyData" chart-labels="labels" chart-option="options">
+    				</canvas>
+             
             </div>
         </div>
     </section>
+<<
 
     <!-- About Section -->
-    <section class="success" id="about">
+    <section class="portfolio" id="about">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
@@ -316,7 +293,7 @@ app.controller('myCtrl', ['$scope', '$http', function($scope, $http) {
     <!-- Contact Section -->
     <div class="modal fade" modal="signUpModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
    	  <div class="modal-dialog ">
-        <div class="loginmodal-container">
+        <div class="signUpModal-container">
         <button type="button" class="close" ng-click="signUpModal = false">&times;</button>
          
                 <div class="col-lg-12 text-center">
@@ -328,45 +305,45 @@ app.controller('myCtrl', ['$scope', '$http', function($scope, $http) {
                 
                     <!-- To configure the contact form email address, go to mail/contact_me.php and update the email address in the PHP file on line 19. -->
                     <!-- The form should work on most web servers, but if the form is not working you may need to configure your web server differently. -->
-                    <form name="sentMessage" id="contactForm" novalidate>
+                    <form name="signUpForm" id="signUpForm" validate>
                         <div class="row control-group">
                             <div class="form-group col-xs-12 floating-label-form-group controls">
                                 <label for="firstName">First Name</label>
-                                <input type="text" class="form-control" placeholder="First Name" id="firstName" data-ng-model="firstName" required data-validation-required-message="Please enter your first name.">
+                                <input type="text" class="form-control input-text" placeholder="First Name" id="firstName" data-ng-model="signUp.firstName" required data-validation-required-message="Please enter your first name.">
                                 <p class="help-block text-danger"></p>
                             </div>
                         </div>
                         <div class="row control-group">
                             <div class="form-group col-xs-12 floating-label-form-group controls">
                                 <label for="lastName">Last Name</label>
-                                <input type="text" class="form-control" placeholder="Last Name" id="lastName"  data-ng-model="lastName" required data-validation-required-message="Please enter your last name.">
+                                <input type="text" class="form-control input-text" placeholder="Last Name" id="lastName"  data-ng-model="signUp.lastName" required data-validation-required-message="Please enter your last name.">
                                 <p class="help-block text-danger"></p>
                             </div>
                         </div>
                         <div class="row control-group">
                             <div class="form-group col-xs-12 floating-label-form-group controls">
                                 <label for="phone">Phone Number</label>
-                                <input type="tel" class="form-control" placeholder="Phone Number" id="phone"  data-ng-model="phoneNumber" required data-validation-required-message="Please enter your phone number.">
+                                <input type="tel" class="form-control" placeholder="Phone Number" id="phone"  data-ng-model="signUp.phoneNumber" required data-validation-required-message="Please enter your phone number.">
                                 <p class="help-block text-danger"></p>
                             </div>
                         </div>
                         <div class="row control-group">
                             <div class="form-group col-xs-12 floating-label-form-group controls">
                                 <label for="email">Email Address</label>
-                                <input type="email" class="form-control" placeholder="Email Address" id="email"  data-ng-model="emailId" required data-validation-required-message="Please enter your email address.">
+                                <input type="email" class="form-control" placeholder="Email Address" id="email"  data-ng-model="signUp.emailId" required data-validation-required-message="Please enter your email address.">
                                 <p class="help-block text-danger"></p>
                             </div>
                         </div>
                         <div class="row control-group">
                             <div class="form-group col-xs-12 floating-label-form-group controls">
                                 <label for="password">Password</label>
-                                <input type="password" class="form-control" placeholder="Password" id="password"  data-ng-model="password" required data-validation-required-message="Please enter your password.">
+                                <input type="password" class="form-control input-text" placeholder="Password" id="password"  data-ng-model="signUp.password" required data-validation-required-message="Please enter your password.">
                                 <p class="help-block text-danger"></p>
                             </div>
                         </div>
                         <br>
                         <div class="form-group col-xs-12">
-                                <button type="submit" class="btn btn-success btn-lg" ng-click="signUp();">Sign Up</button>
+                                <button type="submit" class="btn btn-success btn-lg" ng-click="signUp();" ng-disabled="signUpForm.invalid">Sign Up</button>
                             </div>
                         
                     </form>
@@ -375,7 +352,7 @@ app.controller('myCtrl', ['$scope', '$http', function($scope, $http) {
         </div>
     
     
-
+	</div>
     <!-- Footer -->
     <footer class="text-center">
         <div class="footer-above">
@@ -429,36 +406,41 @@ app.controller('myCtrl', ['$scope', '$http', function($scope, $http) {
     </div>
 
     <!-- Portfolio Modals -->
-    <div class="portfolio-modal modal fade" id="portfolioModal1" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-content">
-            <div class="close-modal" data-dismiss="modal">
-                <div class="lr">
-                    <div class="rl">
-                    </div>
-                </div>
-            </div>
+    <div class="portfolio-modal modal fade" id="portfolioModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-content" style="padding:20px">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-8 col-lg-offset-2">
                         <div class="modal-body">
-                            <h2>Project Title</h2>
-                            <hr class="star-primary">
-                            <img src="img/portfolio/cabin.png" class="img-responsive img-centered" alt="">
-                            <p>Use this area of the page to describe your project. The icon above is part of a free icon set by <a href="https://sellfy.com/p/8Q9P/jV3VZ/">Flat Icons</a>. On their website, you can download their free set with 16 icons, or you can purchase the entire set with 146 icons for only $12!</p>
+                            <img ng-src="img/{{property.image}}" class="img-responsive img-centered" style="width:75%;height:75%;" alt="">
+                            <p>{{property.description}}</p>
                             <ul class="list-inline item-details">
-                                <li>Client:
-                                    <strong><a href="http://startbootstrap.com">Start Bootstrap</a>
+                                <li>Year Built:
+                                    <strong>{{property.yearBuilt}}
                                     </strong>
                                 </li>
-                                <li>Date:
-                                    <strong><a href="http://startbootstrap.com">April 2014</a>
+                                <li>Sq. Ft:
+                                    <strong>{{property.squareFeet}}
                                     </strong>
                                 </li>
-                                <li>Service:
-                                    <strong><a href="http://startbootstrap.com">Web Development</a>
+                                <li>Price:
+                                    <strong>{{property.price}}
+                                    </strong>
+                                </li>
+                                <li>Bedrooms:
+                                    <strong>{{property.numberOfBedrooms}}
+                                    </strong>
+                                </li>
+                                <li>Bathrooms:
+                                    <strong>{{property.numberOfBathrooms}}
+                                    </strong>
+                                </li>
+                                <li>Floors:
+                                    <strong>{{property.numberOfFloors}}
                                     </strong>
                                 </li>
                             </ul>
+                            <button type="button" class="btn btn-success" data-dismiss="modal"><i class="fa fa-check"></i> Buy</button>
                             <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
                         </div>
                     </div>
@@ -483,10 +465,7 @@ app.controller('myCtrl', ['$scope', '$http', function($scope, $http) {
 
     <!-- Theme JavaScript -->
     <script src="js/freelancer.min.js"></script>
-    
-    <!-- Chart JS -->
-   
-    
+
 </body>
 
 </html>

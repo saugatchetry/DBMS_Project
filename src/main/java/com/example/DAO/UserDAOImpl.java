@@ -51,12 +51,13 @@ public class UserDAOImpl implements UserDAO {
                 	userOut.setEmailId(rs.getString(4));
                 	userOut.setPhoneNumber(rs.getString(5));
                 	userOut.setPassword(rs.getString(6));
+                	userOut.setErrorStatus(1);
                 }
                 else{
-                	user.setErrorStatus(0);
-                	user.setErrorMessage("Login error occured");
+                	userOut.setErrorStatus(0);
+                	userOut.setErrorMessage("Login error occured");
                 	System.out.println("Failed to login");
-                	return user;
+                	return userOut;
                 	
                 }
                 System.out.println(userOut);
