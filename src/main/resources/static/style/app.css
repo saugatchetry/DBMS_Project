@@ -1,0 +1,11 @@
+.login-error{
+	color:red;
+}
+
+#signUpForm .input-text{
+	background-color:transparent;
+	border:none;
+	font-size:1.5em;
+	margin:0px;
+	padding:0px;
+}
