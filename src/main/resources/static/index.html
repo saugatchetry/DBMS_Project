@@ -12,12 +12,19 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-route.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
+<<<<<<< HEAD
 	<!-- <script src="js/dist/angular-chart.js"></script>--> 
   	<!-- <script src="js/dist/angular-chart.min.js"></script> -->
 	<title>Home</title>
     
+=======
+	<!-- <script src="js/angular-chart.js"></script> -->
+  	<!-- <script src="js/dist/angular-chart.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    <title>Home</title>
+>>>>>>> branch 'master' of https://github.com/saugatchetry/DBMS_Project.git
 	<script src="js/angular-ui-bootstrap-modal.js"></script>
-	<script src="js/angular-chart/angular-chart.min.js"></script>
+	<script src="js/angular-chart/angular-chart.min.js"></script>		
     <!-- Bootstrap Core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
@@ -41,7 +48,7 @@
 	
 	<script>
 
-var app = angular.module('myApp', ['ngRoute','ui.bootstrap.modal', 'chart.js']);
+var app = angular.module('myApp', ['ngRoute','ui.bootstrap.modal', 'chart.js', 'angularjs-dropdown-multiselect']);
 
 app.config(function($routeProvider) {
     $routeProvider
@@ -175,7 +182,7 @@ app.controller('MainController', ['$scope', '$http', function($scope, $http) {
     <!-- Navigation -->
    
     <nav id="mainNav" class="navbar navbar-default navbar-fixed-top navbar-custom">
-        <div class="container">
+        <div class="container" style = "width :100%">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header page-scroll">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -515,6 +522,7 @@ app.controller('MainController', ['$scope', '$http', function($scope, $http) {
 
     <!-- Theme JavaScript -->
     <script src="js/freelancer.min.js"></script>
+    <script src="js/angularjs-dropdown-multiselect.min.js"></script>
 
 </body>
 

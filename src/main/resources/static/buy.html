@@ -1,4 +1,8 @@
-<div class="w3-light-grey" style="margin-top: 100px; padding-top:10px;">
+<div ng-init="loadImage()">
+	<h1>HELLO Buyer</h1>
+	<img ng-src="data:image/JPEG;base64,{{image}}">
+</div>
+<div class="w3-light-grey" style="margin-top: 100px; padding-top: 10px;">
 
 	<!-- Page Container -->
 	<div class="w3-content w3-margin-top" style="max-width: 1400px;">
@@ -38,6 +42,14 @@
 						2</input><br> <input type="radio"> 3</input><br> <input
 							type="radio"> 4 or more</input> <br>
 					</div>
+					<div class="w3-container">
+						<label ng-repeat="fruitName in fruits"> <input
+							type="checkbox" name="selectedFruits[]" value="{{fruitName}}"
+							ng-checked="selection.indexOf(fruitName) > -1"
+							ng-click="toggleSelection(fruitName)"> {{fruitName}}
+							<br/>
+						</label>
+					</div>
 				</div>
 				<br>
 
@@ -47,13 +59,17 @@
 			<!-- Right Column -->
 			<div class="w3-twothird">
 
-				<div class="w3-container w3-card-2 w3-white w3-margin-bottom" style="padding:10px;">
+				<div class="w3-container w3-card-2 w3-white w3-margin-bottom"
+					style="padding: 10px;">
 
 					<div class="w3-container">
-					
+
 						<div class="row">
 							<div class="col-md-4">
-								<div ><img src="img/portfolio/cake.png" style="width:100%;height:auto;"></img></div>
+								<div>
+									<img src="img/portfolio/cake.png"
+										style="width: 100%; height: auto;"></img>
+								</div>
 							</div>
 							<div class="col-md-8">
 								<div class="row">
@@ -84,7 +100,7 @@
 
 						</div>
 					</div>
-					</div>
+				</div>
 
 				<!-- End Right Column -->
 			</div>
@@ -94,5 +110,4 @@
 
 		<!-- End Page Container -->
 	</div>
-
 </div>
