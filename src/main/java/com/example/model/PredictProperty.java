@@ -13,6 +13,7 @@ public class PredictProperty {
 	private Date sale_dt;
 	private int zipcode;
 	private String city;
+	private double estimatedValue;
 	private int errorStatus; //0 is error 1 is success
 	private String errorMessage;
 	
@@ -85,6 +86,12 @@ public class PredictProperty {
 	}
 
 	
+	public double getEstimatedValue() {
+		return estimatedValue;
+	}
+	public void setEstimatedValue(double estimatedValue) {
+		this.estimatedValue = estimatedValue;
+	}
 	@Override
 	public String toString() {
 		return "PredictProp [sq_ft=" + sq_ft + ", no_of_bedrooms=" + no_of_bedrooms + ", no_of_bath=" + no_of_bath + ", no_of_floors=" + no_of_floors

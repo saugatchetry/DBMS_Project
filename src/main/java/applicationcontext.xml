@@ -7,6 +7,9 @@
         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
     
+      
+    
+  
     <bean id="userBean" class="com.example.business.UserBean">
         <property name="userDAO" ref="userDAO" />
     </bean>
@@ -14,6 +17,16 @@
     <bean id="propertyBean" class="com.example.business.PropertyBean">
         <property name="propertyDAO" ref="propertyDAO" />
     </bean>
+    <!-- Anitha changes begin -->
+    <bean id="predictBean" class="com.example.business.PredictBean">
+        <property name="predictDAO" ref="predictDAO" />
+    </bean>
+     <bean id="sellBean" class="com.example.business.SellBean">
+        <property name="sellDAO" ref="sellDAO" />
+    </bean>
+     
+     <!-- Anitha changes end -->
+    
     <bean id="userDAO" class="com.example.DAO.UserDAOImpl">
         <property name="jdbcTemplate" ref="jdbcTemplate" />
         <property name="keyGenerator" ref="keyGenerator" />
@@ -23,6 +36,19 @@
         <property name="jdbcTemplate" ref="jdbcTemplate" />
         
     </bean>
+      <!-- Anitha changes begin -->
+    <bean id="predictDAO" class="com.example.DAO.PredictDAOImpl">
+        <property name="jdbcTemplate" ref="jdbcTemplate" />
+        <property name="keyGenerator" ref="keyGenerator" />
+    </bean>
+    
+    
+ 
+    <bean id="sellDAO" class="com.example.DAO.SellDAOImpl">
+        <property name="jdbcTemplate" ref="jdbcTemplate" />
+        <property name="keyGenerator" ref="keyGenerator" />
+    </bean>
+     <!-- Anitha changes end -->
     <bean id="keyGenerator" class="com.example.KeyGenerator">
     	<property name="jdbcTemplate" ref="jdbcTemplate" />
     </bean>

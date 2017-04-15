@@ -8,25 +8,27 @@ import com.example.model.PredictProperty;
 public class PredictBean {
 	
 	@Autowired
-	
 	private PredictDAO predictDAO;
 	
 	
 	
-	public PredictDAO getPredictDao() {
+
+	public PredictDAO getPredictDAO() {
 		return predictDAO;
 	}
 
 
 
-	public void setPredictDao(PredictDAO predictDAO) {
+	public void setPredictDAO(PredictDAO predictDAO) {
 		this.predictDAO = predictDAO;
 	}
 
 
 
-	public double predictValue(PredictProperty p){
+	public PredictProperty predictValue(PredictProperty p){
 		return predictDAO.predictValue(p);
 	}
+
+
 
 }

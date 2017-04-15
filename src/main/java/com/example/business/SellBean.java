@@ -12,13 +12,14 @@ private SellDAO sellDAO;
 
 
 
-public SellDAO getPredictDao() {
+public SellDAO getSellDAO() {
 	return sellDAO;
 }
 
 
-public void setPredictDao(SellDAO predictDAO) {
-	this.sellDAO = predictDAO;
+
+public void setSellDAO(SellDAO sellDAO) {
+	this.sellDAO = sellDAO;
 }
 
 

@@ -1,6 +1,8 @@
 package com.example.model;
 
+import java.io.File;
 import java.sql.Date;
+
 
 public class Sell {
 	int propId;
@@ -11,6 +13,7 @@ public class Sell {
 	String yearRenovated;
 	String yearBuilt;
 //image
+	File image;
 	String status;
 	String description;
 	Date saleDate;
@@ -22,7 +25,23 @@ public class Sell {
 	String city;
 	int sellerId;
 	int negotiable;
+	PropertyFeature propFeature;
+	String path;
+	private int errorStatus; //0 is error 1 is success
+	private String errorMessage;
 	
+	public int getErrorStatus() {
+		return errorStatus;
+	}
+	public void setErrorStatus(int errorStatus) {
+		this.errorStatus = errorStatus;
+	}
+	public String getErrorMessage() {
+		return errorMessage;
+	}
+	public void setErrorMessage(String errorMessage) {
+		this.errorMessage = errorMessage;
+	}
 	public float getSquareFeet() {
 		return squareFeet;
 	}
@@ -125,4 +144,30 @@ public class Sell {
 	public void setNegotiable(int negotiable) {
 		this.negotiable = negotiable;
 	}
+	public int getPropId() {
+		return propId;
+	}
+	public void setPropId(int propId) {
+		this.propId = propId;
+	}
+	public File getImage() {
+		return image;
+	}
+	public void setImage(File image) {
+		this.image = image;
+	}
+	
+	public PropertyFeature getPropFeature() {
+		return propFeature;
+	}
+	public void setPropFeature(PropertyFeature propFeature) {
+		this.propFeature = propFeature;
+	}
+	public String getPath() {
+		return path;
+	}
+	public void setPath(String path) {
+		this.path = path;
+	}
+	
 }
