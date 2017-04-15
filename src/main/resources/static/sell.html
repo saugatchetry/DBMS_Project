@@ -1,3 +1,85 @@
+<<<<<<< HEAD
+<div class="modal fade" modal="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+   	  <div class="modal-dialog">
+   		<div class="loginmodal-container">
+	   		<button type="button" class="close" ng-click="loginModal = false">&times;</button>
+       		<h1>Sell</h1><br>
+			  <form name = "loginForm">
+				<input type="text" name="user" placeholder="Username" data-ng-model="login.emailId" ng-required>
+				<input type="password" name="pass" placeholder="Password" data-ng-model="login.password" ng-required>
+				<div class="login-error" ng-show="user.errorStatus == 0">{{user.errorMessage}}</div> 
+				<input type="button" name="login" class="login loginmodal-submit" value="Login" ng-click = "loginUser();" ng-disabled="loginForm.$invalid" >
+			  </form>
+			  	
+			  <div class="login-help">
+				<a href="#">Register</a> - <a href="#">Forgot Password</a>
+			  </div>
+			</div>
+		</div>
+	  </div>
+	  
+<div class="w3-light-grey" style="margin-top: 100px; padding-top:10px;">
+
+	<!-- Page Container -->
+	<div class="w3-content w3-margin-top" style="max-width: 1400px;">
+	<div>
+	<!-- <h1>HELLO Seller</h1> -->
+	
+	  
+	  <div class="w3-third">
+
+				<div class="w3-white w3-text-grey w3-card-4">
+					
+					<div class="w3-container">
+
+						<div class="w3-large">
+							<i class="fa fa-bed fa-fw w3-margin-right w3-text-teal"></i><b>Bedrooms</b><i
+								class="fa fa-close"></i>
+						</div>
+						<input type="radio"> 1</input><br> <input type="radio">
+						2</input><br> <input type="radio"> 3</input><br> <input
+							type="radio"> 4 or more</input> <br>
+						<p class="w3-large">
+							<i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i><b>Bathrooms</b>
+						</p>
+						<input type="radio"> 1</input><br> <input type="radio">
+						2</input><br> <input type="radio"> 3</input><br> <input
+							type="radio"> 4 or more</input> <br>
+						<p class="w3-large">
+							<i class="fa fa-home fa-fw w3-margin-right w3-text-teal"></i><b>Floors</b>
+						</p>
+						<input type="radio"> 1</input><br> <input type="radio">
+						2</input><br> <input type="radio"> 3</input><br> <input
+							type="radio"> 4 or more</input> <br>
+					</div>
+				
+				<br>
+
+				<!-- End Left Column -->
+			</div>
+
+			<!-- <div class="modal fade" modal="sellModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+   	  <div class="modal-dialog">
+   		<div class="loginmodal-container">
+	   		<button type="button" class="close" ng-click="loginModal = false">&times;</button>
+       		<h1>Housing Details</h1><br>
+			  <form name = "sellForm">
+				<input type="text" name="address" placeholder="Address" data-ng-model="sell.address" ng-required>
+				<input type="password" name="pass" placeholder="Password" data-ng-model="login.password" ng-required>
+				<div class="login-error" ng-show="user.errorStatus == 0">{{user.errorMessage}}</div> 
+				<input type="button" name="login" class="login loginmodal-submit" value="Login" ng-click = "loginUser();" ng-disabled="loginForm.$invalid" >
+			  </form>
+			  	
+			  <div class="login-help">
+				<a href="#">Register</a> - <a href="#">Forgot Password</a>
+			  </div>
+			</div>
+		</div> -->
+	  </div>
+	</div>
+	</div>
+	</div>
+=======
 <div style="margin-top: 100px; padding-top: 10px;">
 	<h1>HELLO Seller</h1>
 </div>
@@ -5,3 +87,4 @@
 
 
 <div ng-dropdown-multiselect="" options="example13data" selected-model="example13model" extra-settings="example13settings"></div>
+>>>>>>> branch 'master' of https://github.com/saugatchetry/DBMS_Project.git

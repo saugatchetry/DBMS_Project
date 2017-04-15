@@ -104,6 +104,7 @@ public class PropertyDAOImpl implements PropertyDAO{
 		});  
 	}
 
+<<<<<<< HEAD
 	/*
 	 * Author :- Saugat
 	 * Method :- Returns all the properties based on the search criteria from "buy" page
@@ -149,14 +150,29 @@ public class PropertyDAOImpl implements PropertyDAO{
                 	prop.setNumberOfFloors(rs.getInt(4));
                 	//System.out.println("NumofFloorrs = "+rs.getInt(7));
                 	returnList.add(prop);
+=======
+	@Override
+	public ArrayList<String> getCities() {
+		String quer = "select * from cities";
+		return (ArrayList<String>) jdbcTemplate.query(quer, new ResultSetExtractor<ArrayList<String>>() {
+            public ArrayList<String> extractData(ResultSet rs) throws SQLException, DataAccessException {
+            	ArrayList<String> returnList = new ArrayList<>();
+                while (rs.next()) {
+                	String s="";
+                	s+=rs.getString(1)+','+rs.getString(2);
+                	returnList.add(s);
+>>>>>>> 8a97e594ef8fb2bb61f3cbd8ad26a381cba724a0
                 }
                 
                 System.out.println("Size =  "+returnList.size());
                 return returnList;
             }
         });
+<<<<<<< HEAD
 		
 		//String query = "SELECT * FROM PROPERTY WHERE "
 		//return null;
+=======
+>>>>>>> 8a97e594ef8fb2bb61f3cbd8ad26a381cba724a0
 	} 
 }

@@ -20,8 +20,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.business.PredictBean;
 import com.example.business.PropertyBean;
 import com.example.business.UserBean;
+import com.example.model.PredictProperty;
 import com.example.model.Property;
 import com.example.model.User;
 
@@ -31,11 +33,15 @@ class DemoController2{
 	ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationcontext.xml");
 	UserBean userBean = (UserBean) applicationContext.getBean("userBean");
 	PropertyBean propertyBean = (PropertyBean)applicationContext.getBean("propertyBean");
+	//PredictBean predictBean = (PredictBean)applicationContext.getBean("predictBean");//Anitha changes
 	
 	@RequestMapping(value = "/login",method=RequestMethod.POST, consumes="application/json",produces="application/json")
 	public User secondPage(@RequestBody User user){
 		User userOutput = userBean.getUser(user);
 		return userOutput;
+		
+		
+		/*anitha ranganathan*/
 	}
 	
 	@RequestMapping(value = "/signUp",method=RequestMethod.POST, consumes="application/json",produces="application/json")
@@ -49,6 +55,20 @@ class DemoController2{
 		ArrayList<Property> popularProperty = propertyBean.getProperty();
 		return popularProperty;
 	}
+
+	/*Anitha changes begin*/
+	@RequestMapping(value = "/getCities",method=RequestMethod.GET,produces="application/json")
+	public ArrayList<String> getCities(){
+		ArrayList<String> popularProperty = propertyBean.getCities();
+		return popularProperty;
+	}
+
+	
+//	@RequestMapping(value = "/estimateValue",method=RequestMethod.POST,produces="application/json")
+//	public double getEstimate(@RequestBody PredictProperty p){
+//		double estimated_value = predictBean.predictValue(p);
+//		return estimated_value;
+//	}
 	
 
 	@RequestMapping(value="/getTotalRecords",method=RequestMethod.GET)
@@ -92,6 +112,10 @@ class DemoController2{
             System.err.println(e);
         }
         return null;
+<<<<<<< HEAD
     }
 
+=======
+    }
+>>>>>>> 8a97e594ef8fb2bb61f3cbd8ad26a381cba724a0
 }
