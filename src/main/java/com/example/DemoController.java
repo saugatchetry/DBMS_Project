@@ -100,10 +100,29 @@ class DemoController2{
 		return estimated_value;
 	}
 	
+
+	@RequestMapping(value="/getTotalRecords",method=RequestMethod.GET)
+	public int showAllRecords(){
+		System.out.println("Show all records called");
+		int total = userBean.getTotalRecords();
+		System.out.println("Total Records = "+total);
+		return total;
+	}
+
 	@RequestMapping(value = "/insertImage",method=RequestMethod.GET,produces="application/json")
 	public boolean imsertImageData(){
 		Boolean insertionResult = propertyBean.insertImage();
 		return insertionResult;
+	}
+	
+	/*
+	 * END-Point to search properties based on selected features
+	 */
+	@RequestMapping(value = "/searchProperties",method=RequestMethod.POST,consumes="application/json",produces="application/json")
+	public ArrayList<Property> getSearchedProperties(@RequestBody Property property){
+		System.out.println("Controller hit");
+		ArrayList<Property> searchedProperty = propertyBean.getSearchedProperties(property);
+		return searchedProperty;
 	}
 	
 	@RequestMapping(value = "/downloadImage", method = RequestMethod.GET, produces = "image/jpeg")
@@ -124,4 +143,5 @@ class DemoController2{
         }
         return null;
     }
+
 }
