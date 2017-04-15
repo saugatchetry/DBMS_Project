@@ -17,7 +17,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
     <title>Home</title>
 	<script src="js/angular-ui-bootstrap-modal.js"></script>
-	<script src="js/angular-chart/angular-chart.min.js"></script>	
+	<script src="js/angular-chart/angular-chart.min.js"></script>		
     <!-- Bootstrap Core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
@@ -30,6 +30,7 @@
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
 
 	<link href="style/app.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -40,7 +41,7 @@
 	
 	<script>
 
-var app = angular.module('myApp', ['ngRoute','ui.bootstrap.modal', 'chart.js']);
+var app = angular.module('myApp', ['ngRoute','ui.bootstrap.modal', 'chart.js', 'angularjs-dropdown-multiselect']);
 
 app.config(function($routeProvider) {
     $routeProvider
@@ -240,7 +241,7 @@ app.controller('MainController', ['$scope', '$http', function($scope, $http) {
         <!-- /.container-fluid -->
     </nav>
   
-	<div style = "margin-top: 100px;" ng-view></div>
+	<div ng-view></div>
     
     
     
@@ -289,6 +290,7 @@ app.controller('MainController', ['$scope', '$http', function($scope, $http) {
 
     <!-- Theme JavaScript -->
     <script src="js/freelancer.min.js"></script>
+    <script src="js/angularjs-dropdown-multiselect.min.js"></script>
 
 </body>
 

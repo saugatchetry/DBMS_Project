@@ -1,4 +1,113 @@
-<div ng-init = "loadImage()">
+<div ng-init="loadImage()">
 	<h1>HELLO Buyer</h1>
-	<img ng-src="data:image/JPEG;base64,{{image}}">	
+	<img ng-src="data:image/JPEG;base64,{{image}}">
+</div>
+<div class="w3-light-grey" style="margin-top: 100px; padding-top: 10px;">
+
+	<!-- Page Container -->
+	<div class="w3-content w3-margin-top" style="max-width: 1400px;">
+
+		<!-- The Grid -->
+		<div class="w3-row-padding">
+
+			<!-- Left Column -->
+			<div class="w3-third">
+
+				<div class="w3-white w3-text-grey w3-card-4">
+					<div class="w3-display-container">
+						<button type="submit">
+							<i class="glyphicon glyphicon-search"></i>
+						</button>
+						<input type="text"></input>
+					</div>
+					<div class="w3-container">
+
+						<div class="w3-large">
+							<i class="fa fa-bed fa-fw w3-margin-right w3-text-teal"></i><b>Bedrooms</b><i
+								class="fa fa-close"></i>
+						</div>
+						<input type="radio"> 1</input><br> <input type="radio">
+						2</input><br> <input type="radio"> 3</input><br> <input
+							type="radio"> 4 or more</input> <br>
+						<p class="w3-large">
+							<i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i><b>Bathrooms</b>
+						</p>
+						<input type="radio"> 1</input><br> <input type="radio">
+						2</input><br> <input type="radio"> 3</input><br> <input
+							type="radio"> 4 or more</input> <br>
+						<p class="w3-large">
+							<i class="fa fa-home fa-fw w3-margin-right w3-text-teal"></i><b>Floors</b>
+						</p>
+						<input type="radio"> 1</input><br> <input type="radio">
+						2</input><br> <input type="radio"> 3</input><br> <input
+							type="radio"> 4 or more</input> <br>
+					</div>
+					<div class="w3-container">
+						<label ng-repeat="fruitName in fruits"> <input
+							type="checkbox" name="selectedFruits[]" value="{{fruitName}}"
+							ng-checked="selection.indexOf(fruitName) > -1"
+							ng-click="toggleSelection(fruitName)"> {{fruitName}}
+							<br/>
+						</label>
+					</div>
+				</div>
+				<br>
+
+				<!-- End Left Column -->
+			</div>
+
+			<!-- Right Column -->
+			<div class="w3-twothird">
+
+				<div class="w3-container w3-card-2 w3-white w3-margin-bottom"
+					style="padding: 10px;">
+
+					<div class="w3-container">
+
+						<div class="row">
+							<div class="col-md-4">
+								<div>
+									<img src="img/portfolio/cake.png"
+										style="width: 100%; height: auto;"></img>
+								</div>
+							</div>
+							<div class="col-md-8">
+								<div class="row">
+									<div class="col-md-6">
+										<p>Bedrooms: 3</p>
+									</div>
+									<div class="col-md-6">
+										<p>Bathrooms: 2</p>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-6">
+										<p>Floors: 2</p>
+									</div>
+									<div class="col-md-6">
+										<p>Price : $500000</p>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-6">
+										<p>Parking : Available</p>
+									</div>
+									<div class="col-md-6">
+										<p>Contact Seller</p>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+				<!-- End Right Column -->
+			</div>
+
+			<!-- End Grid -->
+		</div>
+
+		<!-- End Page Container -->
+	</div>
 </div>
