@@ -1,7 +1,83 @@
 <div style="margin-top: 100px; padding-top: 10px;">
 	<h1>HELLO Seller</h1>
 </div>
-
-
-
-<div ng-dropdown-multiselect="" options="example13data" selected-model="example13model" extra-settings="example13settings"></div>
+<div class = "row">
+	<div class= "col-md-6 col-md-offset-2">
+		<div class = "row">
+			<div class = "col-md-6">
+				<input type = "text" name = "ownerName" ng-model= "ownerName" ng-required= "true" placeholder="Owner Name"/>
+			</div>
+			<div class = "col-md-6">
+				<input type = "email" name = "emailId" ng-model= "email" ng-required= "true" placeholder="Email ID"/>
+			</div>
+		</div>
+		<br/>
+		<div class = "row">
+			<div class = "col-md-6">
+				<select ng-model="selectedCity" ng-options="x for x in cities"></select>
+			</div>
+			<div class = "col-md-6">
+				<input type = "text" name = "zipcode"  ng-model= "zipcode" ng-pattern = "/^[0-9]{5}$/" ng-required= "true" placeholder="Zip Code"/>
+			</div>
+		</div>
+		<br/>
+		<div class = "row">
+			<div class = "col-md-6">
+				<input type = "number" name = "bathroom"  ng-model= "bathroom" min = "1" ng-required= "true" placeholder="No of Bathroom"/>
+			</div>
+			<div class = "col-md-6">
+				<input type = "number" name = "bedroom"  ng-model= "bedroom" min = "1" ng-required= "true" placeholder="No of Bedrooms"/>
+			</div>
+		</div>
+		<br/>
+		<div class = "row">
+			<div class = "col-md-6">
+				<input type = "text" name = "livingArea" ng-model= "livingArea" ng-pattern = "/^[0-9]*$/" ng-required= "true" placeholder="Living Area Sqft"/>
+			</div>
+			<div class = "col-md-6">
+				<input type = "text" name = "expectedRate" ng-model= "expectedRate" ng-pattern = "/^[0-9]*$/" ng-required= "true" placeholder="Expected Rate"/>
+			</div>
+		</div>
+		<br/>
+		<div class = "row">
+			<div class = "col-md-6">
+				<input type = "text" name = "yearBuilt" ng-model= "yearBuilt" ng-pattern = "/[0-9]{4}$/" ng-required= "true" placeholder="Year Built"/>
+			</div>
+			<div class = "col-md-6">
+				<input type = "text" name = "yearRenovated" ng-model= "yearRenovated" ng-pattern = "/[0-9]{4}$/" ng-required= "true" placeholder="Year Renovated"/>
+			</div>
+		</div>
+		<br/>		
+		<div class = "row">
+			<div class = "col-md-6">
+				<input type = "radio" name = "nego" value= "true" ng-model= "isNegotiable" ng-required= "true"/>Negotiable
+			</div>
+			<div class = "col-md-6">
+				<input type = "radio" name = "nego" value = "false" ng-model= "isNegotiable" ng-required= "true"/>Non Negotiable
+			</div>
+		</div>
+		<br/>
+		<div class = "row">
+			<textarea style = "margin-left: 10px; width : 81%" ng-model = "comments" wrap = "soft"></textarea>
+		</div>
+	</div>
+	<div class = "col-md-4">
+		<div class= "row">
+			<input type="checkbox" ng-model="propertyProp.WoodenFlooring" ng-true-value="1" ng-false-value="0" ng-checked="checkbox.WoodenFlooring == 1"/>&nbsp;&nbsp;Wooden Flooring
+			<br/><br/>
+			<input type="checkbox" ng-model="propertyProp.Carpet" ng-true-value="1" ng-false-value="0" ng-checked="propertyProp.Carpet == 1"/>&nbsp;&nbsp;Carpet
+						<br/><br/>
+			<input type="checkbox" ng-model="propertyProp.Parking" ng-true-value="1" ng-false-value="0" ng-checked="propertyProp.Parking == 1"/>&nbsp;&nbsp;Parking
+						<br/><br/>
+			<input type="checkbox" ng-model="propertyProp.PetFriendly" ng-true-value="1" ng-false-value="0" ng-checked="propertyProp.PetFriendly == 1"/>&nbsp;&nbsp;Pet Friendly
+						<br/><br/>
+			<input type="checkbox" ng-model="propertyProp.Pool" ng-true-value="1" ng-false-value="0" ng-checked="propertyProp.Pool == 1"/>&nbsp;&nbsp;Pool
+						<br/><br/>
+			<input type="checkbox" ng-model="propertyProp.WaterFront" ng-true-value="1" ng-false-value="0" ng-checked="propertyProp.WaterFront == 1"/>&nbsp;&nbsp;Water Front
+						<br/><br/>
+			<input type="checkbox" ng-model="propertyProp.View" ng-true-value="1" ng-false-value="0" ng-checked="propertyProp.View == 1"/>&nbsp;&nbsp;View
+		</div>
+		{{propertyProp.WoodenFlooring}}
+		{{propertyProp.Carpet}}
+	</div>
+</div>
