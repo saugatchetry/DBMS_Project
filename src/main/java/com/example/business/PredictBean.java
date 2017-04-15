@@ -2,31 +2,31 @@ package com.example.business;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.example.DAO.PredictDao;
+import com.example.DAO.PredictDAO;
 import com.example.model.PredictProperty;
 
 public class PredictBean {
 	
 	@Autowired
 	
-	private PredictDao predictDao;
+	private PredictDAO predictDAO;
 	
 	
 	
-	public PredictDao getPropertyDAO() {
-		return predictDao;
+	public PredictDAO getPredictDao() {
+		return predictDAO;
 	}
 
 
 
-	public void setPredictDao(PredictDao predictDao) {
-		this.predictDao = predictDao;
+	public void setPredictDao(PredictDAO predictDAO) {
+		this.predictDAO = predictDAO;
 	}
 
 
 
 	public double predictValue(PredictProperty p){
-		return predictDao.predictValue(p);
+		return predictDAO.predictValue(p);
 	}
 
 }

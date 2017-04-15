@@ -15,7 +15,7 @@ import com.example.model.PredictProperty;
 
 
 
-public class PredictDaoImpl implements PredictDao {
+public class PredictDaoImpl implements PredictDAO {
 	private JdbcTemplate jdbcTemplate;
 	private KeyGenerator keyGenerator;
 	
