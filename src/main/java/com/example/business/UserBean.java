@@ -19,14 +19,12 @@ public class UserBean {
 
 	public User insertUser(User user){
 		return userDAO.insertUser(user);
-<<<<<<< HEAD
+
 	}
 	
 	public int getTotalRecords(){
 		return userDAO.getTotalRecords();
 	}
 
-=======
-	}
->>>>>>> branch 'master' of https://github.com/saugatchetry/DBMS_Project.git
+
 }

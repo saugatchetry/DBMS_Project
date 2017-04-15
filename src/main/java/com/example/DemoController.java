@@ -83,5 +83,5 @@ class DemoController2{
         }
         return null;
     }
->>>>>>> branch 'master' of https://github.com/saugatchetry/DBMS_Project.git
+
 }
