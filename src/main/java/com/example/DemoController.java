@@ -57,6 +57,12 @@ class DemoController2{
 	}
 
 	/*Anitha changes begin*/
+	@RequestMapping(value = "/getCities",method=RequestMethod.GET,produces="application/json")
+	public ArrayList<String> getCities(){
+		ArrayList<String> popularProperty = propertyBean.getCities();
+		return popularProperty;
+	}
+
 	
 //	@RequestMapping(value = "/estimateValue",method=RequestMethod.POST,produces="application/json")
 //	public double getEstimate(@RequestBody PredictProperty p){

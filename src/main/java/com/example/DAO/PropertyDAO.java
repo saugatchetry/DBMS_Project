@@ -9,4 +9,5 @@ public interface PropertyDAO {
 	ArrayList<Property> getProperty();
 	boolean insertImage();
 	List<byte[]> getImages();
+	ArrayList<String> getCities();
 }

@@ -16,10 +16,6 @@ public SellDAO getPredictDao() {
 	return sellDAO;
 }
 
-public Sell getUser(Sell sell) {
-	return sellDAO.getSell(sell);
-}
-
 
 public void setPredictDao(SellDAO predictDAO) {
 	this.sellDAO = predictDAO;

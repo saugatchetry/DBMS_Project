@@ -102,5 +102,23 @@ public class PropertyDAOImpl implements PropertyDAO{
 				return list;  
 			}  
 		});  
+	}
+
+	@Override
+	public ArrayList<String> getCities() {
+		String quer = "select * from cities";
+		return (ArrayList<String>) jdbcTemplate.query(quer, new ResultSetExtractor<ArrayList<String>>() {
+            public ArrayList<String> extractData(ResultSet rs) throws SQLException, DataAccessException {
+            	ArrayList<String> returnList = new ArrayList<>();
+                while (rs.next()) {
+                	String s="";
+                	s+=rs.getString(1)+','+rs.getString(2);
+                	returnList.add(s);
+                }
+                
+                System.out.println("Size =  "+returnList.size());
+                return returnList;
+            }
+        });
 	} 
 }
