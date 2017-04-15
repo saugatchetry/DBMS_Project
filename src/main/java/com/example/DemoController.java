@@ -20,10 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.business.PredictBean;
 import com.example.business.PropertyBean;
 import com.example.business.UserBean;
-import com.example.model.PredictProperty;
 import com.example.model.Property;
 import com.example.model.User;
 
@@ -112,10 +110,6 @@ class DemoController2{
             System.err.println(e);
         }
         return null;
-<<<<<<< HEAD
     }
 
-=======
-    }
->>>>>>> 8a97e594ef8fb2bb61f3cbd8ad26a381cba724a0
 }

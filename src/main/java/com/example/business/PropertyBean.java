@@ -32,15 +32,14 @@ public class PropertyBean {
 	public List<byte[]> getImages(){
 		return propertyDAO.getImages();
 	}
-<<<<<<< HEAD
 	
 	
 	public ArrayList<Property> getSearchedProperties(Property property){
 		return propertyDAO.getSearchedProperties(property);
-=======
+	}
+	
 	public ArrayList<String> getCities(){
 		return propertyDAO.getCities();
->>>>>>> 8a97e594ef8fb2bb61f3cbd8ad26a381cba724a0
 	}
 
 }
