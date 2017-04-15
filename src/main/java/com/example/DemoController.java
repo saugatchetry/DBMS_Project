@@ -39,4 +39,12 @@ class DemoController2{
 		ArrayList<Property> popularProperty = propertyBean.getProperty();
 		return popularProperty;
 	}
+	
+	@RequestMapping(value="/getTotalRecords",method=RequestMethod.GET)
+	public int showAllRecords(){
+		System.out.println("Show all records called");
+		int total = userBean.getTotalRecords();
+		System.out.println("Total Records = "+total);
+		return total;
+	}
 }

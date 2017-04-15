@@ -89,6 +89,16 @@ app.controller('MainController', ['$scope', '$http', function($scope, $http) {
 		
 	}
 	
+	$scope.showAllRecords = function(){
+		//console.log("Clicked");
+		 $http({
+			method : "GET",
+			url : "getTotalRecords"
+		}).then(function(result){
+			alert('Total no of records : ' + result.data);
+		});
+	}
+	
 	$scope.loginUser = function(){
 		$http({
 	        method : "POST",
@@ -184,7 +194,7 @@ app.controller('MainController', ['$scope', '$http', function($scope, $http) {
                 <ul class="nav navbar-nav navbar-left">
                    
                     <li class="page-scroll" >
-                    	 <a class="navbar-brand" href="#page-top" style="background:transparent !important;">GharWaale.com</a>
+                    	 <a ng-click="showAllRecords()" class="navbar-brand" href="#page-top" style="background:transparent !important;">GharWaale.com</a>
                     </li>
                     <li class="page-scroll">
                     	<a ng-href="#buy" >Buy</a>
