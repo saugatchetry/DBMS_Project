@@ -1,9 +1,20 @@
 package com.example;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
+import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.apache.xerces.impl.dv.util.Base64;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,13 +44,13 @@ class DemoController2{
 		return userOutput;
 	}
 	
-	
 	@RequestMapping(value = "/getPopularProperties",method=RequestMethod.GET,produces="application/json")
 	public ArrayList<Property> getPopularProperties(){
 		ArrayList<Property> popularProperty = propertyBean.getProperty();
 		return popularProperty;
 	}
 	
+
 	@RequestMapping(value="/getTotalRecords",method=RequestMethod.GET)
 	public int showAllRecords(){
 		System.out.println("Show all records called");
@@ -47,4 +58,30 @@ class DemoController2{
 		System.out.println("Total Records = "+total);
 		return total;
 	}
+
+	@RequestMapping(value = "/insertImage",method=RequestMethod.GET,produces="application/json")
+	public boolean imsertImageData(){
+		Boolean insertionResult = propertyBean.insertImage();
+		return insertionResult;
+	}
+	
+	@RequestMapping(value = "/downloadImage", method = RequestMethod.GET, produces = "image/jpeg")
+    public ResponseEntity<String> getPDF() {
+        FileInputStream fileStream;
+        try {
+        	List<byte[]> images = propertyBean.getImages();  
+        	System.out.println("Inside this ");
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType("image/jpeg"));
+            String filename = "image1.jpeg";
+            headers.setContentDispositionFormData(filename, filename);
+            String imageEncoded = Base64.encode(images.get(0));
+            ResponseEntity<String> response = new ResponseEntity<String>(imageEncoded, headers, HttpStatus.OK);
+            return response;
+        } catch (Exception e) {
+            System.err.println(e);
+        }
+        return null;
+    }
+>>>>>>> branch 'master' of https://github.com/saugatchetry/DBMS_Project.git
 }

@@ -1,12 +1,22 @@
 package com.example.DAO;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.support.SqlLobValue;
+import org.springframework.jdbc.support.lob.DefaultLobHandler;
+import org.springframework.jdbc.support.lob.LobHandler;
 
 import com.example.model.Property;
 
@@ -50,5 +60,47 @@ public class PropertyDAOImpl implements PropertyDAO{
 		
 		
 	}
+	
+	public boolean insertImage(){		
+		try {
+			final File image = new File("C:\\Users\\Nishant\\Desktop\\spring17\\DBMSPROJ\\DBMS_Project\\src\\main\\resources\\static\\img\\prop2.jpg");
+			final InputStream imageIs = new FileInputStream(image);   
+			LobHandler lobHandler = new DefaultLobHandler(); 
+			int result = jdbcTemplate.update(
+					"INSERT INTO Image (IMAGE_ID, IMAGE_DATA) VALUES (?, ?)",
+					new Object[] {
+							1,
+							new SqlLobValue(imageIs, (int)image.length(), lobHandler),
+					},
+					new int[] {Types.INTEGER, Types.BLOB});
+			if (result > 0){
+				return true;
+			}
+			
+			return false;
+		} catch (DataAccessException e) {
+			System.out.println("DataAccessException " + e.getMessage());
+			return false;
+		} catch (FileNotFoundException e) {
+			System.out.println("DataAccessException " + e.getMessage());
+			return false;
+		}		
+	}
+	
+	public List<byte[]> getImages(){  
+		String queryString = "Select * from Image";
+		LobHandler lobHandler = new DefaultLobHandler();
+		return jdbcTemplate.query(queryString,new ResultSetExtractor<List<byte[]>>(){  
+			@Override  
+			public List<byte[]> extractData(ResultSet rs) throws SQLException,  
+			DataAccessException {  
 
+				List<byte[]> list=new ArrayList<byte[]>();  
+				while(rs.next()){  					
+					list.add(lobHandler.getBlobAsBytes(rs,"IMAGE_DATA"));  
+				}  
+				return list;  
+			}  
+		});  
+	} 
 }
