@@ -102,5 +102,61 @@ public class PropertyDAOImpl implements PropertyDAO{
 				return list;  
 			}  
 		});  
+	}
+
+	/*
+	 * Author :- Saugat
+	 * Method :- Returns all the properties based on the search criteria from "buy" page
+	 */
+	@Override
+	public ArrayList<Property> getSearchedProperties(Property property) {
+		final Property searchedProperty = new Property();
+		System.out.println("Bedrooms = "+property.getNumberOfBedrooms());
+		System.out.println("Bathrooms = "+property.getNumberOfBathrooms());
+		System.out.println("Floors = "+property.getNumberOfFloors());
+		StringBuilder query = new StringBuilder("SELECT * FROM PROPERTY WHERE ");
+		boolean flag=false;
+		if(property.getNumberOfBathrooms() != 0){
+			query.append("NUMBER_OF_BATHROOM ="+property.getNumberOfBathrooms());
+			flag=true;
+		}
+		
+		if(property.getNumberOfBedrooms() != 0){
+			if(flag)
+				query.append(" AND ");
+			query.append("NUMBER_OF_BEDROOMS = "+ property.getNumberOfBedrooms());
+			flag=true;
+		}
+		
+		if(property.getNumberOfFloors() != 0){
+			if(flag)
+				query.append(" AND ");
+			query.append("NUMBER_OF_FLOORS = "+ property.getNumberOfBedrooms());
+			flag=true;
+		}
+		System.out.println("Query = "+query);
+		return (ArrayList<Property>) jdbcTemplate.query(query.toString(), new ResultSetExtractor<ArrayList<Property>>() {
+            public ArrayList<Property> extractData(ResultSet rs) throws SQLException, DataAccessException {
+            	ArrayList<Property> returnList = new ArrayList<>();
+                while (rs.next()) {
+                	Property prop = new Property();
+                	prop.setId(rs.getLong(1));
+                	prop.setYearBuilt(rs.getString(7));
+                	prop.setSquareFeet(rs.getFloat(2));
+                	prop.setPrice(rs.getFloat(12));
+                	prop.setNumberOfBedrooms(rs.getInt(3));
+                	prop.setNumberOfBathrooms(rs.getInt(5));
+                	prop.setNumberOfFloors(rs.getInt(4));
+                	//System.out.println("NumofFloorrs = "+rs.getInt(7));
+                	returnList.add(prop);
+                }
+                
+                System.out.println("Size =  "+returnList.size());
+                return returnList;
+            }
+        });
+		
+		//String query = "SELECT * FROM PROPERTY WHERE "
+		//return null;
 	} 
 }

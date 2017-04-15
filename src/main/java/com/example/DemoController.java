@@ -65,6 +65,16 @@ class DemoController2{
 		return insertionResult;
 	}
 	
+	/*
+	 * END-Point to search properties based on selected features
+	 */
+	@RequestMapping(value = "/searchProperties",method=RequestMethod.POST,consumes="application/json",produces="application/json")
+	public ArrayList<Property> getSearchedProperties(@RequestBody Property property){
+		System.out.println("Controller hit");
+		ArrayList<Property> searchedProperty = propertyBean.getSearchedProperties(property);
+		return searchedProperty;
+	}
+	
 	@RequestMapping(value = "/downloadImage", method = RequestMethod.GET, produces = "image/jpeg")
     public ResponseEntity<String> getPDF() {
         FileInputStream fileStream;
