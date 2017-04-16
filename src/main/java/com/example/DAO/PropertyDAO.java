@@ -9,5 +9,6 @@ public interface PropertyDAO {
 	ArrayList<Property> getProperty();
 	boolean insertImage(byte[] arr);
 	List<byte[]> getImages(String imageId);
+	ArrayList<Property> getSearchedProperties(Property property);		
 	ArrayList<String> getCities();
 }

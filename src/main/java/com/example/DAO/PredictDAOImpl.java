@@ -7,15 +7,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.InvalidResultSetAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 
 import com.example.KeyGenerator;
 import com.example.model.PredictProperty;
 
-
-
-public class PredictDaoImpl implements PredictDAO {
+public class PredictDAOImpl implements PredictDAO {
 	private JdbcTemplate jdbcTemplate;
 	private KeyGenerator keyGenerator;
 	
@@ -36,7 +35,7 @@ public class PredictDaoImpl implements PredictDAO {
 	}
 
 	@Override
-	public double predictValue(PredictProperty p){
+	public PredictProperty predictValue(PredictProperty p){
 		ArrayList<PredictProperty> returnList = new ArrayList<>();
 		StringBuilder querySelect = new StringBuilder();
 		querySelect.append("select SQ_FT,NUMBER_OF_BATHROOM,NUMBER_OF_BEDROOMS,"
@@ -108,6 +107,7 @@ public class PredictDaoImpl implements PredictDAO {
 			queryWhere.append(" CITY != null ");
 		}
 		querySelect.append(queryWhere);
+		try{
 		jdbcTemplate.query(querySelect.toString(), new ResultSetExtractor<ArrayList<PredictProperty>>() {
             public ArrayList<PredictProperty> extractData(ResultSet rs) throws SQLException, DataAccessException {
                 while (rs.next()) {
@@ -128,8 +128,21 @@ public class PredictDaoImpl implements PredictDAO {
                 return returnList;
             }
         });
+	
 		double [][] featureMatrix =loadFeatureMatrix(returnList,p);
-		return MultipleRegression.printPredictedPrices(featureMatrix);
+		p.setEstimatedValue(MultipleRegression.printPredictedPrices(featureMatrix));
+		return p;
+	}
+    catch(InvalidResultSetAccessException e){
+    	System.out.println("Invalid thing Exception is "+e);
+    	return p;
+    }
+    catch(DataAccessException e){
+    	System.out.println("Exception is "+e.getCause().getMessage());
+    	p.setErrorStatus(0);
+    	p.setErrorMessage(e.getCause().getMessage());
+    	return p;
+    }
 	}
 	public static double[][] loadFeatureMatrix(ArrayList<PredictProperty> returnList, PredictProperty p){		
 		

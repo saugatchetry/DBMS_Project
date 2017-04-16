@@ -95,7 +95,11 @@ public class UserDAOImpl implements UserDAO {
         }
         return user;
 	}
-
 	
+	@Override
+	public int getTotalRecords(){
+		String query = "SELECT COUNT(*) FROM Registered_User";
+		return  jdbcTemplate.queryForObject(query, Integer.class);
+	}
  
 }

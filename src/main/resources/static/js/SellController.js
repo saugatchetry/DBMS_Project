@@ -1,11 +1,13 @@
 angular.module('myApp').controller('SellController', ['$rootScope', '$scope', '$http','toastr', function($rootScope,$scope, $http, toastr) {
 	function getCities(){
+		$scope.loading = true;
 		$http({
 	        method : "GET",
 	        url : "getCities",	     
 	    }).then(function(response) {
         	$scope.cities = response.data;
         	$scope.selectedCity = $scope.cities[0];
+        	$scope.loading = false;
     	});		
 	};
 	
@@ -25,13 +27,13 @@ angular.module('myApp').controller('SellController', ['$rootScope', '$scope', '$
 	 }
 	
 	$scope.propertyProp = {
-			'WoodenFlooring' : 0,
-			'Carpet' : 0,
-			'Parking' : 0,
-			'PetFriendly' : 0,
-			'Pool' : 0,
-			'WaterFront' : 0,
-			'View' : 0
+			'woodenFlooring' : 0,
+			'carpet' : 0,
+			'parking' : 0,
+			'petFriendly' : 0,
+			'pool' : 0,
+			'waterFront' : 0,
+			'view' : 0
 	};
 	
 	$scope.submitSellerDetails = function(){
@@ -54,19 +56,28 @@ angular.module('myApp').controller('SellController', ['$rootScope', '$scope', '$
 						'street':$scope.street,
 						'zipcode':$scope.zipcode,
 						'city': $scope.selectedCity,
-						'sellerId':$rootScope.userDetails.id,
+						'sellerId':$rootScope.userDetails.id,						
 						'negotiable':$scope.isNegotiable,
-						'propFeature': $scope.propertyProp																				
-				}
-				
+						'woodenFlooring':$scope.propertyProp.woodenFlooring,
+						'carpet':$scope.propertyProp.carpet,
+						'parking':$scope.propertyProp.parking,
+						'petFriendly':$scope.propertyProp.petFriendly,
+						'pool':$scope.propertyProp.pool,
+						'waterFront':$scope.propertyProp.waterFront,
+						'view':$scope.propertyProp.view,
+				}				
 				$http({
 			        method : "POST",
-			        url : "sell",
+			        url : "selling",
 			        data : sellPropDet
 			    }).then(function(response) {
-		        	alert('Details saved');
+			    	var sellerData = response.data;
+		        	toastr.success('Details saved for propertyid:' + sellerData.propId);
 		    	});																				
-			}			
+			}
+			else{
+				toastr.info('Please login before posting property');
+			}
 		}else{
 			toastr.error('Form is Invalid', 'Please Fill Details Properly',{
 				'position-class': 'toastr-bottom-left',
@@ -85,6 +96,5 @@ angular.module('myApp').controller('SellController', ['$rootScope', '$scope', '$
 	    }).then(function(response) {
         	alert('Details saved');
     	});		*/
-	  }, true);
-	
+	  }, true);	
 }]);

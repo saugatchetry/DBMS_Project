@@ -32,6 +32,12 @@ public class PropertyBean {
 	public List<byte[]> getImages(String imageId){
 		return propertyDAO.getImages(imageId);
 	}
+	
+	
+	public ArrayList<Property> getSearchedProperties(Property property){
+		return propertyDAO.getSearchedProperties(property);
+	}
+	
 	public ArrayList<String> getCities(){
 		return propertyDAO.getCities();
 	}

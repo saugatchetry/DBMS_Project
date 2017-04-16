@@ -62,6 +62,74 @@ public class PropertyDAOImpl implements PropertyDAO{
 		
 	}
 	
+	@Override
+	public ArrayList<Property> getSearchedProperties(Property property) {
+		final Property searchedProperty = new Property();
+		System.out.println("Bedrooms = "+property.getNumberOfBedrooms());
+		System.out.println("Bathrooms = "+property.getNumberOfBathrooms());
+		System.out.println("Floors = "+property.getNumberOfFloors());
+		StringBuilder query = new StringBuilder("SELECT * FROM PROPERTY WHERE ");
+		boolean flag=false;
+		if(property.getNumberOfBathrooms() != 0){
+			query.append("NUMBER_OF_BATHROOM ="+property.getNumberOfBathrooms());
+			flag=true;
+		}
+		
+		if(property.getNumberOfBedrooms() != 0){
+			if(flag)
+				query.append(" AND ");
+			query.append("NUMBER_OF_BEDROOMS = "+ property.getNumberOfBedrooms());
+			flag=true;
+		}
+		
+		if(property.getNumberOfFloors() != 0){
+			if(flag)
+				query.append(" AND ");
+			query.append("NUMBER_OF_FLOORS = "+ property.getNumberOfBedrooms());
+			flag=true;
+		}
+		System.out.println("Query = "+query);
+		return (ArrayList<Property>) jdbcTemplate.query(query.toString(), new ResultSetExtractor<ArrayList<Property>>() {
+            public ArrayList<Property> extractData(ResultSet rs) throws SQLException, DataAccessException {
+            	ArrayList<Property> returnList = new ArrayList<>();
+                while (rs.next()) {
+                	Property prop = new Property();
+                	prop.setId(rs.getLong(1));
+                	prop.setYearBuilt(rs.getString(7));
+                	prop.setSquareFeet(rs.getFloat(2));
+                	prop.setPrice(rs.getFloat(12));
+                	prop.setNumberOfBedrooms(rs.getInt(3));
+                	prop.setNumberOfBathrooms(rs.getInt(5));
+                	prop.setNumberOfFloors(rs.getInt(4));
+                	//System.out.println("NumofFloorrs = "+rs.getInt(7));
+                	returnList.add(prop);
+                }
+				return returnList;
+            }});
+		
+		}  
+	@Override
+	public ArrayList<String> getCities() {
+		String quer = "select * from cities";
+		return (ArrayList<String>) jdbcTemplate.query(quer, new ResultSetExtractor<ArrayList<String>>() {
+            public ArrayList<String> extractData(ResultSet rs) throws SQLException, DataAccessException {
+            	ArrayList<String> returnList = new ArrayList<>();
+                while (rs.next()) {
+                	String s="";
+                	s+=rs.getString(1)+','+rs.getString(2);
+                	returnList.add(s);
+                }
+                
+                System.out.println("Size =  "+returnList.size());
+                return returnList;
+            }
+        });
+		
+		//String query = "SELECT * FROM PROPERTY WHERE "
+		//return null;
+	}
+
+	@Override
 	public boolean insertImage(byte[] imageArr){		
 		try {
 			//final File image = new File("C:\\Users\\Nishant\\Desktop\\spring17\\DBMSPROJ\\DBMS_Project\\src\\main\\resources\\static\\img\\prop2.jpg");
@@ -86,6 +154,7 @@ public class PropertyDAOImpl implements PropertyDAO{
 		}		
 	}
 	
+	@Override
 	public List<byte[]> getImages(String imageId){  
 		String queryString = "Select * from Image where IMAGE_ID = " + imageId;
 		LobHandler lobHandler = new DefaultLobHandler();
@@ -103,21 +172,4 @@ public class PropertyDAOImpl implements PropertyDAO{
 		});  
 	}
 
-	@Override
-	public ArrayList<String> getCities() {
-		String quer = "select * from cities";
-		return (ArrayList<String>) jdbcTemplate.query(quer, new ResultSetExtractor<ArrayList<String>>() {
-            public ArrayList<String> extractData(ResultSet rs) throws SQLException, DataAccessException {
-            	ArrayList<String> returnList = new ArrayList<>();
-                while (rs.next()) {
-                	String s="";
-                	s+=rs.getString(1)+','+rs.getString(2);
-                	returnList.add(s);
-                }
-                
-                System.out.println("Size =  "+returnList.size());
-                return returnList;
-            }
-        });
-	} 
 }

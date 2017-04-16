@@ -31,5 +31,17 @@ public class KeyGenerator {
         });
 		return str.add(new BigDecimal(1));
 	}
+	public BigDecimal generateKeySell(String seqName){
+		String query = "SELECT "+seqName + ".NEXTVAL from DUAL";
+		BigDecimal str =  jdbcTemplate.query(query, new ResultSetExtractor<BigDecimal>() {
+            public BigDecimal extractData(ResultSet rs) throws SQLException, DataAccessException {
+                if(rs.next()) {
+                	return rs.getBigDecimal(1);
+                }
+                return null;
+            }
+        });
+		return str.add(new BigDecimal(1));
+	}
 	
 }

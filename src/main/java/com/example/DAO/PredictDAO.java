@@ -4,5 +4,5 @@ import com.example.model.PredictProperty;
 
 public interface PredictDAO {
 
-	double predictValue(PredictProperty p);
+	PredictProperty predictValue(PredictProperty p);
 	}
