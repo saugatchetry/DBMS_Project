@@ -3,10 +3,11 @@ angular.module('myApp').controller('BuyController', ['$rootScope', '$scope', '$h
 	$scope.pageLoad = false;
 	$scope.loadImage = function(){
 		$http({
-			method : "GET",
-			url : "downloadImage",	       
+			method : "POST",
+			url : "downloadImage",
+			data: JSON.stringify(1),
 		}).then(function(response) {			
-			$scope.image = response.data;
+			$scope.image = response.data;			
 		});
 	}
 	

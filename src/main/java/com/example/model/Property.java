@@ -1,11 +1,7 @@
 package com.example.model;
 
 public class Property {
-	
-	
-	//not added :- sale date,image
 	long id;
-	
 	int numberOfBedrooms;
 	int numberOfFloors;
 	int propertyId;
@@ -22,8 +18,16 @@ public class Property {
 	int zipcode;
 	String city;
 	User seller;
+	int sellerId;
+	String image;
 	
 	
+	public String getImage() {
+		return image;
+	}
+	public void setImage(String image) {
+		this.image = image;
+	}
 	public long getId() {
 		return id;
 	}
@@ -127,8 +131,5 @@ public class Property {
 	public void setSeller(User seller) {
 		this.seller = seller;
 	}
-	
-	
-	
 
 }

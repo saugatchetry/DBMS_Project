@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -44,10 +43,77 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 	<link rel="stylesheet" type="text/css" href="style/loginModal.css">
-	
+	<script src="https://unpkg.com/angular-toastr/dist/angular-toastr.tpls.js"></script>
+	<link rel="stylesheet" href="https://unpkg.com/angular-toastr/dist/angular-toastr.css" />
 	<script>
 
-var app = angular.module('myApp', ['ngRoute','ui.bootstrap.modal', 'chart.js','rzModule']);
+var app = angular.module('myApp', ['ngRoute','ui.bootstrap.modal', 'chart.js','rzModule','toastr']);
+
+app.directive('filelistBind', function() {
+	  return function( scope, elm, attrs ) {
+	    elm.bind('change', function( evt ) {
+	      scope.$apply(function() {
+	        scope[ attrs.name ] = evt.target.files;
+	      });
+	    });
+	  };
+	});
+app.directive("fileread", [function () {
+    return {
+        scope: {
+            fileread: "="
+        },
+        link: function (scope, element, attributes) {
+            element.bind("change", function (changeEvent) {
+                scope.$apply(function () {
+                    scope.fileread = changeEvent.target.files[0];
+                    // or all selected files:
+                    // scope.fileread = changeEvent.target.files;
+                });
+            });
+        }
+    }
+}]);
+app.directive('appFilereader', function($q) {
+    var slice = Array.prototype.slice;
+
+    return {
+        restrict: 'A',
+        require: '?ngModel',
+        link: function(scope, element, attrs, ngModel) {
+                if (!ngModel) return;
+
+                ngModel.$render = function() {};
+
+                element.bind('change', function(e) {
+                    var element = e.target;
+
+                    $q.all(slice.call(element.files, 0).map(readFile))
+                        .then(function(values) {
+                            if (element.multiple) ngModel.$setViewValue(values);
+                            else ngModel.$setViewValue(values.length ? values[0] : null);
+                        });
+
+                    function readFile(file) {
+                        var deferred = $q.defer();
+
+                        var reader = new FileReader();
+                        reader.onload = function(e) {
+                            deferred.resolve(e.target.result);
+                        };
+                        reader.onerror = function(e) {
+                            deferred.reject(e);
+                        };
+                        reader.readAsDataURL(file);
+
+                        return deferred.promise;
+                    }
+
+                }); //change
+
+            } //link
+    }; //return
+});
 
 app.config(function($routeProvider) {
     $routeProvider
@@ -96,16 +162,6 @@ app.controller('MainController', ['$rootScope', '$scope', '$http', function($roo
 		
 	}
 	
-	$scope.showAllRecords = function(){
-		//console.log("Clicked");
-		 $http({
-			method : "GET",
-			url : "getTotalRecords"
-		}).then(function(result){
-			alert('Total no of records : ' + result.data);
-		});
-	}
-	
 	$scope.loginUser = function(){
 		$http({
 	        method : "POST",
@@ -115,7 +171,7 @@ app.controller('MainController', ['$rootScope', '$scope', '$http', function($roo
 	        	'password' : $scope.login.password
 	        }
 	    }).then(function(response) {
-        	$scope.user = response.data;
+        	$scope.user = response.data;        	
         	if($scope.user.errorStatus == 1){
         		console.log($scope.user);
         		$scope.loginError = undefined;
@@ -161,7 +217,7 @@ app.controller('MainController', ['$rootScope', '$scope', '$http', function($roo
 			$scope.user = undefined;
 			$rootScope.userDetails = undefined;
 		}
-	
+		
 		$scope.getPopularProperties = function(){
 			$http({
 				method : "GET",
@@ -175,11 +231,13 @@ app.controller('MainController', ['$rootScope', '$scope', '$http', function($roo
 				}
 			})
 		} 
+
 		$scope.setProperty = function(index){
 			console.log(index);
 			$scope.property = $scope.properties[index];
 			console.log($scope.property);
 		}
+		
 		$scope.getPopularProperties();
 		
 		$scope.labels = ["Detroit", "San Diego","Nebraska","San Francisco","Mississippi"];
@@ -209,7 +267,7 @@ app.controller('MainController', ['$rootScope', '$scope', '$http', function($roo
                 <ul class="nav navbar-nav navbar-left">
                    
                     <li class="page-scroll" >
-                    	 <a ng-click="showAllRecords()" class="navbar-brand" href="#page-top" style="background:transparent !important;">GharWaale.com</a>
+                    	 <a class="navbar-brand" href="#page-top" style="background:transparent !important;">GharWaale.com</a>
                     </li>
                     <li class="page-scroll">
                     	<a ng-href="#buy" >Buy</a>
@@ -223,9 +281,7 @@ app.controller('MainController', ['$rootScope', '$scope', '$http', function($roo
                     <li class="page-scroll">
                     	<a ng-href="#trends">Trends</a>
                     </li>
-                </ul>
-                
-              
+                </ul>                             
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -295,7 +351,9 @@ app.controller('MainController', ['$rootScope', '$scope', '$http', function($roo
 			</div>
 		</div>
 	  </div>
-    
+
+        
+
     <!-- jQuery -->
     <script src="vendor/jquery/jquery.min.js"></script>
 
@@ -310,8 +368,7 @@ app.controller('MainController', ['$rootScope', '$scope', '$http', function($roo
     <script src="js/contact_me.js"></script>
 
     <!-- Theme JavaScript -->
-    <script src="js/freelancer.min.js"></script>
-    
+    <script src="js/freelancer.min.js"></script>    
 
 </body>
 

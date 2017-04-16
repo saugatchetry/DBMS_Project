@@ -2,7 +2,7 @@
 	<h1>HELLO Buyer</h1>
 	<img ng-src="data:image/JPEG;base64,{{image}}">
 </div> -->
-<div style="margin-top: 100px; padding-top: 10px;" class="black-overlay">
+<div style="margin-top: 100px; padding-top: 10px;" ng-class="{'black-overlay':pageLoad}">
 
 	<!-- Page Container -->
 	<div class="w3-content w3-margin-top" style="max-width: 1400px;">
@@ -31,7 +31,7 @@
 					    
 						<div class="w3-large row">
 						<div class="col-md-5">
-							<i class="fa fa-asterisk fa-fw "></i><b>Bathrooms</b>
+							<i class="fa fa-asterisk fa-fw "></i><b>Bathroom</b>
 						</div>
 						<div class="col-md-6">
 							<span ng-repeat="bathroom in bathrooms">
@@ -170,5 +170,4 @@
 			</div>
 		</div>
 	</div>
-</div>
 

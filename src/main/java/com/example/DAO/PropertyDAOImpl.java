@@ -1,5 +1,6 @@
 package com.example.DAO;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -60,49 +61,6 @@ public class PropertyDAOImpl implements PropertyDAO{
         });
 		
 		
-	}
-	
-	public boolean insertImage(){		
-		try {
-			final File image = new File("C:\\Users\\Nishant\\Desktop\\spring17\\DBMSPROJ\\DBMS_Project\\src\\main\\resources\\static\\img\\prop2.jpg");
-			final InputStream imageIs = new FileInputStream(image);   
-			LobHandler lobHandler = new DefaultLobHandler(); 
-			int result = jdbcTemplate.update(
-					"INSERT INTO Image (IMAGE_ID, IMAGE_DATA) VALUES (?, ?)",
-					new Object[] {
-							1,
-							new SqlLobValue(imageIs, (int)image.length(), lobHandler),
-					},
-					new int[] {Types.INTEGER, Types.BLOB});
-			if (result > 0){
-				return true;
-			}
-			
-			return false;
-		} catch (DataAccessException e) {
-			System.out.println("DataAccessException " + e.getMessage());
-			return false;
-		} catch (FileNotFoundException e) {
-			System.out.println("DataAccessException " + e.getMessage());
-			return false;
-		}		
-	}
-	
-	public List<byte[]> getImages(){  
-		String queryString = "Select * from Image";
-		LobHandler lobHandler = new DefaultLobHandler();
-		return jdbcTemplate.query(queryString,new ResultSetExtractor<List<byte[]>>(){  
-			@Override  
-			public List<byte[]> extractData(ResultSet rs) throws SQLException,  
-			DataAccessException {  
-
-				List<byte[]> list=new ArrayList<byte[]>();  
-				while(rs.next()){  					
-					list.add(lobHandler.getBlobAsBytes(rs,"IMAGE_DATA"));  
-				}  
-				return list;  
-			}  
-		});  
 	}
 	
 	@Override
@@ -176,5 +134,49 @@ public class PropertyDAOImpl implements PropertyDAO{
 		
 		//String query = "SELECT * FROM PROPERTY WHERE "
 		//return null;
-	} 
+	}
+
+	@Override
+	public boolean insertImage(byte[] imageArr){		
+		try {
+			//final File image = new File("C:\\Users\\Nishant\\Desktop\\spring17\\DBMSPROJ\\DBMS_Project\\src\\main\\resources\\static\\img\\prop2.jpg");
+			//final InputStream imageIs = new FileInputStream(image);
+			InputStream imageIs = new ByteArrayInputStream(imageArr);
+			LobHandler lobHandler = new DefaultLobHandler(); 
+			int result = jdbcTemplate.update(
+					"INSERT INTO Image (IMAGE_ID, IMAGE_DATA) VALUES (?, ?)",
+					new Object[] {
+							90026,
+							new SqlLobValue(imageIs, (int)imageArr.length, lobHandler),
+					},
+					new int[] {Types.INTEGER, Types.BLOB});
+			if (result > 0){
+				return true;
+			}
+			
+			return false;
+		} catch (DataAccessException e) {
+			System.out.println("DataAccessException " + e.getMessage());
+			return false;
+		}		
+	}
+	
+	@Override
+	public List<byte[]> getImages(String imageId){  
+		String queryString = "Select * from Image where IMAGE_ID = " + imageId;
+		LobHandler lobHandler = new DefaultLobHandler();
+		return jdbcTemplate.query(queryString,new ResultSetExtractor<List<byte[]>>(){  
+			@Override  
+			public List<byte[]> extractData(ResultSet rs) throws SQLException,  
+			DataAccessException {  
+
+				List<byte[]> list=new ArrayList<byte[]>();  
+				while(rs.next()){  					
+					list.add(lobHandler.getBlobAsBytes(rs,"IMAGE_DATA"));  
+				}  
+				return list;  
+			}  
+		});  
+	}
+
 }
