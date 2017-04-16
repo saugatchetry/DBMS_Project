@@ -1,20 +1,19 @@
 package com.example.model;
 
-public class Property {
-	
-	
-	//not added :- sale date,image
-	long id;
-	
+import java.sql.Date;
+
+public class Sell {
+	int propId;
+	float squareFeet;
 	int numberOfBedrooms;
 	int numberOfFloors;
-	int propertyId;
-	float squareFeet;
 	int numberOfBathrooms;
 	String yearRenovated;
 	String yearBuilt;
+//image
 	String status;
 	String description;
+	Date saleDate;
 	float price;
 	float latitude;
 	float longitude;
@@ -22,22 +21,14 @@ public class Property {
 	int zipcode;
 	String city;
 	int sellerId;
-	String image;
+	int negotiable;
 	
-	
-	public String getImage() {
-		return image;
+	public float getSquareFeet() {
+		return squareFeet;
 	}
-	public void setImage(String image) {
-		this.image = image;
+	public void setSquareFeet(float squareFeet) {
+		this.squareFeet = squareFeet;
 	}
-	public long getId() {
-		return id;
-	}
-	public void setId(long id) {
-		this.id = id;
-	}
-	
 	public int getNumberOfBedrooms() {
 		return numberOfBedrooms;
 	}
@@ -49,18 +40,6 @@ public class Property {
 	}
 	public void setNumberOfFloors(int numberOfFloors) {
 		this.numberOfFloors = numberOfFloors;
-	}
-	public int getPropertyId() {
-		return propertyId;
-	}
-	public void setPropertyId(int propertyId) {
-		this.propertyId = propertyId;
-	}
-	public float getSquareFeet() {
-		return squareFeet;
-	}
-	public void setSquareFeet(float squareFeet) {
-		this.squareFeet = squareFeet;
 	}
 	public int getNumberOfBathrooms() {
 		return numberOfBathrooms;
@@ -91,6 +70,12 @@ public class Property {
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	public Date getSaleDate() {
+		return saleDate;
+	}
+	public void setSaleDate(Date saleDate) {
+		this.saleDate = saleDate;
 	}
 	public float getPrice() {
 		return price;
@@ -134,8 +119,10 @@ public class Property {
 	public void setSellerId(int sellerId) {
 		this.sellerId = sellerId;
 	}
-	
-	
-	
-
+	public int getNegotiable() {
+		return negotiable;
+	}
+	public void setNegotiable(int negotiable) {
+		this.negotiable = negotiable;
+	}
 }

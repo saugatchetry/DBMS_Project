@@ -1,5 +1,6 @@
 package com.example.DAO;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -61,16 +62,17 @@ public class PropertyDAOImpl implements PropertyDAO{
 		
 	}
 	
-	public boolean insertImage(){		
+	public boolean insertImage(byte[] imageArr){		
 		try {
-			final File image = new File("C:\\Users\\Nishant\\Desktop\\spring17\\DBMSPROJ\\DBMS_Project\\src\\main\\resources\\static\\img\\prop2.jpg");
-			final InputStream imageIs = new FileInputStream(image);   
+			//final File image = new File("C:\\Users\\Nishant\\Desktop\\spring17\\DBMSPROJ\\DBMS_Project\\src\\main\\resources\\static\\img\\prop2.jpg");
+			//final InputStream imageIs = new FileInputStream(image);
+			InputStream imageIs = new ByteArrayInputStream(imageArr);
 			LobHandler lobHandler = new DefaultLobHandler(); 
 			int result = jdbcTemplate.update(
 					"INSERT INTO Image (IMAGE_ID, IMAGE_DATA) VALUES (?, ?)",
 					new Object[] {
-							1,
-							new SqlLobValue(imageIs, (int)image.length(), lobHandler),
+							90026,
+							new SqlLobValue(imageIs, (int)imageArr.length, lobHandler),
 					},
 					new int[] {Types.INTEGER, Types.BLOB});
 			if (result > 0){
@@ -81,14 +83,11 @@ public class PropertyDAOImpl implements PropertyDAO{
 		} catch (DataAccessException e) {
 			System.out.println("DataAccessException " + e.getMessage());
 			return false;
-		} catch (FileNotFoundException e) {
-			System.out.println("DataAccessException " + e.getMessage());
-			return false;
 		}		
 	}
 	
-	public List<byte[]> getImages(){  
-		String queryString = "Select * from Image";
+	public List<byte[]> getImages(String imageId){  
+		String queryString = "Select * from Image where IMAGE_ID = " + imageId;
 		LobHandler lobHandler = new DefaultLobHandler();
 		return jdbcTemplate.query(queryString,new ResultSetExtractor<List<byte[]>>(){  
 			@Override  
@@ -102,5 +101,23 @@ public class PropertyDAOImpl implements PropertyDAO{
 				return list;  
 			}  
 		});  
+	}
+
+	@Override
+	public ArrayList<String> getCities() {
+		String quer = "select * from cities";
+		return (ArrayList<String>) jdbcTemplate.query(quer, new ResultSetExtractor<ArrayList<String>>() {
+            public ArrayList<String> extractData(ResultSet rs) throws SQLException, DataAccessException {
+            	ArrayList<String> returnList = new ArrayList<>();
+                while (rs.next()) {
+                	String s="";
+                	s+=rs.getString(1)+','+rs.getString(2);
+                	returnList.add(s);
+                }
+                
+                System.out.println("Size =  "+returnList.size());
+                return returnList;
+            }
+        });
 	} 
 }

@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -38,10 +37,77 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 	<link rel="stylesheet" type="text/css" href="style/loginModal.css">
-	
+	<script src="https://unpkg.com/angular-toastr/dist/angular-toastr.tpls.js"></script>
+	<link rel="stylesheet" href="https://unpkg.com/angular-toastr/dist/angular-toastr.css" />
 	<script>
 
-var app = angular.module('myApp', ['ngRoute','ui.bootstrap.modal', 'chart.js', 'angularjs-dropdown-multiselect']);
+var app = angular.module('myApp', ['ngRoute','ui.bootstrap.modal', 'chart.js','toastr']);
+
+app.directive('filelistBind', function() {
+	  return function( scope, elm, attrs ) {
+	    elm.bind('change', function( evt ) {
+	      scope.$apply(function() {
+	        scope[ attrs.name ] = evt.target.files;
+	      });
+	    });
+	  };
+	});
+app.directive("fileread", [function () {
+    return {
+        scope: {
+            fileread: "="
+        },
+        link: function (scope, element, attributes) {
+            element.bind("change", function (changeEvent) {
+                scope.$apply(function () {
+                    scope.fileread = changeEvent.target.files[0];
+                    // or all selected files:
+                    // scope.fileread = changeEvent.target.files;
+                });
+            });
+        }
+    }
+}]);
+app.directive('appFilereader', function($q) {
+    var slice = Array.prototype.slice;
+
+    return {
+        restrict: 'A',
+        require: '?ngModel',
+        link: function(scope, element, attrs, ngModel) {
+                if (!ngModel) return;
+
+                ngModel.$render = function() {};
+
+                element.bind('change', function(e) {
+                    var element = e.target;
+
+                    $q.all(slice.call(element.files, 0).map(readFile))
+                        .then(function(values) {
+                            if (element.multiple) ngModel.$setViewValue(values);
+                            else ngModel.$setViewValue(values.length ? values[0] : null);
+                        });
+
+                    function readFile(file) {
+                        var deferred = $q.defer();
+
+                        var reader = new FileReader();
+                        reader.onload = function(e) {
+                            deferred.resolve(e.target.result);
+                        };
+                        reader.onerror = function(e) {
+                            deferred.reject(e);
+                        };
+                        reader.readAsDataURL(file);
+
+                        return deferred.promise;
+                    }
+
+                }); //change
+
+            } //link
+    }; //return
+});
 
 app.config(function($routeProvider) {
     $routeProvider
@@ -71,7 +137,7 @@ app.config(function($routeProvider) {
     });
 });
 
-app.controller('MainController', ['$scope', '$http', function($scope, $http) {
+app.controller('MainController', ['$rootScope', '$scope', '$http', function($rootScope, $scope, $http) {
 	$scope.user = undefined;
 	$scope.loginStatus  = false;
 	
@@ -100,12 +166,13 @@ app.controller('MainController', ['$scope', '$http', function($scope, $http) {
 	        	'password' : $scope.login.password
 	        }
 	    }).then(function(response) {
-        	$scope.user = response.data;
+        	$scope.user = response.data;        	
         	if($scope.user.errorStatus == 1){
         		console.log($scope.user);
         		$scope.loginError = undefined;
         		$scope.loginModal = false;
         		$scope.loginStatus  = true;
+        		$rootScope.userDetails = $scope.user;
         	}
         	else{
         		$scope.loginStatus  = false;
@@ -200,9 +267,7 @@ app.controller('MainController', ['$scope', '$http', function($scope, $http) {
                     <li class="page-scroll">
                     	<a ng-href="#trends">Trends</a>
                     </li>
-                </ul>
-                
-              
+                </ul>                             
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -289,8 +354,7 @@ app.controller('MainController', ['$scope', '$http', function($scope, $http) {
     <script src="js/contact_me.js"></script>
 
     <!-- Theme JavaScript -->
-    <script src="js/freelancer.min.js"></script>
-    <script src="js/angularjs-dropdown-multiselect.min.js"></script>
+    <script src="js/freelancer.min.js"></script>    
 
 </body>
 

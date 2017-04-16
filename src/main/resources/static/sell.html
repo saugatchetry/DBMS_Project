@@ -1,64 +1,95 @@
+<style>
+.labelAlign {
+    display:block !important;
+}
+.submitted{
+	border: 1px solid red;
+}
+</style>
+
 <div style="margin-top: 100px; padding-top: 10px;">
-	<h1>HELLO Seller</h1>
+	<br/><br/>
 </div>
+<form name= "sellDetails"  novalidate>
 <div class = "row">
 	<div class= "col-md-6 col-md-offset-2">
 		<div class = "row">
-			<div class = "col-md-6">
-				<input type = "text" name = "ownerName" ng-model= "ownerName" ng-required= "true" placeholder="Owner Name"/>
+			<div class = "form-group col-md-4">
+				<select class= "form-control" style = "width:207px;" ng-model="selectedCity" ng-options="x for x in cities"></select>
 			</div>
-			<div class = "col-md-6">
-				<input type = "email" name = "emailId" ng-model= "email" ng-required= "true" placeholder="Email ID"/>
-			</div>
-		</div>
-		<br/>
-		<div class = "row">
-			<div class = "col-md-6">
-				<select ng-model="selectedCity" ng-options="x for x in cities"></select>
-			</div>
-			<div class = "col-md-6">
-				<input type = "text" name = "zipcode"  ng-model= "zipcode" ng-pattern = "/^[0-9]{5}$/" ng-required= "true" placeholder="Zip Code"/>
+			<div class = "col-md-4 col-md-offset-2">
+			<label class= "control-label labelAlign" for="zipcode" style="color:red" ng-show="sellDetails.zipcode.$error.pattern">Enter 5 digit number</label>
+				<input class= "form-control" ng-class="{submitted: sellDetails.zipcode.$invalid}" type = "text" name = "zipcode"  ng-model= "zipcode" ng-pattern = "/^[0-9]{5}$/" ng-required= "true" placeholder="Zip Code"/>
 			</div>
 		</div>
 		<br/>
 		<div class = "row">
-			<div class = "col-md-6">
-				<input type = "number" name = "bathroom"  ng-model= "bathroom" min = "1" ng-required= "true" placeholder="No of Bathroom"/>
+			<div class = "form-group col-md-4">
+				<input class= "form-control" ng-class="{submitted: sellDetails.street.$invalid}" type = "text" name = "street" required ng-model= "street" placeholder="Street Name"/>
 			</div>
-			<div class = "col-md-6">
-				<input type = "number" name = "bedroom"  ng-model= "bedroom" min = "1" ng-required= "true" placeholder="No of Bedrooms"/>
-			</div>
-		</div>
-		<br/>
-		<div class = "row">
-			<div class = "col-md-6">
-				<input type = "text" name = "livingArea" ng-model= "livingArea" ng-pattern = "/^[0-9]*$/" ng-required= "true" placeholder="Living Area Sqft"/>
-			</div>
-			<div class = "col-md-6">
-				<input type = "text" name = "expectedRate" ng-model= "expectedRate" ng-pattern = "/^[0-9]*$/" ng-required= "true" placeholder="Expected Rate"/>
+			<div class = "col-md-4 col-md-offset-2">
+				<input class= "form-control" type = "text" name = "coords" readonly = "true" ng-model = "coords" placeholder="Lat Long"/>
 			</div>
 		</div>
 		<br/>
 		<div class = "row">
-			<div class = "col-md-6">
-				<input type = "text" name = "yearBuilt" ng-model= "yearBuilt" ng-pattern = "/[0-9]{4}$/" ng-required= "true" placeholder="Year Built"/>
+			<div class = "form-group col-md-4">
+			<label class= "control-label labelAlign" for="bathroom" style="color:red" ng-show="sellDetails.bathroom.$error.pattern">Enter number only</label>
+				<input class= "form-control" ng-class="{submitted: sellDetails.bathroom.$invalid}" type = "number" name = "bathroom"  ng-model= "bathroom" min = "1" ng-pattern = "/^[0-9]{1}$/" required placeholder="No of Bathroom"/>
 			</div>
-			<div class = "col-md-6">
-				<input type = "text" name = "yearRenovated" ng-model= "yearRenovated" ng-pattern = "/[0-9]{4}$/" ng-required= "true" placeholder="Year Renovated"/>
+			<div class = "col-md-4 col-md-offset-2">
+			<label class= "control-label labelAlign" for="bedroom" style="color:red" ng-show="sellDetails.bedroom.$error.pattern">Enter number only</label>
+				<input class= "form-control" ng-class="{submitted: sellDetails.bedroom.$invalid}" type = "number" name = "bedroom"  ng-model= "bedroom" min = "1" ng-pattern = "/^[0-9]{1}$/" required placeholder="No of Bedrooms"/>
 			</div>
 		</div>
+		<br/>
+		<div class = "row">
+			<div class = "form-group col-md-4">
+			<label class= "control-label labelAlign" for="livingArea" style="color:red" ng-show="sellDetails.livingArea.$error.pattern">Enter numbers only</label>
+				<input class= "form-control" ng-class="{submitted: sellDetails.livingArea.$invalid}" type = "text" name = "livingArea" ng-model= "livingArea" ng-pattern = "/^[0-9]*$/" ng-required= "true" placeholder="Living Area Sqft"/>
+			</div>
+			<div class = "col-md-4 col-md-offset-2">
+				<input class= " form-control" ng-class="{submitted: sellDetails.expectedRate.$invalid}" type = "text" name = "expectedRate" ng-model= "expectedRate" ng-pattern = "/^[0-9]*$/" ng-required= "true" placeholder="Expected Rate"/>
+			</div>
+		</div>
+		<br/>
+		<div class = "row">
+			<div class = "form-group col-md-4">
+			<label class= "control-label labelAlign" for="yearBuilt" style="color:red" ng-show="sellDetails.yearBuilt.$error.pattern">Enter 4 digit number </label>
+				<input ng-class="{submitted: sellDetails.yearBuilt.$invalid}" class = "form-control labelAlign" type = "text" name = "yearBuilt" ng-model= "yearBuilt" ng-pattern = "/[0-9]{4}$/" ng-required= "true" placeholder="Year Built"/>
+			</div>			
+			<div class = "col-md-4 col-md-offset-2">
+			<label class= "control-label labelAlign" for="yearRenovated" style="color:red" ng-show="sellDetails.yearRenovated.$error.pattern">Enter 4 digit number </label>
+				<input class= "form-control labelAlign" ng-class="{submitted: sellDetails.yearRenovated.$invalid}" type = "text" name = "yearRenovated" ng-model= "yearRenovated" ng-pattern = "/[0-9]{4}$/" ng-required= "true" placeholder="Year Renovated"/>
+			</div>
+		</div>
+		<br/>
+		<div class = "row">
+			<div class = "form-group col-md-4">
+				<input class= "form-control"  ng-class="{submitted: sellDetails.floors.$invalid}" type = "number" name = "floors"  ng-model= "floors" min = "0" ng-required= "true" placeholder="No of Floors"/>
+			</div>	
+			<div class = "col-md-4 col-md-offset-2">
+				<!-- <input type="file" filelist-bind name="files"/>  -->
+				<!-- <input type="file" fileread="uploadedImage" /> -->
+				<input type="file" ng-model="editItem._attachments_uri.image" accept="image/*" app-filereader />
+			</div>		
+		</div>		
 		<br/>		
 		<div class = "row">
-			<div class = "col-md-6">
-				<input type = "radio" name = "nego" value= "true" ng-model= "isNegotiable" ng-required= "true"/>Negotiable
+			<div class = "form-group col-md-4">
+				<input type = "radio" name = "nego" value= "1" ng-model= "isNegotiable" ng-required= "true"/>Negotiable
 			</div>
-			<div class = "col-md-6">
-				<input type = "radio" name = "nego" value = "false" ng-model= "isNegotiable" ng-required= "true"/>Non Negotiable
+			<div class = "col-md-4 col-md-offset-2">
+				<input type = "radio" name = "nego" value = "0" ng-model= "isNegotiable" ng-required= "true"/>Non Negotiable
 			</div>
 		</div>
-		<br/>
+		<br/>			
 		<div class = "row">
-			<textarea style = "margin-left: 10px; width : 81%" ng-model = "comments" wrap = "soft"></textarea>
+			<textarea style = "margin-left: 10px; width : 81%" ng-model = "comments" row = "6" wrap = "soft"></textarea>
+		</div>
+		<br/>
+		<div class= "row">
+			<input type="submit" class= "btn btn-primary" id="submit" value="Submit property details" ng-click="submitSellerDetails()" />
 		</div>
 	</div>
 	<div class = "col-md-4">
@@ -76,8 +107,19 @@
 			<input type="checkbox" ng-model="propertyProp.WaterFront" ng-true-value="1" ng-false-value="0" ng-checked="propertyProp.WaterFront == 1"/>&nbsp;&nbsp;Water Front
 						<br/><br/>
 			<input type="checkbox" ng-model="propertyProp.View" ng-true-value="1" ng-false-value="0" ng-checked="propertyProp.View == 1"/>&nbsp;&nbsp;View
-		</div>
-		{{propertyProp.WoodenFlooring}}
-		{{propertyProp.Carpet}}
+			<br/><br/>
+			<div style="width:400px;">
+				<fieldset>
+  				<legend style= "margin-bottom :0px ;width:inherit; border: none">Furnishing:</legend>
+  					<input type = "radio" name = "furnish" value= "UnFurnished" ng-model= "furnishType"/>&nbsp;&nbsp;Un-Furnished
+						<br/>
+					<input type = "radio" name = "furnish" value= "SemiFurnished" ng-model= "furnishType"/>&nbsp;&nbsp;Semi-Furnished
+						<br/>
+					<input type = "radio" name = "furnish" value= "Furnished" ng-model= "furnishType"/>&nbsp;&nbsp;Furnished
+						<br/>
+ 				</fieldset> 				
+			</div>			
+		</div>				
 	</div>
 </div>
+</form>

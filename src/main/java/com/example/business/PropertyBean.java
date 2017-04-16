@@ -25,12 +25,14 @@ public class PropertyBean {
 		return propertyDAO.getProperty();
 	}
 	
-	public boolean insertImage(){
-		return propertyDAO.insertImage();
+	public boolean insertImage(byte[] arr){
+		return propertyDAO.insertImage(arr);
 	}
 	
-	public List<byte[]> getImages(){
-		return propertyDAO.getImages();
+	public List<byte[]> getImages(String imageId){
+		return propertyDAO.getImages(imageId);
 	}
-
+	public ArrayList<String> getCities(){
+		return propertyDAO.getCities();
+	}
 }
