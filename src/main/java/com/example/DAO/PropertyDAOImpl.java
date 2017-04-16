@@ -19,6 +19,7 @@ import org.springframework.jdbc.support.lob.DefaultLobHandler;
 import org.springframework.jdbc.support.lob.LobHandler;
 
 import com.example.model.Property;
+import com.example.model.User;
 
 
 public class PropertyDAOImpl implements PropertyDAO{
@@ -110,7 +111,7 @@ public class PropertyDAOImpl implements PropertyDAO{
 		System.out.println("Bedrooms = "+property.getNumberOfBedrooms());
 		System.out.println("Bathrooms = "+property.getNumberOfBathrooms());
 		System.out.println("Floors = "+property.getNumberOfFloors());
-		StringBuilder query = new StringBuilder("SELECT * FROM PROPERTY WHERE ");
+		StringBuilder query = new StringBuilder("SELECT * FROM PROPERTY P INNER JOIN REGISTERED_USER S ON S.REG_USR_ID = P.SELLER_ID WHERE ");
 		boolean flag=false;
 		if(property.getNumberOfBathrooms() != 0){
 			query.append("NUMBER_OF_BATHROOM ="+property.getNumberOfBathrooms());
@@ -127,7 +128,7 @@ public class PropertyDAOImpl implements PropertyDAO{
 		if(property.getNumberOfFloors() != 0){
 			if(flag)
 				query.append(" AND ");
-			query.append("NUMBER_OF_FLOORS = "+ property.getNumberOfBedrooms());
+			query.append("NUMBER_OF_FLOORS = "+ property.getNumberOfFloors());
 			flag=true;
 		}
 		System.out.println("Query = "+query);
@@ -143,7 +144,13 @@ public class PropertyDAOImpl implements PropertyDAO{
                 	prop.setNumberOfBedrooms(rs.getInt(3));
                 	prop.setNumberOfBathrooms(rs.getInt(5));
                 	prop.setNumberOfFloors(rs.getInt(4));
-                	//System.out.println("NumofFloorrs = "+rs.getInt(7));
+                	User seller = new User();
+                	seller.setId(rs.getString("REG_USR_ID"));
+                	seller.setEmailId(rs.getString("EMAIL"));
+                	seller.setPhoneNumber(rs.getString("PHONE_NUMBER"));
+                	seller.setFirstName(rs.getString("FIRST_NAME"));
+                	seller.setLastName(rs.getString("LAST_NAME"));
+                	prop.setSeller(seller);
                 	returnList.add(prop);
                 }
 				return returnList;

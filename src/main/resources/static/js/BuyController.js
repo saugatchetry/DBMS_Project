@@ -1,5 +1,6 @@
-angular.module('myApp').controller('BuyController', ['$scope', '$http', function($scope, $http) {
-	
+angular.module('myApp').controller('BuyController', ['$rootScope', '$scope', '$http', function($rootScope, $scope, $http) {
+	$scope.user = $rootScope.userDetails;
+	$scope.pageLoad = false;
 	$scope.loadImage = function(){
 		$http({
 			method : "GET",
@@ -9,43 +10,99 @@ angular.module('myApp').controller('BuyController', ['$scope', '$http', function
 		});
 	}
 	
+	$scope.priceSlider = {
+		    minValue: 0,
+		    maxValue: 120000000,
+		    options: {
+		      floor: 0,
+		      ceil: 10000,
+		      step: 1
+		    }
+	};
+	
+	$scope.sqFeetSlider = {
+		    minValue: 0,
+		    maxValue: 120000000,
+		    options: {
+		      floor: 0,
+		      ceil: 10000,
+		      step: 1
+		    }
+	};
+	
 	$scope.searchProperty = function(){
-		$scope.formData={};
-		console.log($scope.totalBathrooms);
-		
+		$scope.pageLoad = true;
 		$http({
-	        method : "POST",
+	        method : "GET",
 	        url : "searchProperties",
 	        data : {
 	        	'numberOfBedrooms' : $scope.totalBedrooms,
 	        	'numberOfBathrooms' : $scope.totalBathrooms,
-	        	'numberOfFloors' : $scope.totalFloors
-	        	
+	        	'numberOfFloors' : $scope.totalFloors,
+	        	'priceFrom' : $scope.priceSlider.minValue,
+	        	'priceTo' : $scope.priceSlider.maxValue,
+	        	'squareFeetFrom' : $scope.sqFeetSlider.minValue,
+	        	'squareFeetTo' : $scope.sqFeetSlider.maxValue
 	        }
 	    }).then(function(response) {
+	    	$scope.pageLoad = false;
         	$scope.searchedProperties = response.data;
         	console.log('total records = '+$scope.searchedProperties.length);
     	});
 	}
-	
-	$scope.fruits = ['apple', 'orange', 'pear', 'naartjie'];
-
-	  // Selected fruits
-	  $scope.selection = ['apple', 'pear'];
-
-	  // Toggle selection for a given fruit by name
-	  $scope.toggleSelection = function toggleSelection(fruitName) {
-	    var idx = $scope.selection.indexOf(fruitName);
-
-	    // Is currently selected
-	    if (idx > -1) {
-	      $scope.selection.splice(idx, 1);
-	    }
-
-	    // Is newly selected
-	    else {
-	      $scope.selection.push(fruitName);
-	    }
+	  
+	  $scope.bedrooms = ['1', '2', '3', '4'];
+	  $scope.totalBedrooms = [];
+	  $scope.bathrooms = ['1', '2', '3', '4'];
+	  $scope.totalBathrooms = [];
+	  $scope.floors = ['1', '2', '3', '4'];
+	  $scope.totalFloors = [];
+	  
+	  $scope.toggleBedroomSelection = function toggleSelection(bedroom) {
+	        var idx = $scope.totalBedrooms.indexOf(bedroom);
+	        if (idx > -1) {
+	          // is currently selected
+	          $scope.totalBedrooms.splice(idx, 1);
+	         }
+	         else {
+	           // is newly selected
+	           $scope.totalBedrooms.push(bedroom);
+	         }
+	  };
+	  
+	  $scope.toggleBathroomSelection = function toggleSelection(bathroom) {
+	        var idx = $scope.totalBathrooms.indexOf(bathroom);
+	        if (idx > -1) {
+	          // is currently selected
+	          $scope.totalBathrooms.splice(idx, 1);
+	         }
+	         else {
+	           // is newly selected
+	           $scope.totalBathrooms.push(bathroom);
+	         }
+	  };
+	  
+	  $scope.toggleFloorSelection = function toggleSelection(floor) {
+	        var idx = $scope.totalFloors.indexOf(floor);
+	        if (idx > -1) {
+	          // is currently selected
+	          $scope.totalFloors.splice(idx, 1);
+	         }
+	         else {
+	           // is newly selected
+	           $scope.totalFloors.push(floor);
+	         }
+	  };
+	  
+	  $scope.provideSellerDetails = function(seller){
+		  console.log($rootScope.userDetails);
+		  if($rootScope.userDetails == undefined){
+			  $rootScope.loginModal = true;
+		  }
+		  else{
+			  $scope.currentSeller = seller;
+			  $scope.sellerDetailsModal = true;
+		  }
 	  }
 	
 }]);

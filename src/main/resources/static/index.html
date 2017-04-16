@@ -12,9 +12,10 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-route.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
+	
+	<script src="js/rzslider.min.js"></script>
 	<!-- <script src="js/dist/angular-chart.js"></script>--> 
   	<!-- <script src="js/dist/angular-chart.min.js"></script> -->
-	<title>Home</title>
 
 	<!-- <script src="js/angular-chart.js"></script> -->
   	<!-- <script src="js/dist/angular-chart.min.js"></script> -->
@@ -24,7 +25,8 @@
 	<script src="js/angular-chart/angular-chart.min.js"></script>		
     <!-- Bootstrap Core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
+	<link href="style/rzslider.min.css" rel="stylesheet">
+	
     <!-- Theme CSS -->
     <link href="style/freelancer.min.css" rel="stylesheet">
 
@@ -45,7 +47,7 @@
 	
 	<script>
 
-var app = angular.module('myApp', ['ngRoute','ui.bootstrap.modal', 'chart.js']);
+var app = angular.module('myApp', ['ngRoute','ui.bootstrap.modal', 'chart.js','rzModule']);
 
 app.config(function($routeProvider) {
     $routeProvider
@@ -75,7 +77,7 @@ app.config(function($routeProvider) {
     });
 });
 
-app.controller('MainController', ['$scope', '$http', function($scope, $http) {
+app.controller('MainController', ['$rootScope', '$scope', '$http', function($rootScope, $scope, $http) {
 	$scope.user = undefined;
 	$scope.loginStatus  = false;
 	
@@ -86,7 +88,6 @@ app.controller('MainController', ['$scope', '$http', function($scope, $http) {
 	$scope.openLoginModal = function(){
 		$scope.login = undefined;
 		$scope.loginModal = true;
-		
 	}
 	
 	$scope.openSignUpModal = function(){
@@ -120,12 +121,20 @@ app.controller('MainController', ['$scope', '$http', function($scope, $http) {
         		$scope.loginError = undefined;
         		$scope.loginModal = false;
         		$scope.loginStatus  = true;
+        		$rootScope.userDetails = $scope.user;
         	}
         	else{
         		$scope.loginStatus  = false;
         		$scope.loginModal = true;
         	}
     	});
+	}
+	
+	$scope.closeLoginModal = function(){
+		console.log($scope.loginModal);
+		$scope.loginModal = false;
+		//$rootScope.loginModal = $scope.loginModal;
+		//console.log($rootScope.loginModal);
 	}
 		$scope.signUp = function(){
 			$http({
@@ -142,6 +151,7 @@ app.controller('MainController', ['$scope', '$http', function($scope, $http) {
 	        	$scope.user = response.data;
 	        	$scope.signUpModal = false;
 	        	$scope.loginStatus  = true;
+	        	$rootScope.userDetails = $scope.user;
 	    	});
 		}
 		
@@ -149,6 +159,7 @@ app.controller('MainController', ['$scope', '$http', function($scope, $http) {
 			$scope.user = undefined;
 			$scope.loginStatus = false;
 			$scope.user = undefined;
+			$rootScope.userDetails = undefined;
 		}
 	
 		$scope.getPopularProperties = function(){
@@ -173,7 +184,7 @@ app.controller('MainController', ['$scope', '$http', function($scope, $http) {
 		
 		$scope.labels = ["Detroit", "San Diego","Nebraska","San Francisco","Mississippi"];
 		$scope.propertyData = [10,35,15,45,25];
-		
+		$rootScope.loginModal = $scope.loginModal;
 }]);
 </script>
 <script src = "js/BuyController.js" ></script>
@@ -269,7 +280,7 @@ app.controller('MainController', ['$scope', '$http', function($scope, $http) {
 <div class="modal fade" modal="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
    	  <div class="modal-dialog">
    		<div class="loginmodal-container">
-	   		<button type="button" class="close" ng-click="loginModal = false">&times;</button>
+	   		<button type="button" class="close" ng-click="closeLoginModal();">&times;</button>
        		<h1>Login</h1><br>
 			  <form name = "loginForm">
 				<input type="text" name="user" placeholder="Username" data-ng-model="login.emailId" ng-required>
