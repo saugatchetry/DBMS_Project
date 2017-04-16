@@ -68,28 +68,28 @@ class DemoController2{
 		return popularProperty;
 	}
 	@RequestMapping(value = "/Sell",method=RequestMethod.POST, consumes="application/json",produces="application/json")
-	public Sell insertDetails(){
-		Sell sell = new Sell();
-		sell.setPropId(0);
-		sell.setSquareFeet(1200);
-		sell.setNumberOfBedrooms(2);;
-		sell.setNumberOfBathrooms(2);;
-		sell.setNumberOfFloors(1);;
-		sell.setYearRenovated("2010");
-		sell.setYearBuilt("1991");
-	//image
-		sell.setImage(null);
-		sell.setStatus("UNSOLD");;
-		sell.setDescription("anitha inserted data");
-		sell.setSaleDate(null);;
-		sell.setPrice(12300000);
-		sell.setLatitude(200);
-		sell.setLongitude(20);
-		sell.setStreet("dfhsf");
-		sell.setZipcode(32608);
-		sell.setCity("Mumbai");
-		sell.setSellerId(4646);
-		sell.setNegotiable(0);;
+	public Sell insertDetails(@RequestBody Sell sell){
+//		Sell sell = new Sell();
+//		sell.setPropId(0);
+//		sell.setSquareFeet(1200);
+//		sell.setNumberOfBedrooms(2);;
+//		sell.setNumberOfBathrooms(2);;
+//		sell.setNumberOfFloors(1);;
+//		sell.setYearRenovated("2010");
+//		sell.setYearBuilt("1991");
+//	//image
+//		sell.setImage(null);
+//		sell.setStatus("UNSOLD");;
+//		sell.setDescription("anitha inserted data");
+//		sell.setSaleDate(null);;
+//		sell.setPrice(12300000);
+//		sell.setLatitude(200);
+//		sell.setLongitude(20);
+//		sell.setStreet("dfhsf");
+//		sell.setZipcode(32608);
+//		sell.setCity("Mumbai");
+//		sell.setSellerId(4646);
+//		sell.setNegotiable(0);
 		Sell sellOutput = sellBean.insertDetails(sell);
 		return sellOutput;
 	}
