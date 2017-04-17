@@ -203,6 +203,13 @@ class DemoController2{
 		return trendsBean.getPricesGroupedByZipcode();
 	}
 	
+	
+	@RequestMapping(value = "/insertSearchedProperty", method=RequestMethod.GET, produces = "application/json")
+	public User insertSearchedProperty(@RequestParam("userId") Integer userId,@RequestParam("propertyId") Long propertyId){
+		System.out.println("Hit kiya");
+		return userBean.insertSearchedProperty(userId,propertyId);
+	}
+	
 	@RequestMapping(value = "/getPricesByCity", method=RequestMethod.GET, produces = "application/json")
 	public HashMap<String,ArrayList<String>> getPricesByCity(@RequestParam("cityName") String cityName){
 		return trendsBean.getPricesByCity(cityName);

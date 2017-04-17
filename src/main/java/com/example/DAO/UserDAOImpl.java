@@ -17,6 +17,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.example.KeyGenerator;
 import com.example.model.User;
 
+import oracle.net.aso.i;
+
 public class UserDAOImpl implements UserDAO {
 	private JdbcTemplate jdbcTemplate;
 	private KeyGenerator keyGenerator;
@@ -114,6 +116,49 @@ public class UserDAOImpl implements UserDAO {
 		
 		//String query = "SELECT COUNT(*) FROM Registered_User";
 		return  totalRecords;
+	}
+
+	@Override
+	public User insertSearchedProperty(Integer userId, Long propertyId) {
+		
+		String query1 = "select (nvl(query_count,0)+1) from query_searched where reg_usr_id = "+userId +" and property_id = "+propertyId;
+		System.out.println("QueryT :- "+query1);
+		Integer count = 0;
+		try{
+			count = getJdbcTemplate().queryForObject(query1,Integer.class);
+		}
+		catch(Exception e){
+			count = 0;
+		}
+		System.out.println("count = "+count);
+		String query = "";
+		if(count == 0 || count == null){
+		
+		query = "INSERT into query_searched values( "+userId+","+propertyId+"," +(count+1)+")";
+		}
+		else{
+		
+		query = "UPDATE query_searched set query_count = "+ (count+1) + " where reg_usr_id = "+userId +" and property_id = "+propertyId;
+				
+		}
+		//System.out.println("queryzzies = "+query);
+		 try{
+		      	System.out.println("tests query :- "+query);
+		        jdbcTemplate.update(query);
+		       
+		 	}
+		        catch(InvalidResultSetAccessException e){
+		        	//System.out.println("query = "+query);
+		        	System.out.println("Invalid thing Exception is "+e);
+		        }
+		        catch(DataAccessException e){
+		        	
+		        	System.out.println("Exception is "+e.getCause().getMessage());
+		        	
+		        	return null;
+		        }
+		        return null;
+		
 	}
  
 }
