@@ -8,15 +8,15 @@ import Jama.Matrix;
 
 public class MultipleRegression {
 
-	public static double printPredictedPrices(double[][] featureArray ) {
+	public static double printPredictedPrices(double[][] featureArray, double[] userProvidedFeatures) {
 		
 		Matrix featureMatrix = new Matrix(featureArray);		
 		Matrix outputPriceMat = getOutputPriceColumn(featureMatrix);
-		//featureMatrix = stripPriceColumn(featureMatrix, 0);
+		featureMatrix = stripPriceColumn(featureMatrix, 0);
 		featureMatrix = getFeatureMatrixData(featureMatrix);
 		Matrix initialWeights = new Matrix(featureMatrix.getColumnDimension(), 1, 1);
 		double[][] predictedWeights = predictOpenMethod(initialWeights, featureMatrix, outputPriceMat);
-		return printPredictedPrices(predictedWeights, featureMatrix, outputPriceMat);	
+		return getEstimatedPrices(predictedWeights, userProvidedFeatures);	
 	}
 	
 	public Matrix predictOutput(Matrix features, Matrix weights){
@@ -93,13 +93,22 @@ public class MultipleRegression {
 		return weights;		
 	}
 	
-	public static double printPredictedPrices(double[][] weights, Matrix featureMatrix, Matrix ouMatrix){
+	/*public static double printPredictedPrices(double[][] weights, Matrix featureMatrix, Matrix ouMatrix){
 		double price = 0; 
 		double[][] featureArray = featureMatrix.getArray();
 		for(int i = 0; i < featureArray[0].length; i++){
 			price += weights[i][0] * featureArray[6][i];
 		}
 		System.out.println("The predicted Price is : " + price + "Original Price " + ouMatrix.get(6, 0));
+		return price;
+	}*/
+	
+	public static double getEstimatedPrices(double[][] weights, double[] userFeatures){
+		double price = 0; 		
+		for(int i = 0; i < userFeatures.length; i++){
+			price += weights[i][0] * userFeatures[i];
+		}
+		System.out.println("The predicted Price is : " + price);
 		return price;
 	}
 	

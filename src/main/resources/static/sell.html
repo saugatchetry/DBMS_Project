@@ -21,7 +21,7 @@
 <img class = "centerImage" id="mySpinner" src="img/ajax-loader.gif" ng-show="loading" />
 <form class=" black_overlay" name= "sellDetails"  novalidate>
 <div class = "row">
-	<div class= "col-md-6 col-md-offset-2">
+	<div class= "col-md-7 col-md-offset-1">
 		<div class = "row">
 			<div class = "form-group col-md-4">
 				<select class= "form-control" style = "width:207px;" ng-model="selectedCity" ng-options="x for x in cities"></select>
@@ -98,11 +98,14 @@
 		</div>
 		<br/>
 		<div class= "row">
-			<input type="submit" class= "btn btn-primary" id="submit" value="Submit property details" ng-click="submitSellerDetails()" />
+			<input type="submit" style = "margin-left: 10px;" class= "btn btn-primary" id="submit" value="Submit property details" ng-click="submitSellerDetails()" />
 		</div>
 	</div>
 	<div class = "col-md-4">
 		<div class= "row">
+		<div style="width:400px;">
+			<fieldset>
+  				<legend style= "margin-bottom :0px ;width:inherit; border: none">Advanced Features:</legend>
 			<input type="checkbox" ng-model="propertyProp.woodenFlooring" ng-true-value="1" ng-false-value="0" ng-checked="checkbox.woodenFlooring == 1"/>&nbsp;&nbsp;Wooden Flooring
 			<br/><br/>
 			<input type="checkbox" ng-model="propertyProp.carpet" ng-true-value="1" ng-false-value="0" ng-checked="propertyProp.carpet == 1"/>&nbsp;&nbsp;Carpet
@@ -115,8 +118,10 @@
 						<br/><br/>
 			<input type="checkbox" ng-model="propertyProp.waterFront" ng-true-value="1" ng-false-value="0" ng-checked="propertyProp.waterFront == 1"/>&nbsp;&nbsp;Water Front
 						<br/><br/>
-			<input type="checkbox" ng-model="propertyProp.view" ng-true-value="1" ng-false-value="0" ng-checked="propertyProp.view == 1"/>&nbsp;&nbsp;View
-			<br/><br/>
+			<input type="checkbox" ng-model="propertyProp.view" ng-true-value="1" ng-false-value="0" ng-checked="propertyProp.view == 1"/>&nbsp;&nbsp;Sea View
+			</fieldset>
+			</div>
+			<br/>
 			<div style="width:400px;">
 				<fieldset>
   				<legend style= "margin-bottom :0px ;width:inherit; border: none">Furnishing:</legend>

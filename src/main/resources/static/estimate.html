@@ -1,4 +1,113 @@
+<style>
+.labelAlign {
+    display:block !important;
+}
+.submitted{
+	border: 1px solid red;	
+}
+.toast-pink {     
+    z-index: 999999;
+}
+
+</style>
 <div style="margin-top: 100px; padding-top: 10px;">
 	<br/><br/>
-	HELLLLO
+</div>
+<div>
+<form name= "estimateDetails" novalidate>
+<div class = "row">
+	<div class= "col-md-7 col-md-offset-1">	
+		<div class = "row">
+			<div class = "form-group col-md-4">
+			<label class= "control-label labelAlign" for="bathroom" style="color:red" ng-show="estimateDetails.bathroom.$error.pattern">Enter number only</label>
+			<label class= "control-label labelAlign" for="bathroom" ng-show="!estimateDetails.bathroom.$error.pattern" >No of BathRooms: </label>
+				<input class= "form-control" ng-class="{submitted: estimateDetails.bathroom.$invalid}" type = "number" name = "bathroom"  ng-model= "bathroom" min = "1" ng-pattern = "/^[0-9]{1}$/" required placeholder="No of Bathroom"/>
+			</div>
+			<div class = "col-md-4 col-md-offset-2">
+			<label class= "control-label labelAlign" for="bedroom" style="color:red" ng-show="estimateDetails.bedroom.$error.pattern">Enter number only</label>
+			<label class= "control-label labelAlign" for="bedroom" ng-show="!estimateDetails.bedroom.$error.pattern">No of Bedrooms:</label>
+				<input class= "form-control" ng-class="{submitted: estimateDetails.bedroom.$invalid}" type = "number" name = "bedroom"  ng-model= "bedroom" min = "1" ng-pattern = "/^[0-9]{1}$/" required placeholder="No of Bedrooms"/>
+			</div>
+		</div>
+		<br/>
+		<div class = "row">
+			<div class = "form-group col-md-4">
+			<label class= "control-label labelAlign" for="livingArea" style="color:red" ng-show="estimateDetails.livingArea.$error.pattern">Enter numbers only</label>
+			<label class= "control-label labelAlign" for="livingArea" ng-show="!estimateDetails.livingArea.$error.pattern">Square Feet Area:</label>
+				<input class= "form-control" ng-class="{submitted: estimateDetails.livingArea.$invalid}" type = "text" name = "livingArea" ng-model= "livingArea" ng-pattern = "/^[0-9]*$/" ng-required= "true" placeholder="Living Area Sqft"/>
+			</div>
+			<div class = "col-md-4 col-md-offset-2">
+			<label class= "control-label labelAlign" for="zipcode" style="color:red" ng-show="estimateDetails.zipcode.$error.pattern">Enter 5 digit number</label>
+			<label class= "control-label labelAlign" for="zipcode" ng-show="!estimateDetails.zipcode.$error.pattern">Zipcode:</label>
+				<input class= "form-control" ng-class="{submitted: estimateDetails.zipcode.$invalid}" type = "text" name = "zipcode"  ng-model= "zipcode" ng-pattern = "/^[0-9]{5}$/" ng-required= "true" placeholder="Zip Code"/>
+			</div>		
+		</div>
+		<br/>
+		<div class = "row">
+			<div class = "form-group col-md-4">
+			<label class= "control-label labelAlign" for="yearBuilt" style="color:red" ng-show="estimateDetails.yearBuilt.$error.pattern">Enter 4 digit number </label>
+			<label class= "control-label labelAlign" for="yearBuilt" ng-show="!estimateDetails.yearBuilt.$error.pattern">Year of Built:</label>
+				<input ng-class="{submitted: estimateDetails.yearBuilt.$invalid}" class = "form-control labelAlign" type = "text" name = "yearBuilt" ng-model= "yearBuilt" ng-pattern = "/[0-9]{4}$/" ng-required= "true" placeholder="Year Built"/>
+			</div>			
+			<div class = "col-md-4 col-md-offset-2">
+			<label class= "control-label labelAlign" for="yearRenovated" style="color:red" ng-show="estimateDetails.yearRenovated.$error.pattern">Enter 4 digit number </label>
+			<label class= "control-label labelAlign" for="yearRenovated" ng-show="!estimateDetails.yearRenovated.$error.pattern">Year of Renovation:</label>
+				<input class= "form-control labelAlign" ng-class="{submitted: estimateDetails.yearRenovated.$invalid}" type = "text" name = "yearRenovated" ng-model= "yearRenovated" ng-pattern = "/[0-9]{4}$/" ng-required= "true" placeholder="Year Renovated"/>
+			</div>
+		</div>
+		<br/>
+		<div class = "row">
+			<div class = "form-group col-md-4">
+			<label class= "control-label labelAlign" for="floors">No of Floors:</label>
+				<input class= "form-control"  ng-class="{submitted: estimateDetails.floors.$invalid}" type = "number" name = "floors"  ng-model= "floors" min = "0" ng-required= "true" placeholder="No of Floors"/>
+			</div>				
+		</div>
+		<br/><br/>			
+		<div class = "row">
+			<div>
+				<label class= "control-label"  style = "margin-left: 10px;" for = "estimate">Suggestions:</label>
+				<textarea class= "form-control" name = "estimate" style = "margin-left: 10px; width : 81%;" rows = 4 ng-model = "estimatedBox" row = "6" wrap = "soft"></textarea> 
+			</div>			
+		</div>
+		<br/>
+		<div class= "row">
+			<input type="submit" style = "margin-left: 10px;" class= "btn btn-primary" id="submit" value="Estimate Property Value" ng-click="submitEstimateDetails()" />
+		</div>
+	</div>	
+	<div class = "col-md-4">
+		<div class= "row">
+		<div style="width:400px;">
+			<fieldset>
+  				<legend style= "margin-bottom :0px ;width:inherit; border: none">Advanced Features:</legend>
+			<input type="checkbox" ng-model="propertyProp.woodenFlooring" ng-true-value="1" ng-false-value="0" ng-checked="checkbox.woodenFlooring == 1"/>&nbsp;&nbsp;Wooden Flooring
+			<br/><br/>
+			<input type="checkbox" ng-model="propertyProp.carpet" ng-true-value="1" ng-false-value="0" ng-checked="propertyProp.carpet == 1"/>&nbsp;&nbsp;Carpet
+						<br/><br/>
+			<input type="checkbox" ng-model="propertyProp.parking" ng-true-value="1" ng-false-value="0" ng-checked="propertyProp.parking == 1"/>&nbsp;&nbsp;Parking
+						<br/><br/>
+			<input type="checkbox" ng-model="propertyProp.petFriendly" ng-true-value="1" ng-false-value="0" ng-checked="propertyProp.petFriendly == 1"/>&nbsp;&nbsp;Pet Friendly
+						<br/><br/>
+			<input type="checkbox" ng-model="propertyProp.pool" ng-true-value="1" ng-false-value="0" ng-checked="propertyProp.pool == 1"/>&nbsp;&nbsp;Pool
+						<br/><br/>
+			<input type="checkbox" ng-model="propertyProp.waterFront" ng-true-value="1" ng-false-value="0" ng-checked="propertyProp.waterFront == 1"/>&nbsp;&nbsp;Water Front
+						<br/><br/>
+			<input type="checkbox" ng-model="propertyProp.view" ng-true-value="1" ng-false-value="0" ng-checked="propertyProp.view == 1"/>&nbsp;&nbsp;Sea View
+			</fieldset>
+			</div>
+			<br/>
+			<div style="width:400px;">
+				<fieldset>
+  				<legend style= "margin-bottom :0px ;width:inherit; border: none">Furnishing:</legend>
+  					<input type = "radio" name = "furnish" value= "UnFurnished" ng-model= "furnishType"/>&nbsp;&nbsp;Un-Furnished
+						<br/>
+					<input type = "radio" name = "furnish" value= "SemiFurnished" ng-model= "furnishType"/>&nbsp;&nbsp;Semi-Furnished
+						<br/>
+					<input type = "radio" name = "furnish" value= "Furnished" ng-model= "furnishType"/>&nbsp;&nbsp;Furnished
+						<br/>
+ 				</fieldset> 				
+			</div>			
+		</div>				
+	</div>
+</div>
+</form>
 </div>

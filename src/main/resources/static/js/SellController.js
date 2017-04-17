@@ -13,6 +13,7 @@ angular.module('myApp').controller('SellController', ['$rootScope', '$scope', '$
 	
 	$scope.uploadedImage = ""
 	$scope.isFormValid = false;
+	setAdvanceDeatures();
 	
 	getCities();
 	
@@ -26,19 +27,50 @@ angular.module('myApp').controller('SellController', ['$rootScope', '$scope', '$
 		    });
 	 }
 	
-	$scope.propertyProp = {
-			'woodenFlooring' : 0,
-			'carpet' : 0,
-			'parking' : 0,
-			'petFriendly' : 0,
-			'pool' : 0,
-			'waterFront' : 0,
-			'view' : 0
-	};
+	 
+	function setAdvanceDeatures(){
+		$scope.propertyProp = {
+				'woodenFlooring' : 0,
+				'carpet' : 0,
+				'parking' : 0,
+				'petFriendly' : 0,
+				'pool' : 0,
+				'waterFront' : 0,
+				'view' : 0
+		};
+	}
 	
+	function clearAll(){
+		$scope.livingArea = '';
+		$scope.bedroom = '';
+		$scope.floors = '';
+		$scope.bathroom = '';
+		$scope.yearRenovated = '';
+		$scope.yearBuilt = '';
+		$scope.imageData = '';
+		$scope.comments = '';
+		$scope.expectedRate = '';
+		$scope.lat = '';
+		$scope.longitude = '';
+		$scope.street = '';
+		$scope.zipcode = '';
+		$scope.selectedCity = '';
+		$scope.isNegotiable = '';
+		$scope.furnishType = '';
+		$scope.coords = '';
+		$scope.editItem._attachments_uri.image = '';
+	}
+		
 	$scope.submitSellerDetails = function(){
-		if ($scope.sellDetails.$valid){
-			if($rootScope.userDetails.id !== undefined || $rootScope.userDetails.id !== null){
+		if ($scope.sellDetails.$valid){			
+			if($rootScope.userDetails !== undefined || $rootScope.userDetails !== null){
+				toastr.info('The Data is being Inserted','Please Wait!', {
+					  allowHtml: true, 
+					  timeOut : 50000,				
+					  preventDuplicates: true,
+					  preventOpenDuplicates: true,
+					  progressBar: true,
+					});		
 				var sellPropDet = {
 						'squareFeet':$scope.livingArea,
 						'numberOfBedrooms':$scope.bedroom,
@@ -65,6 +97,7 @@ angular.module('myApp').controller('SellController', ['$rootScope', '$scope', '$
 						'pool':$scope.propertyProp.pool,
 						'waterFront':$scope.propertyProp.waterFront,
 						'view':$scope.propertyProp.view,
+						'furnishType': $scope.furnishType,
 				}				
 				$http({
 			        method : "POST",
@@ -73,16 +106,16 @@ angular.module('myApp').controller('SellController', ['$rootScope', '$scope', '$
 			    }).then(function(response) {
 			    	var sellerData = response.data;
 		        	toastr.success('Details saved for propertyid:' + sellerData.propId);
+		        	clearAll();
+		        	setAdvanceDeatures();
+		        	toastr.clear();
 		    	});																				
 			}
 			else{
-				toastr.info('Please login before posting property');
+				toastr.error('User must be looged in', 'Please Try Again');
 			}
 		}else{
-			toastr.error('Form is Invalid', 'Please Fill Details Properly',{
-				'position-class': 'toastr-bottom-left',
-				'close-button':true,
-			});		
+			toastr.error('Form is Invalid', 'Please Fill Details Properly');		
 		}		
 	};
 	
