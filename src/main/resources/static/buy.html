@@ -3,13 +3,19 @@
 	<img ng-src="data:image/JPEG;base64,{{image}}">
 </div> -->
 <div class="w3-light-grey" style="margin-top: 100px; padding-top: 10px;">
-
+	<div style="float:right; padding:10px;">
+		<span>
+			<input type="submit" class= "btn btn-primary" id="submit" value="prev" ng-click="prevPage()" />		
+		</span>
+		<span>
+			<input type="submit" class= "btn btn-primary" id="submit" value="Next" ng-click="nextPage()" />		
+		</span>
+	</div>
 	<!-- Page Container -->
 	<div class="w3-content w3-margin-top" style="max-width: 1400px;">
 
 		<!-- The Grid -->
 		<div class="w3-row-padding">
-
 			<!-- Left Column -->
 			<div class="w3-third">
 
@@ -64,7 +70,7 @@
 							<!-- <i class="fa fa-number "></i> --><b>Zip Code</b>
 							</div>
 							<div class="col-md-7">
-								<input type="number" data-ng-model="zipcode" style="width:80%;">
+								<input type="number" data-ng-model="zipcode" min="10000" max = "99999" style="width:80%;">
 						    </div>
 					    </div>
 					    
@@ -93,7 +99,7 @@
 						  </article>
 						</div>
 				
-						<button type="button" class="btn btn-primary" ng-click="searchProperty()" style="border-radius:10px; width:100px; height:55px; margin-left:35%;margin-top:3%;">
+						<button type="button" class="btn btn-primary" ng-click="searchProperty(1)" style="border-radius:10px; width:100px; height:55px; margin-left:35%;margin-top:3%;">
 							Search
 						</button>
 					
@@ -103,18 +109,17 @@
 		
 
 			<!-- Right Column -->
-			<div class="w3-twothird">
-
+			<div class="w3-twothird">				
 				<div class="w3-container w3-card-2 w3-white w3-margin-bottom"
 					style="padding: 50px;" ng-repeat="property in searchedProperties">
 
-					<div class="w3-container">
+					<div class="w3-container">									
 
 						<div class="row">
 							<div class="col-md-4">
 								<div>
-									<img src="img/portfolio/cake.png"
-										style="width: 100%; height: auto;"></img>
+									<img ng-src ="data:image/JPEG;base64,{{property.image}}"
+										style="width: 100%; height: auto;" alt="No Image Found"></img>
 								</div>
 							</div>
 							<div class="col-md-8">
@@ -158,11 +163,7 @@
 
 		<!-- End Page Container -->
 	</div>
-	
-	<div>
-	NEXT: <button>NEXT</button>
-	</div>
-
+		
 	<div class="modal fade" modal="sellerDetailsModal" tabindex="-1"
 		role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
 		style="display: none;">

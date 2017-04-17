@@ -12,4 +12,5 @@ public interface PropertyDAO {
 	List<byte[]> getImages(String imageId);
 	ArrayList<Property> getSearchedProperties(PropertySearch propertySearch);		
 	ArrayList<String> getCities();
+	public boolean insertImageByFile();
 }

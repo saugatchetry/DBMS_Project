@@ -53,8 +53,7 @@ angular.module('myApp').controller('SellController', ['$rootScope', '$scope', '$
 		$scope.lat = '';
 		$scope.longitude = '';
 		$scope.street = '';
-		$scope.zipcode = '';
-		$scope.selectedCity = '';
+		$scope.zipcode = '';		
 		$scope.isNegotiable = '';
 		$scope.furnishType = '';
 		$scope.coords = '';
@@ -104,11 +103,11 @@ angular.module('myApp').controller('SellController', ['$rootScope', '$scope', '$
 			        url : "selling",
 			        data : sellPropDet
 			    }).then(function(response) {
-			    	var sellerData = response.data;
-		        	toastr.success('Details saved for propertyid:' + sellerData.propId);
+			    	var sellerData = response.data;		        	
 		        	clearAll();
 		        	setAdvanceDeatures();
 		        	toastr.clear();
+		        	toastr.success('Details saved for propertyid:' + sellerData.propId);
 		    	});																				
 			}
 			else{

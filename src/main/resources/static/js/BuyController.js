@@ -1,15 +1,28 @@
 angular.module('myApp').controller('BuyController', ['$rootScope', '$scope', '$http', function($rootScope, $scope, $http) {
 	$scope.user = $rootScope.userDetails;
-
+	
+	$scope.pageNumber = 1;
 		
+	var imageList = [];
+	$scope.nextPage = function(){
+		$scope.pageNumber = $scope.pageNumber + 1;
+		$scope.searchProperty(0);
+	}
+	
+	$scope.prevPage = function(){
+		if ($scope.pageNumber > 1){
+			$scope.pageNumber = $scope.pageNumber - 1;
+		}
+		$scope.searchProperty(0);
+	}
 	
 	$scope.pageLoad = false;
-	$scope.loadImage = function(){
+	$scope.loadImage = function(imageId){
 		$http({
 			method : "GET",
-			url : "downloadImage",	       
+			url : "downloadImage/" + imageId,
 		}).then(function(response) {			
-			$scope.image = response.data;
+			imageList.push(response.data);
 		});
 	}
 	
@@ -21,9 +34,14 @@ angular.module('myApp').controller('BuyController', ['$rootScope', '$scope', '$h
 			var images = ['prop1.jpg', 'prop2.jpg', 'prop3.jpg', 'prop4.jpg', 'prop5.jpg', 'prop6.png'];
 			$scope.searchedProperties = response.data;
 			console.log($scope.properties);
-			for(i = 0; i<6 ;i++){
-				$scope.properties[i].image = images[i];
-			}
+			for(var c = 1; c <= $scope.searchedProperties.length; c++){
+				$http({
+					method : "GET",
+					url : "downloadImage/" + c,
+				}).then(function(response) {			
+					$scope.searchedProperties[c-1].image = response.data;
+				});
+        	}        	        
 		})
 	} 
 	
@@ -31,7 +49,7 @@ angular.module('myApp').controller('BuyController', ['$rootScope', '$scope', '$h
 	
 	$scope.priceSlider = {
 		    minValue: 0,
-		    maxValue: 120000000,
+		    maxValue: 8000000,
 		    options: {
 		      floor: 0,
 		      ceil: 10000,
@@ -41,7 +59,7 @@ angular.module('myApp').controller('BuyController', ['$rootScope', '$scope', '$h
 	
 	$scope.sqFeetSlider = {
 		    minValue: 0,
-		    maxValue: 120000000,
+		    maxValue: 14000,
 		    options: {
 		      floor: 0,
 		      ceil: 10000,
@@ -49,7 +67,12 @@ angular.module('myApp').controller('BuyController', ['$rootScope', '$scope', '$h
 		    }
 	};
 	
-	$scope.searchProperty = function(){
+	$scope.searchedProperties = [];
+	
+	$scope.searchProperty = function(isPageReset){
+		if(isPageReset == 1){
+			$scope.pageNumber = 1;
+		}
 		$scope.pageLoad = true;
 		$http({
 	        method : "POST",
@@ -61,11 +84,23 @@ angular.module('myApp').controller('BuyController', ['$rootScope', '$scope', '$h
 	        	'startingPrice' : $scope.priceSlider.minValue,
 	        	'endingPrice' : $scope.priceSlider.maxValue,
 	        	'startingSqFt' : $scope.sqFeetSlider.minValue,
-	        	'endingSqFt' : $scope.sqFeetSlider.maxValue
+	        	'endingSqFt' : $scope.sqFeetSlider.maxValue,
+	        	'currentPageNumber':$scope.pageNumber,
+	        	'zipcode' : $scope.zipcode,
 	        }
 	    }).then(function(response) {
 	    	$scope.pageLoad = false;
+	    	//$scope.searchedProperties = [];
         	$scope.searchedProperties = response.data;
+        	imageList = [];
+        	for(var c = 1; c <= $scope.searchedProperties.length; c++){
+        		$scope.loadImage(c);
+        	}
+        	
+        	for(var c = 0; c < $scope.searchedProperties.length; c++){
+        		$scope.searchedProperties[c].image = imageList[c];
+        	}
+        	
         	console.log('total records = '+$scope.searchedProperties.length);
     	});
 	}
@@ -122,6 +157,5 @@ angular.module('myApp').controller('BuyController', ['$rootScope', '$scope', '$h
 			  $scope.currentSeller = seller;
 			  $scope.sellerDetailsModal = true;
 		  }
-	  }
-	
+	  }	
 }]);

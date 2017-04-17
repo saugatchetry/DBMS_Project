@@ -11,6 +11,7 @@ angular.module('myApp').controller('EstimateController', ['$scope', '$http','toa
 	};
 	
 	$scope.estimatedBox = "";
+	$scope.furnishType = "Furnished";
 	
 	$scope.submitEstimateDetails = function(){
 		

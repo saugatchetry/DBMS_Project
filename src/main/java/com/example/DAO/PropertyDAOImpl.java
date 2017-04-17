@@ -1,6 +1,9 @@
 package com.example.DAO;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -71,7 +74,7 @@ public class PropertyDAOImpl implements PropertyDAO{
 		int endingPrice = propertySearch.getEndingPrice();
 		int startingSqFt = propertySearch.getStartingSqFt();
 		int endingSqFt = propertySearch.getEndingSqFt();
-		int pageNo=1;
+		int pageNo= propertySearch.getCurrentPageNumber();
 		if(startingPrice==0)
 			startingPrice=1;
 		
@@ -120,17 +123,21 @@ public class PropertyDAOImpl implements PropertyDAO{
 			}
 			flag =false;
 			
-			query.append(query2);
-			
-		}
+			query.append(query2);					
+		}		
+		
 		if(flagB)
 			query.append(" AND ");
-		query.append("( SQ_FT BETWEEN "+startingPrice+" AND "+endingPrice+") AND ( PRICE BETWEEN  "+startingSqFt+" AND "+endingSqFt+")");
+		
+		if(propertySearch.getZipcode() > 10000){
+			query.append(" zipcode=" + propertySearch.getZipcode() + " AND ");
+		}	
+		
+		query.append("( SQ_FT BETWEEN "+startingSqFt+" AND "+endingSqFt+") AND ( PRICE BETWEEN  "+startingPrice+" AND "+endingPrice+")");
 		query.append("order by price) A ) WHERE R<= ("+pageNo+"*10) and R >= (("+pageNo+"-1)*10+1)");
 		
 		
-		System.out.println("query build is "+query);
-		
+		System.out.println("query build is "+query);		
 		
 		
 		return (ArrayList<Property>) jdbcTemplate.query(query.toString(), new ResultSetExtractor<ArrayList<Property>>() {
@@ -210,6 +217,32 @@ public class PropertyDAOImpl implements PropertyDAO{
 			System.out.println("DataAccessException " + e.getMessage());
 			return false;
 		}		
+	}
+	
+	public boolean insertImageByFile(){		
+		try {
+			final File image = new File("C:\\Users\\Nishant\\Desktop\\spring17\\DBMSPROJ\\DBMS_Project\\src\\main\\resources\\static\\img\\prop2.jpg");
+			final InputStream imageIs = new FileInputStream(image);			
+			LobHandler lobHandler = new DefaultLobHandler(); 
+			int result = jdbcTemplate.update(
+					"INSERT INTO Image (IMAGE_ID, IMAGE_DATA) VALUES (?, ?)",
+					new Object[] {
+							90026,
+							new SqlLobValue(imageIs, (int)image.length(), lobHandler),
+					},
+					new int[] {Types.INTEGER, Types.BLOB});
+			if (result > 0){
+				return true;
+			}			
+			return false;
+		} catch (DataAccessException e) {
+			System.out.println("DataAccessException " + e.getMessage());
+			return false;
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;		
 	}
 	
 	@Override
