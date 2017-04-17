@@ -37,3 +37,14 @@
   position: relative;
   z-index: 1;
 }
+
+.trends-header {
+	text-align : center;
+}
+
+.trends-row {
+	margin-top:25px;
+}
+
+.row-middle{
+}

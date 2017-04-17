@@ -1,3 +1,49 @@
-<div>
-	<h1>HELLO TrendSetter</h1>
+<div style="margin-top: 120px; margin-left: 10px;">
+	<div class="container">
+		<div class="trends-row row">
+			<div class="col-md-3 row-middle">
+			<!-- Choose Y-Axis : <select ng-model="priceVsOption">
+			<option ng-repeat="x in priceVsOptions" value="{{x}}">{{x}}</option>
+			</select> -->
+			Zipcode: <input type="number" data-ng-model = "zipcode">
+			<button type="button" class="btn btn-primary" ng-click="refreshZipcodeMap(zipcode)">GO</button>
+			</div>
+			<div class="col-md-9">
+				<div class="trends-header">Price vs Year</div>
+				<canvas id="line" class="chart chart-line"
+					chart-data="lineChartData" chart-labels="lineChartLabels"
+					chart-series="lineChartSeries" 
+					 chart-click="onClick">
+				</canvas>
+			</div>
+		</div>
+		<div class="trends-row row">
+			<div class="col-md-12">
+				<div class="trends-header">Price Statistics based on Zipcode</div>
+				<canvas id="bar" class="chart chart-bar" chart-data="barChartData"
+					chart-labels="barChartLabels" chart-series="barChartSeries">
+				</canvas>
+			</div>
+		</div>
+		<div class="trends-row row">
+			<div class="col-md-3">City: <input type="text" data-ng-model = "cityName">
+			<button type="button" class="btn btn-primary" ng-click="getCityWidePrices()">GO</button>
+			</div>
+			<div class="col-md-9">
+				<div class="trends-header">City-wise Min/Avg/Median Price </div>
+				<canvas id="pie" class="chart chart-line" chart-data="cityWideLineData"
+					chart-labels="cityWideLineLabels" chart-series="cityWideLineSeries">
+				</canvas>
+			</div>
+		</div>
+		<div class="trends-row row">
+			<div class="col-md-3"></div>
+			<div class="col-md-9">
+				<div class="trends-header">Year vs Region</div>
+				<canvas id="base" class="chart-horizontal-bar"
+					chart-data="horizBarData" chart-labels="horizBarLabels">
+				</canvas>
+			</div>
+		</div>
+	</div>
 </div>

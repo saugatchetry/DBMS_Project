@@ -1,13 +1,9 @@
 package com.example;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import sun.misc.*;
+
 import org.apache.xerces.impl.dv.util.Base64;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -18,15 +14,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.business.PredictBean;
 import com.example.business.PropertyBean;
 import com.example.business.SellBean;
+import com.example.business.TrendsBean;
 import com.example.business.UserBean;
 import com.example.model.PredictProperty;
 import com.example.model.Property;
-import com.example.model.PropertyFeature;
 import com.example.model.Sell;
 import com.example.model.User;
 
@@ -38,6 +35,7 @@ class DemoController2{
 	PropertyBean propertyBean = (PropertyBean)applicationContext.getBean("propertyBean");
 	PredictBean predictBean = (PredictBean)applicationContext.getBean("predictBean");//Anitha changes
 	SellBean sellBean = (SellBean)applicationContext.getBean("sellBean");//Anitha changes
+	TrendsBean trendsBean = (TrendsBean)applicationContext.getBean("trendsBean");
 	
 	@RequestMapping(value = "/login",method=RequestMethod.POST, consumes="application/json",produces="application/json")
 	public User secondPage(@RequestBody User user){
@@ -137,5 +135,22 @@ class DemoController2{
         }
         return null;
     }
-
+	
+	@RequestMapping(value = "/getAveragePriceByZipcode", method=RequestMethod.GET, produces = "application/json")
+	public HashMap<String,String> getAveragePriceByZipcode(@RequestParam("zipcode") Integer zipcode){
+		return trendsBean.getAveragePriceByZipcode(zipcode);
+	}
+	
+	@RequestMapping(value = "/getPricesGroupedByZipcode", method=RequestMethod.GET, produces = "application/json")
+	public HashMap<String,ArrayList<String>> getPricesGroupedByZipcode(){
+		return trendsBean.getPricesGroupedByZipcode();
+	}
+	
+	@RequestMapping(value = "/getPricesByCity", method=RequestMethod.GET, produces = "application/json")
+	public HashMap<String,ArrayList<String>> getPricesByCity(@RequestParam("cityName") String cityName){
+		return trendsBean.getPricesByCity(cityName);
+	}
 }
+
+
+
