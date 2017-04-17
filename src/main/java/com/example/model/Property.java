@@ -18,6 +18,16 @@ public class Property {
 	int zipcode;
 	String city;
 	User seller;
+	PropertyFeature feature;
+	
+	String propertyFeatures;
+	
+	public String getPropertyFeatures() {
+		return propertyFeatures;
+	}
+	public void setPropertyFeatures(String propertyFeatures) {
+		this.propertyFeatures = propertyFeatures;
+	}
 	//int sellerId;
 	String image;
 	

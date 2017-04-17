@@ -11,7 +11,28 @@ public class PropertySearch {
 	int endingSqFt;
 	int startingPrice;
 	int endingPrice;
+	int currentPageNumber;
+	int zipcode;
+	String image;
 	
+	public String getImage() {
+		return image;
+	}
+	public void setImage(String image) {
+		this.image = image;
+	}
+	public int getZipcode() {
+		return zipcode;
+	}
+	public void setZipcode(int zipcode) {
+		this.zipcode = zipcode;
+	}
+	public int getCurrentPageNumber() {
+		return currentPageNumber;
+	}
+	public void setCurrentPageNumber(int currentPageNumber) {
+		this.currentPageNumber = currentPageNumber;
+	}
 	public ArrayList<Integer> getTotalBedrooms() {
 		return totalBedrooms;
 	}

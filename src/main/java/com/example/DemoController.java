@@ -12,6 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -149,12 +150,12 @@ class DemoController2{
 		return total;
 	}
 
-	/*@RequestMapping(value = "/insertImage",method=RequestMethod.GET,produces="application/json")
+	@RequestMapping(value = "/insertImageByFile",method=RequestMethod.GET,produces="application/json")
 	public boolean imsertImageData(){
-		Boolean insertionResult = propertyBean.insertImage();
+		Boolean insertionResult = propertyBean.insertImageByFile();
 		return insertionResult;
 	}
-	*/
+	
 	/*
 	 * END-Point to search properties based on selected features
 	 */
@@ -175,10 +176,28 @@ class DemoController2{
 		return searchedProperty;
 	}
 	
-	@RequestMapping(value = "/downloadImage", method = RequestMethod.POST, produces = "image/jpeg")
+	/*@RequestMapping(value = "/downloadImage", method = RequestMethod.POST, produces = "image/jpeg")
     public ResponseEntity<String> getPDF(@RequestBody String imageId) {        
         try {        	        	
         	List<byte[]> images = propertyBean.getImages(imageId);  
+        	System.out.println("Inside this ");
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType("image/jpeg"));
+            String filename = "image1.jpeg";
+            headers.setContentDispositionFormData(filename, filename);
+            String imageEncoded = Base64.encode(images.get(0));           
+            ResponseEntity<String> response = new ResponseEntity<String>(imageEncoded,headers, HttpStatus.OK);
+            return response;
+        } catch (Exception e) {
+            System.err.println(e);
+        }
+        return null;
+    }*/
+	
+	@RequestMapping(value = "/downloadImage/{imageId}", method = RequestMethod.GET, produces = "image/jpeg")
+    public ResponseEntity<String> getPDF(@PathVariable(value="imageId") String imageid) {        
+        try {        	        	
+        	List<byte[]> images = propertyBean.getImages("1");  
         	System.out.println("Inside this ");
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.parseMediaType("image/jpeg"));
@@ -201,6 +220,13 @@ class DemoController2{
 	@RequestMapping(value = "/getPricesGroupedByZipcode", method=RequestMethod.GET, produces = "application/json")
 	public HashMap<String,ArrayList<String>> getPricesGroupedByZipcode(){
 		return trendsBean.getPricesGroupedByZipcode();
+	}
+	
+	
+	@RequestMapping(value = "/insertSearchedProperty", method=RequestMethod.GET, produces = "application/json")
+	public User insertSearchedProperty(@RequestParam("userId") Integer userId,@RequestParam("propertyId") Long propertyId){
+		System.out.println("Hit kiya");
+		return userBean.insertSearchedProperty(userId,propertyId);
 	}
 	
 	@RequestMapping(value = "/getPricesByCity", method=RequestMethod.GET, produces = "application/json")

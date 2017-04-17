@@ -33,8 +33,7 @@ public class PropertyBean {
 	public List<byte[]> getImages(String imageId){
 		return propertyDAO.getImages(imageId);
 	}
-	
-	
+		
 	public ArrayList<Property> getSearchedProperties(PropertySearch propertySearch){
 		return propertyDAO.getSearchedProperties(propertySearch);
 	}
@@ -45,5 +44,8 @@ public class PropertyBean {
 
 	public ArrayList<Property> getRecentProperties(String id) {
 		return propertyDAO.getRecentProperties(id);
+	}
+	public boolean insertImageByFile(){
+		return propertyDAO.insertImageByFile();
 	}
 }

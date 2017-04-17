@@ -1,12 +1,18 @@
 package com.example.DAO;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import javax.swing.tree.RowMapper;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -16,6 +22,7 @@ import org.springframework.jdbc.support.lob.DefaultLobHandler;
 import org.springframework.jdbc.support.lob.LobHandler;
 
 import com.example.model.Property;
+import com.example.model.PropertyFeature;
 import com.example.model.PropertySearch;
 import com.example.model.User;
 
@@ -71,7 +78,7 @@ public class PropertyDAOImpl implements PropertyDAO{
 		int endingPrice = propertySearch.getEndingPrice();
 		int startingSqFt = propertySearch.getStartingSqFt();
 		int endingSqFt = propertySearch.getEndingSqFt();
-		int pageNo=1;
+		int pageNo= propertySearch.getCurrentPageNumber();
 		if(startingPrice==0)
 			startingPrice=1;
 		
@@ -120,17 +127,21 @@ public class PropertyDAOImpl implements PropertyDAO{
 			}
 			flag =false;
 			
-			query.append(query2);
-			
-		}
+			query.append(query2);					
+		}		
+		
 		if(flagB)
 			query.append(" AND ");
-		query.append("( SQ_FT BETWEEN "+startingPrice+" AND "+endingPrice+") AND ( PRICE BETWEEN  "+startingSqFt+" AND "+endingSqFt+")");
+		
+		if(propertySearch.getZipcode() > 10000){
+			query.append(" zipcode=" + propertySearch.getZipcode() + " AND ");
+		}	
+		
+		query.append("( SQ_FT BETWEEN "+startingSqFt+" AND "+endingSqFt+") AND ( PRICE BETWEEN  "+startingPrice+" AND "+endingPrice+")");
 		query.append("order by price) A ) WHERE R<= ("+pageNo+"*10) and R >= (("+pageNo+"-1)*10+1)");
 		
 		
-		System.out.println("query build is "+query);
-		
+		System.out.println("query build is "+query);		
 		
 		
 		return (ArrayList<Property>) jdbcTemplate.query(query.toString(), new ResultSetExtractor<ArrayList<Property>>() {
@@ -154,6 +165,8 @@ public class PropertyDAOImpl implements PropertyDAO{
                 	seller.setLastName(rs.getString("LAST_NAME"));
                 	prop.setSeller(seller);
                 	
+                	prop.setPropertyFeatures(getPropertyFeatures(rs.getLong(1)));
+                	
                 	returnList.add(prop);
                 }
 
@@ -165,6 +178,27 @@ public class PropertyDAOImpl implements PropertyDAO{
 		
 		
 }  
+	
+	
+	public String getPropertyFeatures(long id){
+		
+		
+		String query2 = "SELECT rtrim (xmlagg (xmlelement(e,FEATURE_NAME||',')).extract ('//text()'), ' ') AS STR FROM  PROPERTY_FEATURE where property_id = "+id;
+		//String s2 =  jdbcTemplate.queryForObject(query2, String.class);
+		String s="";
+		String quer = "SELECT  FEATURE_NAME , FEATURE_VALUES FROM PROPERTY_FEATURE WHERE PROPERTY_ID = "+id;
+		List<Map<String, Object>> rs = this.jdbcTemplate.queryForList(quer);
+		for(Map r1: rs){
+		
+			if(r1.get("FEATURE_NAME").equals("FURNISHTYPE"))
+				s+=r1.get("FEATURE_VALUES")+",";
+			else
+				if(r1.get("FEATURE_VALUES").equals("1"))
+					s+=r1.get("FEATURE_NAME")+",";
+		}
+		//System.out.println("HEllo u fucking drained me out "+ s);
+		return s;
+	}
 
 	@Override
 	public ArrayList<String> getCities() {
@@ -210,6 +244,32 @@ public class PropertyDAOImpl implements PropertyDAO{
 			System.out.println("DataAccessException " + e.getMessage());
 			return false;
 		}		
+	}
+	
+	public boolean insertImageByFile(){		
+		try {
+			final File image = new File("C:\\Users\\Nishant\\Desktop\\spring17\\DBMSPROJ\\DBMS_Project\\src\\main\\resources\\static\\img\\prop2.jpg");
+			final InputStream imageIs = new FileInputStream(image);			
+			LobHandler lobHandler = new DefaultLobHandler(); 
+			int result = jdbcTemplate.update(
+					"INSERT INTO Image (IMAGE_ID, IMAGE_DATA) VALUES (?, ?)",
+					new Object[] {
+							90026,
+							new SqlLobValue(imageIs, (int)image.length(), lobHandler),
+					},
+					new int[] {Types.INTEGER, Types.BLOB});
+			if (result > 0){
+				return true;
+			}			
+			return false;
+		} catch (DataAccessException e) {
+			System.out.println("DataAccessException " + e.getMessage());
+			return false;
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;		
 	}
 	
 	@Override

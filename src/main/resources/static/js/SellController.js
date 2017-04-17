@@ -51,19 +51,18 @@ angular.module('myApp').controller('SellController', ['$rootScope', '$scope', '$
 		$scope.comments = '';
 		$scope.expectedRate = '';
 		$scope.lat = '';
-		$scope.longitude = '';
+		//$scope.longitude = '';
 		$scope.street = '';
-		$scope.zipcode = '';
-		$scope.selectedCity = '';
+		$scope.zipcode = '';		
 		$scope.isNegotiable = '';
 		$scope.furnishType = '';
-		$scope.coords = '';
-		$scope.editItem._attachments_uri.image = '';
+		//$scope.coords = '';
+		//$scope.editItem._attachments_uri.image = '';
 	}
 		
 	$scope.submitSellerDetails = function(){
 		if ($scope.sellDetails.$valid){			
-			if($rootScope.userDetails !== undefined || $rootScope.userDetails !== null){
+			if($rootScope.userDetails !== undefined && $rootScope.userDetails !== null){
 				toastr.info('The Data is being Inserted','Please Wait!', {
 					  allowHtml: true, 
 					  timeOut : 50000,				
@@ -104,11 +103,11 @@ angular.module('myApp').controller('SellController', ['$rootScope', '$scope', '$
 			        url : "selling",
 			        data : sellPropDet
 			    }).then(function(response) {
-			    	var sellerData = response.data;
-		        	toastr.success('Details saved for propertyid:' + sellerData.propId);
+			    	var sellerData = response.data;		        	
 		        	clearAll();
 		        	setAdvanceDeatures();
 		        	toastr.clear();
+		        	toastr.success('Details saved for propertyid:' + sellerData.propId);
 		    	});																				
 			}
 			else{
