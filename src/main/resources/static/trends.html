@@ -1,30 +1,33 @@
 <div style="margin-top: 120px; margin-left: 10px;">
-	<div class="container">
+	<div class="container" style="margin-left:10px;margin-right:10px;">
 		<div class="trends-row row">
 			<div class="col-md-3 row-middle">
-			<!-- Choose Y-Axis : <select ng-model="priceVsOption">
-			<option ng-repeat="x in priceVsOptions" value="{{x}}">{{x}}</option>
-			</select> -->
 			Zipcode: <input type="number" data-ng-model = "zipcode">
-			<button type="button" class="btn btn-primary" ng-click="refreshZipcodeMap(zipcode)">GO</button>
+			<button type="button" class="btn btn-primary" ng-click="refreshZipcodeMap()">GO</button>
 			</div>
 			<div class="col-md-9">
 				<div class="trends-header">Price vs Year</div>
 				<canvas id="line" class="chart chart-line"
 					chart-data="lineChartData" chart-labels="lineChartLabels"
-					chart-series="lineChartSeries" 
-					 chart-click="onClick">
+					chart-series="lineChartSeries" >
 				</canvas>
 			</div>
 		</div>
+		
 		<div class="trends-row row">
-			<div class="col-md-12">
-				<div class="trends-header">Price Statistics based on Zipcode</div>
-				<canvas id="bar" class="chart chart-bar" chart-data="barChartData"
-					chart-labels="barChartLabels" chart-series="barChartSeries">
+			<div class="col-md-3 row-middle">
+			Zipcode: <input type="number" data-ng-model = "zipcodeDelta">
+			<button type="button" class="btn btn-primary" ng-click="refreshDeltaMap()">GO</button>
+			</div>
+			<div class="col-md-9">
+				<div class="trends-header">Price Rise/Fall by Year</div>
+				<canvas id="line" class="chart chart-line"
+					chart-data="deltaLineChartData" chart-labels="deltaLineChartLabels"
+					chart-series="deltaLineChartSeries">
 				</canvas>
 			</div>
 		</div>
+		
 		<div class="trends-row row">
 			<div class="col-md-3">City: <input type="text" data-ng-model = "cityName">
 			<button type="button" class="btn btn-primary" ng-click="getCityWidePrices()">GO</button>
@@ -37,11 +40,57 @@
 			</div>
 		</div>
 		<div class="trends-row row">
-			<div class="col-md-3"></div>
+			<div class="col-md-3">
+				<input type="checkbox" value="Carpet" data-ng-model="carpet">Carpet</input><br>
+				<input type="checkbox" value="Waterfront" data-ng-model="waterFront">Waterfront</input><br>
+				<input type="checkbox" value="Wooden Flooring" data-ng-model="woodenFlooring">Wooden Flooring</input><br>
+				<input type="checkbox" value="View" data-ng-model="view">View</input><br>
+				<fieldset>
+  				<legend style= "margin-bottom :0px ;width:inherit; border: none">Furnishing:</legend>
+  					<input type = "radio" name = "furnish" value= "Unfurnished" ng-model= "furnishType"/>&nbsp;&nbsp;Un-Furnished
+						<br/>
+					<input type = "radio" name = "furnish" value= "SemiFurnished" ng-model= "furnishType"/>&nbsp;&nbsp;Semi-Furnished
+						<br/>
+					<input type = "radio" name = "furnish" value= "Furnished" ng-model= "furnishType"/>&nbsp;&nbsp;Furnished
+						<br/>
+ 				</fieldset> 
+ 				<button type="button" class="btn btn-primary" ng-click="getFeatureWidePrices();">GO</button>
+			</div>
 			<div class="col-md-9">
 				<div class="trends-header">Year vs Region</div>
-				<canvas id="base" class="chart-horizontal-bar"
-					chart-data="horizBarData" chart-labels="horizBarLabels">
+				<canvas id="doughnut" class="chart chart-doughnut" height = "{{pieHeight}}" width="{{pieWidth}}" ng-if="featureWiseData != undefined"
+				  chart-data="featureWiseData" chart-labels="featureWiseLabels">
+				</canvas> 
+				<div ng-if="featureWiseData == undefined">Nothing Selected</div>
+			</div>
+		</div>
+		
+		<div class="trends-row row">
+			<div class="col-md-3">
+				Zipcodes: <input type="text" class=""data-ng-model="zipcodes"><br>
+				From: <label for="sel1">MM: </label>
+							  <select data-ng-model="fromMonth" ng-options="x for x in months">
+							  </select>
+							  <label for="sel2"> YY: </label> <input type="text" data-ng-model="fromYear" style="width:40px"><br>
+				To: <label for="sel3">MM:</label>
+							  <select data-ng-model="toMonth" ng-options="x for x in months">
+							  </select><label for="sel4"> YY: </label> <input type="text" data-ng-model="toYear" style="width:40px">			  
+ 				<button type="button" class="btn btn-primary" ng-click="getSalesByZipcode();">GO</button>
+			</div>
+			<div class="col-md-9">
+				<div class="trends-header">Sales vs Zipcode</div>
+				<canvas id="pie" class="chart chart-pie" height="{{pieHeight}}" width="{{pieWidth}}" ng-if="salesZipcodeData != undefined"
+				  chart-data="salesZipcodeData" chart-labels="salesZipcodeLabels" style="width:400px;height:400px;">
+				</canvas> 
+				<div ng-if="salesZipcodeData == undefined">Nothing Selected</div>
+			</div>
+		</div>
+		
+		<div class="trends-row row">
+			<div class="col-md-12">
+				<div class="trends-header">Price Statistics based on Zipcode</div>
+				<canvas id="bar" class="chart chart-bar" chart-data="barChartData"
+					chart-labels="barChartLabels" chart-series="barChartSeries">
 				</canvas>
 			</div>
 		</div>

@@ -26,5 +26,12 @@ public class UserBean {
 		return userDAO.getTotalRecords();
 	}
 
+	public User insertSearchedProperty(Integer userId, Long propertyId) {
+		// TODO Auto-generated method stub
+		return userDAO.insertSearchedProperty(userId,propertyId);
+	}
+	
+	
+
 
 }

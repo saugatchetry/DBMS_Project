@@ -2,6 +2,7 @@ package com.example;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.apache.xerces.impl.dv.util.Base64;
@@ -25,7 +26,6 @@ import com.example.business.TrendsBean;
 import com.example.business.UserBean;
 import com.example.model.PredictProperty;
 import com.example.model.Property;
-import com.example.model.PropertyFeature;
 import com.example.model.PropertySearch;
 import com.example.model.Sell;
 import com.example.model.User;
@@ -222,10 +222,34 @@ class DemoController2{
 		return trendsBean.getPricesGroupedByZipcode();
 	}
 	
+	
+	@RequestMapping(value = "/insertSearchedProperty", method=RequestMethod.GET, produces = "application/json")
+	public User insertSearchedProperty(@RequestParam("userId") Integer userId,@RequestParam("propertyId") Long propertyId){
+		System.out.println("Hit kiya");
+		return userBean.insertSearchedProperty(userId,propertyId);
+	}
+	
 	@RequestMapping(value = "/getPricesByCity", method=RequestMethod.GET, produces = "application/json")
 	public HashMap<String,ArrayList<String>> getPricesByCity(@RequestParam("cityName") String cityName){
 		return trendsBean.getPricesByCity(cityName);
 	}
+	
+	@RequestMapping(value = "/getFeatureWidePrices", method=RequestMethod.GET, produces="application/json")
+	public ArrayList<String> getFeatureWidePrices(@RequestParam("carpet") String carpet, @RequestParam("woodenFlooring") String woodenFlooring, @RequestParam("waterFront") String waterFront,
+			@RequestParam("view") String view, @RequestParam("furnishType") String furnishType){
+		return trendsBean.getFeatureWidePrices(carpet, woodenFlooring, waterFront, view, furnishType);
+	}
+	
+	@RequestMapping(value = "/getDeltaByYear", method=RequestMethod.GET, produces="application/json")
+	public LinkedHashMap<String,String> getDeltaByYear(@RequestParam("zipcode") String zipcode){
+		return trendsBean.getDeltaByYear(zipcode);
+	}
+	
+	@RequestMapping(value = "/getSalesByZipcode", method=RequestMethod.GET, produces="application/json")
+	public HashMap<String, String> getSalesByZipcode(@RequestParam("zipcodes") String zipcodes, @RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate){
+		return trendsBean.getSalesByZipcode(zipcodes, fromDate, toDate);
+	}
+	
 }
 
 

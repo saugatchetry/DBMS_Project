@@ -148,14 +148,33 @@ angular.module('myApp').controller('BuyController', ['$rootScope', '$scope', '$h
 	         }
 	  };
 	  
-	  $scope.provideSellerDetails = function(seller){
+	  $scope.provideSellerDetails = function(property){
 		  console.log($rootScope.userDetails);
 		  if($rootScope.userDetails == undefined){
 			  $rootScope.loginModal = true;
 		  }
 		  else{
-			  $scope.currentSeller = seller;
+			  
+			  $http({
+			        method : "GET",
+			        url : "insertSearchedProperty",
+			        params : {
+			        	'userId': $rootScope.userDetails.id,
+			        	'propertyId' : property.id
+			        }
+			    }).then(function(response) {
+					
+		    	});
+			  
+			  $scope.currentSeller = property.seller;
 			  $scope.sellerDetailsModal = true;
 		  }
-	  }	
+	  }
+	  
+	  $scope.openDetailModal = function(property){
+		  	console.log('modal ki maa ki aankh');
+			$scope.property = property;
+			$scope.propertyModal = true;
+			
+		}
 }]);
