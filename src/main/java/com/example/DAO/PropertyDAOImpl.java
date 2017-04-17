@@ -1,9 +1,6 @@
 package com.example.DAO;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,12 +11,13 @@ import java.util.List;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.SqlLobValue;
 import org.springframework.jdbc.support.lob.DefaultLobHandler;
 import org.springframework.jdbc.support.lob.LobHandler;
 
 import com.example.model.Property;
+import com.example.model.PropertySearch;
+import com.example.model.User;
 
 
 public class PropertyDAOImpl implements PropertyDAO{
@@ -63,32 +61,78 @@ public class PropertyDAOImpl implements PropertyDAO{
 	}
 	
 	@Override
-	public ArrayList<Property> getSearchedProperties(Property property) {
+	public ArrayList<Property> getSearchedProperties(PropertySearch propertySearch) {
 		final Property searchedProperty = new Property();
-		System.out.println("Bedrooms = "+property.getNumberOfBedrooms());
-		System.out.println("Bathrooms = "+property.getNumberOfBathrooms());
-		System.out.println("Floors = "+property.getNumberOfFloors());
-		StringBuilder query = new StringBuilder("SELECT * FROM PROPERTY WHERE ");
+		
+		ArrayList<Integer> bedrooms = propertySearch.getTotalBedrooms();
+		ArrayList<Integer> bathrooms = propertySearch.getTotalBathrooms();
+		ArrayList<Integer> floors = propertySearch.getTotalFloors();
+		int startingPrice = propertySearch.getStartingPrice();
+		int endingPrice = propertySearch.getEndingPrice();
+		int startingSqFt = propertySearch.getStartingSqFt();
+		int endingSqFt = propertySearch.getEndingSqFt();
+		int pageNo=1;
+		if(startingPrice==0)
+			startingPrice=1;
+		
+		
 		boolean flag=false;
-		if(property.getNumberOfBathrooms() != 0){
-			query.append("NUMBER_OF_BATHROOM ="+property.getNumberOfBathrooms());
-			flag=true;
+		boolean flagB=false;
+		ArrayList<ArrayList<Integer>> a = new ArrayList<>();
+		a.add(bedrooms);
+		a.add(bathrooms);
+		a.add(floors);
+		StringBuilder query = new StringBuilder("SELECT * FROM (	"
+				+ "SELECT * FROM ("
+				+ "SELECT P.* , S.* ,ROWNUM R FROM PROPERTY P INNER JOIN REGISTERED_USER S ON S.REG_USR_ID = P.SELLER_ID WHERE ");
+		StringBuilder query2 ;
+		//Collections.sort(bedrooms);
+		for(int j=0 ; j<a.size();j++){
+			query2 = new StringBuilder();
+			System.out.println("size of list = "+j+" = "+a.get(j).size());
+			if(a.get(j).size()<6 && a.get(j).size()>1){
+				if(flagB)
+					query.append(" AND ");
+					query2.append("(");
+				for(int i = 1; i <a.get(j).size();i++){
+					flagB=true;
+					if(j==0){
+						if(flag)
+							query2.append(" OR ");
+						flag=true;
+						query2.append("NUMBER_OF_BEDROOMS = "+a.get(j).get(i));
+					}
+					else if(j == 1){
+						if(flag)
+							query2.append(" OR ");
+						flag=true;
+						query2.append("NUMBER_OF_BATHROOM = "+a.get(j).get(i));
+					}
+					else{
+						if(flag)
+							query2.append(" OR ");
+						flag=true;
+						query2.append("NUMBER_OF_FLOORS = "+a.get(j).get(i));
+					}
+
+				}
+				query2.append(")");
+			}
+			flag =false;
+			
+			query.append(query2);
+			
 		}
+		if(flagB)
+			query.append(" AND ");
+		query.append("( SQ_FT BETWEEN "+startingPrice+" AND "+endingPrice+") AND ( PRICE BETWEEN  "+startingSqFt+" AND "+endingSqFt+")");
+		query.append("order by price) A ) WHERE R<= ("+pageNo+"*10) and R >= (("+pageNo+"-1)*10+1)");
 		
-		if(property.getNumberOfBedrooms() != 0){
-			if(flag)
-				query.append(" AND ");
-			query.append("NUMBER_OF_BEDROOMS = "+ property.getNumberOfBedrooms());
-			flag=true;
-		}
 		
-		if(property.getNumberOfFloors() != 0){
-			if(flag)
-				query.append(" AND ");
-			query.append("NUMBER_OF_FLOORS = "+ property.getNumberOfBedrooms());
-			flag=true;
-		}
-		System.out.println("Query = "+query);
+		System.out.println("query build is "+query);
+		
+		
+		
 		return (ArrayList<Property>) jdbcTemplate.query(query.toString(), new ResultSetExtractor<ArrayList<Property>>() {
             public ArrayList<Property> extractData(ResultSet rs) throws SQLException, DataAccessException {
             	ArrayList<Property> returnList = new ArrayList<>();
@@ -102,12 +146,26 @@ public class PropertyDAOImpl implements PropertyDAO{
                 	prop.setNumberOfBathrooms(rs.getInt(5));
                 	prop.setNumberOfFloors(rs.getInt(4));
                 	//System.out.println("NumofFloorrs = "+rs.getInt(7));
+                	User seller = new User();
+                	seller.setId(rs.getString("REG_USR_ID"));
+                	seller.setEmailId(rs.getString("EMAIL"));
+                	seller.setPhoneNumber(rs.getString("PHONE_NUMBER"));
+                	seller.setFirstName(rs.getString("FIRST_NAME"));
+                	seller.setLastName(rs.getString("LAST_NAME"));
+                	prop.setSeller(seller);
+                	
                 	returnList.add(prop);
                 }
-				return returnList;
+
+                return returnList;
             }});
 		
-		}  
+		
+		
+		
+		
+}  
+
 	@Override
 	public ArrayList<String> getCities() {
 		String quer = "select * from cities";

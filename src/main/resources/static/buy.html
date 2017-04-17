@@ -1,7 +1,7 @@
-<div ng-init="loadImage()">
+<!-- <div ng-init="loadImage()">
 	<h1>HELLO Buyer</h1>
 	<img ng-src="data:image/JPEG;base64,{{image}}">
-</div>
+</div> -->
 <div class="w3-light-grey" style="margin-top: 100px; padding-top: 10px;">
 
 	<!-- Page Container -->
@@ -13,53 +13,94 @@
 			<!-- Left Column -->
 			<div class="w3-third">
 
-				<div class="w3-white w3-text-grey w3-card-4">
-					<div class="w3-display-container">
-						<button type="submit" ng-click="searchProperty()">
-							<i class="glyphicon glyphicon-search"></i>
-						</button>
-						<input type="text"></input>
-					</div>
-					<div class="w3-container">
+				<div class="w3-white w3-card-4 buy-card">
 
-						<div class="w3-large">
-							<i class="fa fa-bed fa-fw w3-margin-right w3-text-teal"></i><b>Bedrooms</b><i
-								class="fa fa-close"></i>
+						<div class="w3-large row">
+							<div class="col-md-5">
+							<!-- <i class="fa fa-bed fa-fw "></i> --><b>Bedrooms</b>
+							</div>
+							<div class="col-md-6">
+								<span ng-repeat="bedroom in bedrooms">
+							      <span class="action-checkbox">
+							       <input id="{{bedroom}}" type="checkbox" value="{{bedroom}}" ng-checked="totalBedrooms.indexOf(bedroom) > -1" ng-click="toggleBedroomSelection(bedroom)" />
+							       <label for="{{bedroom}}">{{bedroom}}<span ng-show="bedroom == '4'">+</span></label>
+							      </span>
+							    </span>
+						    </div>
+					    </div>
+					    
+						<div class="w3-large row">
+						<div class="col-md-5">
+							<!-- <i class="fa fa-asterisk fa-fw "></i> --><b>Bathroom</b>
 						</div>
-						<input name="bedroom" type="radio" data-ng-model="totalBedrooms" value="1">1</input><br> 
-						<input name="bedroom" type="radio" data-ng-model="totalBedrooms" value="2">2</input><br> 
-						<input name="bedroom" type="radio" data-ng-model="totalBedrooms" value="3">3</input><br> 
-						<input name="bedroom" type="radio" data-ng-model="totalBedrooms" value="4">4 or more</input><br>
-						
-						<p class="w3-large">
-							<i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i><b>Bathrooms</b>
-						</p>
-						<input name="bathroom" type="radio" data-ng-model="totalBathrooms" value="1">1</input><br> 
-						<input name="bathroom" type="radio" data-ng-model="totalBathrooms" value="2">2</input><br> 
-						<input name="bathroom" type="radio" data-ng-model="totalBathrooms" value="3">3</input><br> 
-						<input name="bathroom" type="radio" data-ng-model="totalBathrooms" value="4"> 4 or more</input><br>
-						
-						<p class="w3-large">
-							<i class="fa fa-home fa-fw w3-margin-right w3-text-teal"></i><b>Floors</b>
-						</p>
-						<input name="floors" type="radio" data-ng-model="totalFloors" value="1">1</input><br> 
-						<input name="floors" type="radio" data-ng-model="totalFloors" value="2">2</input><br> 
-						<input name="floors" type="radio" data-ng-model="totalFloors" value="3">3</input><br> 
-						<input name="floors" type="radio" data-ng-model="totalFloors" value="4"> 4 or more</input> <br>
-					</div>
-					<!-- <div class="w3-container">
-						<label ng-repeat="fruitName in fruits"> <input
-							type="checkbox" name="selectedFruits[]" value="{{fruitName}}"
-							ng-checked="selection.indexOf(fruitName) > -1"
-							ng-click="toggleSelection(fruitName)"> {{fruitName}}
-							<br/>
-						</label>
-					</div> -->
-				</div>
-				<br>
+						<div class="col-md-6">
+							<span ng-repeat="bathroom in bathrooms">
+						      <span class="action-checkbox">
+						       <input id="{{bathroom}}" type="checkbox" value="{{bathroom}}" ng-checked="totalBathrooms.indexOf(bathroom) > -1" ng-click="toggleBathroomSelection(bathroom)" />
+						       <label for="{{bathroom}}">{{bathroom}}<span ng-show="bathroom == '4'">+</span></label>
+						      </span>
+						      
+						    </span>
+					    </div>
+						</div>
 
+						<div class="w3-large row">
+						<div class="col-md-5">
+							<!-- <i class="fa fa-home fa-fw "></i> --><b>Floors</b>
+						</div>
+						<div class="col-md-6">
+						<span ng-repeat="floor in floors">
+					      <span class="action-checkbox">
+					       <input id="{{floor}}" type="checkbox" value="{{floor}}" ng-checked="totalFloors.indexOf(floor) > -1" ng-click="toggleFloorSelection(floor)" />
+					       <label for="{{floor}}">{{floor}}<span ng-show="floor == '4'">+</span></label>
+					       
+					      </span>
+					    </span>
+					    </div>
+					    </div>
+					    
+					    <div class="w3-large row">
+							<div class="col-md-5">
+							<!-- <i class="fa fa-number "></i> --><b>Zip Code</b>
+							</div>
+							<div class="col-md-7">
+								<input type="number" data-ng-model="zipcode" style="width:80%;">
+						    </div>
+					    </div>
+					    
+						<div class="w3-large" style="margin-top:13px;">
+							<article>
+						    <div class="row" style="margin-left:3px;">
+							<!-- <i class="fa fa-money fa-fw "></i> --><b>Price</b>
+						</div>
+						
+						<div class="row">
+						    <rzslider rz-slider-model="priceSlider.minValue" rz-slider-high="priceSlider.maxValue" rz-slider-option="priceSlider.options"></rzslider>
+						    </div>
+						  </article>
+						</div>
+						
+						
+						<div class="w3-large" style="margin-top:13px;">
+							<article>
+						    <div class="row" style="margin-left:3px;">
+							<!-- <i class="fa fa-superscript fa-fw "></i> --><b>Sq. Feet</b>
+						</div>
+						
+						<div class="row">
+						    <rzslider rz-slider-model="sqFeetSlider.minValue" rz-slider-high="sqFeetSlider.maxValue" rz-slider-option="sqFeetSlider.options"></rzslider>
+						    </div>
+						  </article>
+						</div>
+				
+						<button type="button" class="btn btn-primary" ng-click="searchProperty()" style="border-radius:10px; width:100px; height:55px; margin-left:35%;margin-top:3%;">
+							Search
+						</button>
+					
+					</div>
+				</div>
 				<!-- End Left Column -->
-			</div>
+		
 
 			<!-- Right Column -->
 			<div class="w3-twothird">
@@ -98,7 +139,9 @@
 										<p>Parking : Available</p>
 									</div>
 									<div class="col-md-6">
-										<p>Contact Seller</p>
+										<button type="button" class="btn btn-primary" ng-click="provideSellerDetails(property.seller);">
+											Contact Seller
+										</button>
 									</div>
 								</div>
 							</div>
@@ -114,5 +157,29 @@
 		</div>
 
 		<!-- End Page Container -->
+	</div>
+	
+	<div>
+	NEXT: <button>NEXT</button>
+	</div>
+
+	<div class="modal fade" modal="sellerDetailsModal" tabindex="-1"
+		role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+		style="display: none;">
+		<div class="modal-dialog">
+			<div class="loginmodal-container">
+				<button type="button" class="close"
+					ng-click="sellerDetailsModal = false">&times;</button>
+
+
+				<h3>{{currentSeller.firstName}} {{currentSeller.lastName}}</h3>
+				<p>
+					<i class="fa fa-phone"></i> {{currentSeller.phoneNumber}}
+				</p>
+				<p>
+					<i class="fa fa-envelope"></i> {{currentSeller.emailId}}
+				</p>
+			</div>
+		</div>
 	</div>
 </div>
