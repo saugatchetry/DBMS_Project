@@ -162,6 +162,16 @@ app.controller('MainController', ['$rootScope', '$scope', '$http', function($roo
 		
 	}
 	
+	$scope.showAllRecords = function(){
+		//console.log("Clicked");
+		 $http({
+			method : "GET",
+			url : "getTotalRecords"
+		}).then(function(result){
+			alert('Total no of records : ' + result.data);
+		});
+	}
+	
 	$scope.loginUser = function(){
 		$http({
 	        method : "POST",
@@ -178,6 +188,7 @@ app.controller('MainController', ['$rootScope', '$scope', '$http', function($roo
         		$scope.loginModal = false;
         		$scope.loginStatus  = true;
         		$rootScope.userDetails = $scope.user;
+        		$rootScope.registeredUser = 1;
         	}
         	else{
         		$scope.loginStatus  = false;
@@ -267,7 +278,7 @@ app.controller('MainController', ['$rootScope', '$scope', '$http', function($roo
                 <ul class="nav navbar-nav navbar-left">
                    
                     <li class="page-scroll" >
-                    	 <a class="navbar-brand" href="#page-top" style="background:transparent !important;">GharWaale.com</a>
+                    	 <a ng-click="showAllRecords()" class="navbar-brand" href="#page-top" style="background:transparent !important;">GharWaale.com</a>
                     </li>
                     <li class="page-scroll">
                     	<a ng-href="#buy" >Buy</a>

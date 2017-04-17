@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.DAO.PropertyDAO;
 import com.example.model.Property;
+import com.example.model.PropertySearch;
 
 public class PropertyBean {
 	
@@ -34,8 +35,8 @@ public class PropertyBean {
 	}
 	
 	
-	public ArrayList<Property> getSearchedProperties(Property property){
-		return propertyDAO.getSearchedProperties(property);
+	public ArrayList<Property> getSearchedProperties(PropertySearch propertySearch){
+		return propertyDAO.getSearchedProperties(propertySearch);
 	}
 	
 	public ArrayList<String> getCities(){

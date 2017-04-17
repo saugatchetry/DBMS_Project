@@ -24,6 +24,8 @@ import com.example.business.TrendsBean;
 import com.example.business.UserBean;
 import com.example.model.PredictProperty;
 import com.example.model.Property;
+import com.example.model.PropertyFeature;
+import com.example.model.PropertySearch;
 import com.example.model.Sell;
 import com.example.model.User;
 
@@ -111,8 +113,18 @@ class DemoController2{
 	/*
 	 * END-Point to search properties based on selected features
 	 */
+//	@RequestMapping(value = "/searchProperties",method=RequestMethod.POST,consumes="application/json",produces="application/json")
+//	public ArrayList<Property> getSearchedProperties(@RequestBody Property property){
+//		System.out.println("Controller hit");
+//		ArrayList<Property> searchedProperty = propertyBean.getSearchedProperties(property);
+//		return searchedProperty;
+//	}
+	
+	/*
+	 * END-Point to search properties based on selected features
+	 */
 	@RequestMapping(value = "/searchProperties",method=RequestMethod.POST,consumes="application/json",produces="application/json")
-	public ArrayList<Property> getSearchedProperties(@RequestBody Property property){
+	public ArrayList<Property> getSearchedProperties(@RequestBody PropertySearch property){
 		System.out.println("Controller hit");
 		ArrayList<Property> searchedProperty = propertyBean.getSearchedProperties(property);
 		return searchedProperty;
