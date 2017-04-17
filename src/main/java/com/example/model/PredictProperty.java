@@ -4,19 +4,41 @@ import java.sql.Date;
 
 public class PredictProperty {
 	
-	private float sq_ft;
-	private int no_of_bedrooms;
-	private int no_of_bath;
-	private int no_of_floors;
-	private String yr_renovated;
-	private String yr_built;
+	private float squareFeet;
+	private int numberOfBedrooms;
+	private int numberOfBathrooms;
+	private int numberOfFloors;
+	private String yearRenovated;
+	private String yearBuilt;
 	private Date sale_dt;
 	private int zipcode;
 	private String city;
+	private int woodenFlooring;
+	private int carpet;
+	private int parking;
+	private int petFriendly;
+	private int pool;
+	private int waterFront;
+	private int view;
+	private String suggestions;
 	private double estimatedValue;
 	private int errorStatus; //0 is error 1 is success
 	private String errorMessage;
+	private double actualPrice;
+	private String furnishStatus;
 	
+	public String getFurnishStatus() {
+		return furnishStatus;
+	}
+	public void setFurnishStatus(String furnishStatus) {
+		this.furnishStatus = furnishStatus;
+	}
+	public double getActualPrice() {
+		return actualPrice;
+	}
+	public void setActualPrice(double actualPrice) {
+		this.actualPrice = actualPrice;
+	}
 	public int getErrorStatus() {
 		return errorStatus;
 	}
@@ -29,42 +51,41 @@ public class PredictProperty {
 	public void setErrorMessage(String errorMessage) {
 		this.errorMessage = errorMessage;
 	}
-	
-	public float getSq_ft() {
-		return sq_ft;
+	public float getSquareFeet() {
+		return squareFeet;
 	}
-	public void setSq_ft(float f) {
-		this.sq_ft = f;
+	public void setSquareFeet(float squareFeet) {
+		this.squareFeet = squareFeet;
 	}
-	public int getNo_of_bedrooms() {
-		return no_of_bedrooms;
+	public int getNumberOfBedrooms() {
+		return numberOfBedrooms;
 	}
-	public void setNo_of_bedrooms(int no_of_bedrooms) {
-		this.no_of_bedrooms = no_of_bedrooms;
+	public void setNumberOfBedrooms(int numberOfBedrooms) {
+		this.numberOfBedrooms = numberOfBedrooms;
 	}
-	public int getNo_of_bath() {
-		return no_of_bath;
+	public int getNumberOfBathrooms() {
+		return numberOfBathrooms;
 	}
-	public void setNo_of_bath(int no_of_bath) {
-		this.no_of_bath = no_of_bath;
+	public void setNumberOfBathrooms(int numberOfBathrooms) {
+		this.numberOfBathrooms = numberOfBathrooms;
 	}
-	public int getNo_of_floors() {
-		return no_of_floors;
+	public int getNumberOfFloors() {
+		return numberOfFloors;
 	}
-	public void setNo_of_floors(int no_of_floors) {
-		this.no_of_floors = no_of_floors;
+	public void setNumberOfFloors(int numberOfFloors) {
+		this.numberOfFloors = numberOfFloors;
 	}
-	public String getYr_renovated() {
-		return yr_renovated;
+	public String getYearRenovated() {
+		return yearRenovated;
 	}
-	public void setYr_renovated(String yr_renovated) {
-		this.yr_renovated = yr_renovated;
+	public void setYearRenovated(String yearRenovated) {
+		this.yearRenovated = yearRenovated;
 	}
-	public String getYr_built() {
-		return yr_built;
+	public String getYearBuilt() {
+		return yearBuilt;
 	}
-	public void setYr_built(String yr_built) {
-		this.yr_built = yr_built;
+	public void setYearBuilt(String yearBuilt) {
+		this.yearBuilt = yearBuilt;
 	}
 	public Date getSale_dt() {
 		return sale_dt;
@@ -84,17 +105,64 @@ public class PredictProperty {
 	public void setCity(String city) {
 		this.city = city;
 	}
-
-	
+	public int getWoodenFlooring() {
+		return woodenFlooring;
+	}
+	public void setWoodenFlooring(int woodenFlooring) {
+		this.woodenFlooring = woodenFlooring;
+	}
+	public int getCarpet() {
+		return carpet;
+	}
+	public void setCarpet(int carpet) {
+		this.carpet = carpet;
+	}
+	public int getParking() {
+		return parking;
+	}
+	public void setParking(int parking) {
+		this.parking = parking;
+	}
+	public int getPetFriendly() {
+		return petFriendly;
+	}
+	public void setPetFriendly(int petFriendly) {
+		this.petFriendly = petFriendly;
+	}
+	public int getPool() {
+		return pool;
+	}
+	public void setPool(int pool) {
+		this.pool = pool;
+	}
+	public int getWaterFront() {
+		return waterFront;
+	}
+	public void setWaterFront(int waterFront) {
+		this.waterFront = waterFront;
+	}
+	public int getView() {
+		return view;
+	}
+	public void setView(int view) {
+		this.view = view;
+	}
+	public String getSuggestions() {
+		return suggestions;
+	}
+	public void setSuggestions(String suggestions) {
+		this.suggestions = suggestions;
+	}
 	public double getEstimatedValue() {
 		return estimatedValue;
 	}
 	public void setEstimatedValue(double estimatedValue) {
 		this.estimatedValue = estimatedValue;
 	}
-	@Override
+	
+	/*@Override
 	public String toString() {
 		return "PredictProp [sq_ft=" + sq_ft + ", no_of_bedrooms=" + no_of_bedrooms + ", no_of_bath=" + no_of_bath + ", no_of_floors=" + no_of_floors
 				+ ", yr_renovated=" + yr_renovated + ", yr_built=" + yr_built + ",sale_dt=" +sale_dt+",zipcode="+zipcode+", city="+city+" ]";
-	}	
+	}	*/
 }

@@ -10,20 +10,13 @@ public class PredictBean {
 	@Autowired
 	private PredictDAO predictDAO;
 	
-	
-	
-
 	public PredictDAO getPredictDAO() {
 		return predictDAO;
 	}
 
-
-
 	public void setPredictDAO(PredictDAO predictDAO) {
 		this.predictDAO = predictDAO;
 	}
-
-
 
 	public PredictProperty predictValue(PredictProperty p){
 		return predictDAO.predictValue(p);

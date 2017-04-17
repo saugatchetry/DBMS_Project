@@ -74,10 +74,55 @@ class DemoController2{
 		return sellOutput;
 	}
 	/*Anitha changes end*/
-	@RequestMapping(value = "/estimateValue",method=RequestMethod.POST,produces="application/json")
-	public double getEstimate(@RequestBody PredictProperty p){
-		double estimated_value = predictBean.predictValue(p).getEstimatedValue();
-		return estimated_value;
+	@RequestMapping(value = "/estimateValue",method=RequestMethod.POST, consumes="application/json",produces="application/json")
+	public PredictProperty getEstimate(@RequestBody PredictProperty p){
+		PredictProperty propertyWithEstimatedValue = predictBean.predictValue(p);
+		double currentEstimatedPrice = propertyWithEstimatedValue.getEstimatedValue();
+		StringBuilder suggestions = new StringBuilder();
+		if(p.getWaterFront() == 1){
+			currentEstimatedPrice += 0.067*currentEstimatedPrice;
+		}
+		
+		if(p.getWoodenFlooring() == 1){
+			currentEstimatedPrice += 0.017*currentEstimatedPrice;
+		}
+		
+		if(p.getCarpet() == 1){
+			currentEstimatedPrice += 0.020*currentEstimatedPrice;
+		}else{
+			suggestions.append("\n" +"Applying Carpet on Floor can increase the value by: $" + Math.round(0.020*currentEstimatedPrice));			
+		}
+		
+		if(p.getParking() == 1){
+			currentEstimatedPrice += 0.039*currentEstimatedPrice;			
+		}else{
+			suggestions.append("\n" +"Giving Parking Facility can increase the value by: $" + Math.round(0.029*currentEstimatedPrice));
+		}
+		
+		if(p.getPool() == 1){
+			currentEstimatedPrice += 0.025*currentEstimatedPrice;
+		}
+		
+		if(p.getView() == 1){
+			currentEstimatedPrice += 0.085*currentEstimatedPrice;
+		}
+		
+		if(p.getView() == 1){
+			currentEstimatedPrice += 0.085*currentEstimatedPrice;
+		}
+		
+		if(p.getFurnishStatus().equals("Furnished")){
+			currentEstimatedPrice += 0.04*currentEstimatedPrice;
+		}else if(p.getFurnishStatus().equals("SemiFurnished")){
+			currentEstimatedPrice += 0.02*currentEstimatedPrice;
+		}else{
+			suggestions.append("\n" +"Furnishing and Renovation can increase the value by: $" + Math.round(0.03*currentEstimatedPrice)) ;
+			currentEstimatedPrice -= 0.01*currentEstimatedPrice;
+		}
+		propertyWithEstimatedValue.setSuggestions(new String(suggestions));
+		propertyWithEstimatedValue.setEstimatedValue(Math.round(currentEstimatedPrice));
+						
+		return propertyWithEstimatedValue;
 	}
 	
 //	@RequestMapping(value = "/estimateValue",method=RequestMethod.POST,produces="application/json")

@@ -38,7 +38,14 @@ public class Sell {
 	int view;
 	private int errorStatus; //0 is error 1 is success
 	private String errorMessage;
+	String furnishType;
 	
+	public String getFurnishType() {
+		return furnishType;
+	}
+	public void setFurnishType(String furnishType) {
+		this.furnishType = furnishType;
+	}
 	public int getPropertyFeatureId() {
 		return propertyFeatureId;
 	}

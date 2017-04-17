@@ -61,7 +61,8 @@ public class SellDAOImpl implements SellDAO{
             	id_feature = keyGenerator.generateKeySell("PROP_FEAT_SEQ");
 		        jdbcTemplate.update(query, new Object[] {id_feature,id,"CARPET",s.getCarpet()
 	            	});
-            }
+            }                      
+            
             if(s.getWoodenFlooring()!=0){
             	id_feature = keyGenerator.generateKeySell("PROP_FEAT_SEQ");
 		        jdbcTemplate.update(query, new Object[] {id_feature,id,"WOODEN FL",s.getWoodenFlooring()
@@ -93,9 +94,18 @@ public class SellDAOImpl implements SellDAO{
 	            	});
             }	
             
-            Boolean success=insertImage(s.getPath(), id.toString());
-            if(!success)
-            	throw new FileNotFoundException();
+            if(s.getPath() != null){
+            	 Boolean success=insertImage(s.getPath(), id.toString());
+                 if(!success)
+                 	throw new FileNotFoundException();
+            }
+            
+            if(s.getFurnishType()!= null){
+            	id_feature = keyGenerator.generateKeySell("PROP_FEAT_SEQ");
+		        jdbcTemplate.update(query, new Object[] {id_feature,id,"FURNISHTYPE",s.getFurnishType()
+	            	});
+            }
+            
             s.setErrorStatus(1);
             s.setErrorMessage("");
             }
