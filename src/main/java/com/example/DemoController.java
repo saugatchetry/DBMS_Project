@@ -224,6 +224,11 @@ class DemoController2{
 		return trendsBean.getSalesByZipcode(zipcodes, fromDate, toDate);
 	}
 	
+	@RequestMapping(value = "/getRecentSearches", method=RequestMethod.GET, produces="application/json")
+	public ArrayList<Property> getSalesByZipcode(@RequestParam("userId") String id){
+		ArrayList<Property> recentProperty = propertyBean.getRecentProperties(id);
+		return recentProperty;
+	}
 }
 
 

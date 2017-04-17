@@ -25,7 +25,7 @@
 			<div ng-repeat="property in properties ">
 				<div class="col-sm-4 portfolio-item">
 					<a class="portfolio-link" data-target="#propertyModal"
-						data-toggle="modal" ng-click="setProperty($index)">
+						data-toggle="modal" ng-click="setProperty(property)">
 						<div class="caption">
 							<div class="caption-content text-left">
 								<i class="fa fa-bed"> {{property.numberOfBedrooms}}</i><br>
@@ -40,21 +40,23 @@
 	</div>
 </section>
 
-<section class="success" id="charts">
-	<div class="container">
+<section class="success" id="recentSearches" ng-if="userDetails != null && userDetails != undefined">
+	<div class="container" >
 		<div class="row">
 			<div class="col-lg-12 text-center">
-				<h2>Charts</h2>
-				<hr class="star-light">
+				<h2>Recent Searches</h2>
+				<hr class="star-primary">
 			</div>
 		</div>
 		<div class="row">
-
-			<canvas id="pie" width='1200' height='300' class="chart chart-pie"
-				chart-data="propertyData" chart-labels="labels"
-				chart-option="options">
-    				</canvas>
-
+			<div ng-repeat="property in recentProperties ">
+				<div class="col-sm-4 portfolio-item">
+					<a class="portfolio-link" data-target="#propertyModal"
+						data-toggle="modal" ng-click="setProperty(property)">
+						<img src="/img/{{property.image}}" class="img-responsive" style="margin:10px">
+					</a>
+				</div>
+			</div>
 		</div>
 	</div>
 </section>

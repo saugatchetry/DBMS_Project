@@ -1,7 +1,5 @@
 angular.module('myApp').controller('BuyController', ['$rootScope', '$scope', '$http', function($rootScope, $scope, $http) {
 	$scope.user = $rootScope.userDetails;
-
-		
 	
 	$scope.pageLoad = false;
 	$scope.loadImage = function(){

@@ -189,6 +189,7 @@ app.controller('MainController', ['$rootScope', '$scope', '$http', function($roo
         		$scope.loginStatus  = true;
         		$rootScope.userDetails = $scope.user;
         		$rootScope.registeredUser = 1;
+        		console.log($scope.loginStatus);
         	}
         	else{
         		$scope.loginStatus  = false;
@@ -243,17 +244,37 @@ app.controller('MainController', ['$rootScope', '$scope', '$http', function($roo
 			})
 		} 
 
-		$scope.setProperty = function(index){
-			console.log(index);
-			$scope.property = $scope.properties[index];
+		$scope.setProperty = function(property){
+			//console.log(index);
+			$scope.property = property;
 			console.log($scope.property);
 		}
 		
 		$scope.getPopularProperties();
 		
-		$scope.labels = ["Detroit", "San Diego","Nebraska","San Francisco","Mississippi"];
-		$scope.propertyData = [10,35,15,45,25];
 		$rootScope.loginModal = $scope.loginModal;
+		
+		$scope.getRecentSearches = function(){
+			$http({
+		        method : "GET",
+		        url : "getRecentSearches",
+		        params : {
+					'userId' : $rootScope.userDetails.id			        	
+		        }
+		    }).then(function(response) {
+		       	$scope.recentProperties = response.data;
+		       	var images = ['cake.png','circus.png','submarine.png','game.png','cabin.png','safe.png'];
+		       	for(i = 0; i<6 ;i++){
+					$scope.recentProperties[i].image = 'portfolio/' + images[i];
+				}
+		   	});	  
+		}
+		
+		$scope.$watch('loginStatus', function(newValue, oldValue,scope){
+		   if(newValue == true){
+				$scope.getRecentSearches();
+		   }
+		  }, true);	 
 }]);
 </script>
 <script src = "js/BuyController.js" ></script>
@@ -319,6 +340,9 @@ app.controller('MainController', ['$rootScope', '$scope', '$http', function($roo
                         <a href="#page-top"></a>
                     </li>
                     <li class="page-scroll">
+                    	<a ng-href="#main"><i class="fa fa-home"></i></a>
+                    </li>
+                    <li class="page-scroll">
                         <a>Welcome, {{user.firstName}} {{user.lastName}}</a>
                     </li>
                     <li class="page-scroll">
@@ -355,10 +379,6 @@ app.controller('MainController', ['$rootScope', '$scope', '$http', function($roo
 				<div class="login-error" ng-show="user.errorStatus == 0">{{user.errorMessage}}</div> 
 				<input type="button" name="login" class="login loginmodal-submit" value="Login" ng-click = "loginUser();" ng-disabled="loginForm.$invalid" >
 			  </form>
-			  	
-			  <div class="login-help">
-				<a href="#">Register</a> - <a href="#">Forgot Password</a>
-			  </div>
 			</div>
 		</div>
 	  </div>

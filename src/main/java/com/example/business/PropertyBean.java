@@ -42,4 +42,8 @@ public class PropertyBean {
 	public ArrayList<String> getCities(){
 		return propertyDAO.getCities();
 	}
+
+	public ArrayList<Property> getRecentProperties(String id) {
+		return propertyDAO.getRecentProperties(id);
+	}
 }

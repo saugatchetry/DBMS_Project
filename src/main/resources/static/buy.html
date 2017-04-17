@@ -104,7 +104,8 @@
 
 			<!-- Right Column -->
 			<div class="w3-twothird">
-
+				
+				<div ng-if="searchedProperties !=null && searchedProperties != undefined && searchedProperties.length == 0" style="text-align:center;">No Records Found</div>
 				<div class="w3-container w3-card-2 w3-white w3-margin-bottom"
 					style="padding: 50px;" ng-repeat="property in searchedProperties">
 
