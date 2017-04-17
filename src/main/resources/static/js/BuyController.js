@@ -1,15 +1,33 @@
 angular.module('myApp').controller('BuyController', ['$rootScope', '$scope', '$http', function($rootScope, $scope, $http) {
 	$scope.user = $rootScope.userDetails;
+
+		
+	
 	$scope.pageLoad = false;
 	$scope.loadImage = function(){
 		$http({
-			method : "POST",
-			url : "downloadImage",
-			data: JSON.stringify(1),
+			method : "GET",
+			url : "downloadImage",	       
 		}).then(function(response) {			
-			$scope.image = response.data;			
+			$scope.image = response.data;
 		});
 	}
+	
+	$scope.getPopularProperties = function(){
+		$http({
+			method : "GET",
+			url: "getPopularProperties"
+		}).then(function(response){
+			var images = ['prop1.jpg', 'prop2.jpg', 'prop3.jpg', 'prop4.jpg', 'prop5.jpg', 'prop6.png'];
+			$scope.searchedProperties = response.data;
+			console.log($scope.properties);
+			for(i = 0; i<6 ;i++){
+				$scope.properties[i].image = images[i];
+			}
+		})
+	} 
+	
+	$scope.getPopularProperties();
 	
 	$scope.priceSlider = {
 		    minValue: 0,
@@ -34,16 +52,16 @@ angular.module('myApp').controller('BuyController', ['$rootScope', '$scope', '$h
 	$scope.searchProperty = function(){
 		$scope.pageLoad = true;
 		$http({
-	        method : "GET",
+	        method : "POST",
 	        url : "searchProperties",
 	        data : {
-	        	'numberOfBedrooms' : $scope.totalBedrooms,
-	        	'numberOfBathrooms' : $scope.totalBathrooms,
-	        	'numberOfFloors' : $scope.totalFloors,
-	        	'priceFrom' : $scope.priceSlider.minValue,
-	        	'priceTo' : $scope.priceSlider.maxValue,
-	        	'squareFeetFrom' : $scope.sqFeetSlider.minValue,
-	        	'squareFeetTo' : $scope.sqFeetSlider.maxValue
+	        	'totalBedrooms' : $scope.totalBedrooms,
+	        	'totalBathrooms' : $scope.totalBathrooms,
+	        	'totalFloors' : $scope.totalFloors,
+	        	'startingPrice' : $scope.priceSlider.minValue,
+	        	'endingPrice' : $scope.priceSlider.maxValue,
+	        	'startingSqFt' : $scope.sqFeetSlider.minValue,
+	        	'endingSqFt' : $scope.sqFeetSlider.maxValue
 	        }
 	    }).then(function(response) {
 	    	$scope.pageLoad = false;
@@ -53,11 +71,11 @@ angular.module('myApp').controller('BuyController', ['$rootScope', '$scope', '$h
 	}
 	  
 	  $scope.bedrooms = ['1', '2', '3', '4'];
-	  $scope.totalBedrooms = [];
+	  $scope.totalBedrooms = ['0'];
 	  $scope.bathrooms = ['1', '2', '3', '4'];
-	  $scope.totalBathrooms = [];
+	  $scope.totalBathrooms = ['0'];
 	  $scope.floors = ['1', '2', '3', '4'];
-	  $scope.totalFloors = [];
+	  $scope.totalFloors = ['0'];
 	  
 	  $scope.toggleBedroomSelection = function toggleSelection(bedroom) {
 	        var idx = $scope.totalBedrooms.indexOf(bedroom);

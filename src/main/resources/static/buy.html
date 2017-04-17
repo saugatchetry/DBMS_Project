@@ -2,7 +2,7 @@
 	<h1>HELLO Buyer</h1>
 	<img ng-src="data:image/JPEG;base64,{{image}}">
 </div> -->
-<div style="margin-top: 100px; padding-top: 10px;" ng-class="{'black-overlay':pageLoad}">
+<div class="w3-light-grey" style="margin-top: 100px; padding-top: 10px;">
 
 	<!-- Page Container -->
 	<div class="w3-content w3-margin-top" style="max-width: 1400px;">
@@ -16,10 +16,10 @@
 				<div class="w3-white w3-card-4 buy-card">
 
 						<div class="w3-large row">
-							<div class="col-md-5">
+							<div class="col-md-6">
 							<i class="fa fa-bed fa-fw "></i><b>Bedrooms</b>
 							</div>
-							<div class="col-md-7">
+							<div class="col-md-6">
 								<span ng-repeat="bedroom in bedrooms">
 							      <span class="action-checkbox">
 							       <input id="{{bedroom}}" type="checkbox" value="{{bedroom}}" ng-checked="totalBedrooms.indexOf(bedroom) > -1" ng-click="toggleBedroomSelection(bedroom)" />
@@ -30,8 +30,8 @@
 					    </div>
 					    
 						<div class="w3-large row">
-						<div class="col-md-5">
-							<i class="fa fa-asterisk fa-fw "></i><b>Bathroom</b>
+						<div class="col-md-6">
+							<i class="fa fa-asterisk fa-fw "></i><b>Bathrooms</b>
 						</div>
 						<div class="col-md-6">
 							<span ng-repeat="bathroom in bathrooms">
@@ -45,10 +45,10 @@
 						</div>
 
 						<div class="w3-large row">
-						<div class="col-md-5">
+						<div class="col-md-6">
 							<i class="fa fa-home fa-fw "></i><b>Floors</b>
 						</div>
-						<div class="col-md-7">
+						<div class="col-md-6">
 						<span ng-repeat="floor in floors">
 					      <span class="action-checkbox">
 					       <input id="{{floor}}" type="checkbox" value="{{floor}}" ng-checked="totalFloors.indexOf(floor) > -1" ng-click="toggleFloorSelection(floor)" />
@@ -61,38 +61,37 @@
 					    
 						<div class="w3-large" style="margin-top:13px;">
 							<article>
-						    <div class="row" style="margin-left:3px;">
-							<i class="fa fa-money fa-fw "></i><b>Price</b>
-						</div>
-						
-						<div class="row">
-						    <rzslider rz-slider-model="priceSlider.minValue" rz-slider-high="priceSlider.maxValue" rz-slider-option="priceSlider.options"></rzslider>
-						    </div>
-						  </article>
+							    <div class="row" style="margin-left:3px;">
+									<i class="fa fa-money fa-fw "></i><b>Price</b>
+								</div>
+							
+								<div class="row">
+								    <rzslider rz-slider-model="priceSlider.minValue" rz-slider-high="priceSlider.maxValue" rz-slider-option="priceSlider.options"></rzslider>
+								</div>
+						  	</article>
 						</div>
 						
 						
 						<div class="w3-large" style="margin-top:13px;">
 							<article>
-						    <div class="row" style="margin-left:3px;">
-							<i class="fa fa-superscript fa-fw "></i><b>Sq. Feet</b>
-						</div>
-						
-						<div class="row">
-						    <rzslider rz-slider-model="sqFeetSlider.minValue" rz-slider-high="sqFeetSlider.maxValue" rz-slider-option="sqFeetSlider.options"></rzslider>
-						    </div>
-						  </article>
+							    <div class="row" style="margin-left:3px;">
+									<i class="fa fa-superscript fa-fw "></i><b>Sq. Feet</b>
+								</div>
+							
+								<div class="row">
+							    	<rzslider rz-slider-model="sqFeetSlider.minValue" rz-slider-high="sqFeetSlider.maxValue" rz-slider-option="sqFeetSlider.options"></rzslider>
+							    </div>
+						  	</article>
 						</div>
 				
 						<button type="button" class="btn btn-primary" ng-click="searchProperty()" style="border-radius:10px; width:100px; height:55px; margin-left:35%;margin-top:3%;">
 							Search
 						</button>
-						</div>
+					
 					</div>
 				</div>
-
 				<!-- End Left Column -->
-			
+		
 
 			<!-- Right Column -->
 			<div class="w3-twothird">
@@ -150,6 +149,10 @@
 
 		<!-- End Page Container -->
 	</div>
+	
+	<div>
+	NEXT: <button>NEXT</button>
+	</div>
 
 	<div class="modal fade" modal="sellerDetailsModal" tabindex="-1"
 		role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
@@ -170,4 +173,4 @@
 			</div>
 		</div>
 	</div>
-
+</div>

@@ -11,6 +11,11 @@ public class SellBean {
 private SellDAO sellDAO;
 
 
+public Sell insertDetails(Sell s){
+	return sellDAO.insertDetails(s);
+}
+
+
 
 public SellDAO getSellDAO() {
 	return sellDAO;
@@ -20,12 +25,6 @@ public SellDAO getSellDAO() {
 
 public void setSellDAO(SellDAO sellDAO) {
 	this.sellDAO = sellDAO;
-}
-
-
-
-public Sell insertDetails(Sell s){
-	return sellDAO.insertDetails(s);
 }
 
 

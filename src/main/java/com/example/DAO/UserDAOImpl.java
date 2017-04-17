@@ -3,11 +3,15 @@ package com.example.DAO;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
+import java.util.Map;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.InvalidResultSetAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.SqlOutParameter;
+import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.example.KeyGenerator;
@@ -16,6 +20,7 @@ import com.example.model.User;
 public class UserDAOImpl implements UserDAO {
 	private JdbcTemplate jdbcTemplate;
 	private KeyGenerator keyGenerator;
+	private SimpleJdbcCall jdbcCall;
 	
     public JdbcTemplate getJdbcTemplate() {
         return jdbcTemplate;
@@ -98,8 +103,17 @@ public class UserDAOImpl implements UserDAO {
 	
 	@Override
 	public int getTotalRecords(){
-		String query = "SELECT COUNT(*) FROM Registered_User";
-		return  jdbcTemplate.queryForObject(query, Integer.class);
+		jdbcCall =  new SimpleJdbcCall(jdbcTemplate.getDataSource()).withProcedureName("Total_rows")
+				 .declareParameters(new SqlOutParameter("rec_count", Types.INTEGER));;
+		//SqlParameterSource in = new MapSqlParameterSource().addValue() ;
+		
+		Map<String, Object> out = jdbcCall.execute();
+		
+		int totalRecords = (int) out.get("rec_count");
+		//System.out.println("Result of procedure :- "+out.get("rec_count"));
+		
+		//String query = "SELECT COUNT(*) FROM Registered_User";
+		return  totalRecords;
 	}
  
 }

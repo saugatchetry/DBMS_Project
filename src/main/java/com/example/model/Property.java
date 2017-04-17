@@ -18,7 +18,7 @@ public class Property {
 	int zipcode;
 	String city;
 	User seller;
-	int sellerId;
+	//int sellerId;
 	String image;
 	
 	

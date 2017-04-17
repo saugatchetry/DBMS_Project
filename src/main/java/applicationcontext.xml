@@ -68,4 +68,3 @@
         <property name="password" value=""/>
     </bean>
 </beans>
-
