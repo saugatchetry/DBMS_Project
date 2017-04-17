@@ -107,6 +107,7 @@ public class PredictDAOImpl implements PredictDAO {
 			queryWhere.append(" CITY != null ");
 		}*/
 		querySelect.append(queryWhere);
+		queryWhere.append("in (SELECT PROPERTY_ID,rtrim (xmlagg (xmlelement(e,FEATURE_NAME||',')).extract ('//text()'), ' ') AS STR FROM  PROPERTY_FEATURE GROUP BY PROPERTY_ID)");
 		try{
 		jdbcTemplate.query(querySelect.toString(), new ResultSetExtractor<ArrayList<PredictProperty>>() {
             public ArrayList<PredictProperty> extractData(ResultSet rs) throws SQLException, DataAccessException {

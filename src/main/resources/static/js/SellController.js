@@ -58,12 +58,19 @@ angular.module('myApp').controller('SellController', ['$rootScope', '$scope', '$
 		$scope.isNegotiable = '';
 		$scope.furnishType = '';
 		$scope.coords = '';
+		$scope.editItem._attachments_uri.image = '';
 	}
 		
 	$scope.submitSellerDetails = function(){
-		if ($scope.sellDetails.$valid){
-			alert($rootScope.userDetails);
+		if ($scope.sellDetails.$valid){			
 			if($rootScope.userDetails !== undefined || $rootScope.userDetails !== null){
+				toastr.info('The Data is being Inserted','Please Wait!', {
+					  allowHtml: true, 
+					  timeOut : 50000,				
+					  preventDuplicates: true,
+					  preventOpenDuplicates: true,
+					  progressBar: true,
+					});		
 				var sellPropDet = {
 						'squareFeet':$scope.livingArea,
 						'numberOfBedrooms':$scope.bedroom,
@@ -100,7 +107,8 @@ angular.module('myApp').controller('SellController', ['$rootScope', '$scope', '$
 			    	var sellerData = response.data;
 		        	toastr.success('Details saved for propertyid:' + sellerData.propId);
 		        	clearAll();
-		        	setAdvanceDeatures();		        	
+		        	setAdvanceDeatures();
+		        	toastr.clear();
 		    	});																				
 			}
 			else{
