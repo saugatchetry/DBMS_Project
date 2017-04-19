@@ -250,6 +250,12 @@ app.controller('MainController', ['$rootScope', '$scope', '$http', function($roo
 			$scope.property.image = $scope.recentSearchImage[index];			
 		}
 		
+		$scope.setProperty2 = function(property){
+			//console.log(index);
+			$scope.property = property;
+			$scope.property.image = property.image;			
+		}
+		
 		$scope.getPopularProperties();
 		
 		$rootScope.loginModal = $scope.loginModal;

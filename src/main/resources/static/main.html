@@ -24,8 +24,8 @@
 		<div class="row">
 			<div ng-repeat="property in properties ">
 				<div class="col-md-4 portfolio-item">
-					<a class="portfolio-link" data-target="#propertyModal"
-						data-toggle="modal" ng-click="setProperty(property)">
+					<a class="portfolio-link" data-target="#propertyModal2"
+						data-toggle="modal" ng-click="setProperty2(property)">
 						<div class="caption">
 							<div class="caption-content text-left">
 								<i class="fa fa-bed"> {{property.numberOfBedrooms}}</i><br>
@@ -243,8 +243,49 @@
                                     <strong>{{property.numberOfFloors}}
                                     </strong>
                                 </li>
-                            </ul>
-                            <button type="button" class="btn btn-success" data-dismiss="modal"><i class="fa fa-check"></i> Buy</button>
+                            </ul>                            
+                            <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="portfolio-modal modal fade" id="propertyModal2" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-content" style="padding:20px">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2">
+                        <div class="modal-body">
+                            <img src = "img/{{property.image}}" class="img-responsive img-centered" style="width:75%;height:75%;" alt="">
+                            <p>{{property.description}}</p>
+                            <ul class="list-inline item-details">
+                                <li>Year Built:
+                                    <strong>{{property.yearBuilt}}
+                                    </strong>
+                                </li>
+                                <li>Sq. Ft:
+                                    <strong>{{property.squareFeet}}
+                                    </strong>
+                                </li>
+                                <li>Price:
+                                    <strong>{{property.price}}
+                                    </strong>
+                                </li>
+                                <li>Bedrooms:
+                                    <strong>{{property.numberOfBedrooms}}
+                                    </strong>
+                                </li>
+                                <li>Bathrooms:
+                                    <strong>{{property.numberOfBathrooms}}
+                                    </strong>
+                                </li>
+                                <li>Floors:
+                                    <strong>{{property.numberOfFloors}}
+                                    </strong>
+                                </li>
+                            </ul>                           
                             <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
                         </div>
                     </div>
