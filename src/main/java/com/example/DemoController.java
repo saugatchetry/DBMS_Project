@@ -260,12 +260,18 @@ class DemoController2{
 	public ArrayList<Property> getRecentSearches(@RequestParam("userId") String id){
 		ArrayList<Property> recentProperty = propertyBean.getRecentProperties(id);
 		return recentProperty;
-	}
+	}		
 	
 	@RequestMapping(value = "/getTopSearchedHouse", method=RequestMethod.GET, produces="application/json")
 	public ArrayList<ArrayList<String>> getTopSearchedHouse(){
 		ArrayList<ArrayList<String>> topProperties = propertyBean.getTopSearchedProperties();
 		return topProperties;
+	}
+	
+	@RequestMapping(value = "/getTopSellersForZipCode", method=RequestMethod.GET, produces="application/json")
+	public ArrayList<User> getTopSellersForZipCode(@RequestParam("zipcode") String zipcode){
+		ArrayList<User> topSellers = propertyBean.getTopSellersPerZipCode(zipcode);
+		return topSellers;
 	}
 }
 

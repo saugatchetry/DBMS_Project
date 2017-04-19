@@ -27,6 +27,21 @@ angular.module('myApp').controller(
 						    [28, 48, 40, 19, 96, 27, 100]
 						  ];*/
 					}	
+					
+					$scope.topSellersOnZipCode = function(){						
+						$http({
+							method : "GET",
+							url : "getTopSellersForZipCode",
+							params : {
+								'zipcode' : $scope.sellerZipCode
+							}
+						}).then(
+								function(response) {
+									$scope.topSellerLabels = new Array();
+									$scope.topSellers = new Array();
+									$scope.topSellers = response.data;								
+								});																						
+					}
 
 					$scope.refreshZipcodeMap = function() {
 						$http({
@@ -210,20 +225,5 @@ angular.module('myApp').controller(
 					$scope.pieWidth = window.innerWidth * 0.095;																
 					
 					getTopSearchedProperties();	
-					function initMap() {
-						alert('hi');
-				        var myLatLng = {lat: -25.363, lng: 131.044};
-
-				        var map = new google.maps.Map(document.getElementById('map'), {
-				          zoom: 4,
-				          center: myLatLng
-				        });
-
-				        var marker = new google.maps.Marker({
-				          position: myLatLng,
-				          map: map,
-				          title: 'Hello World!'
-				        });
-				      }
 															
 				}]);

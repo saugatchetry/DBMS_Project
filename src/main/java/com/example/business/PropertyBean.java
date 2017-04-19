@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.example.DAO.PropertyDAO;
 import com.example.model.Property;
 import com.example.model.PropertySearch;
+import com.example.model.User;
 
 public class PropertyBean {
 	
@@ -59,5 +60,9 @@ public class PropertyBean {
 	
 	public ArrayList<ArrayList<String>> getTopSearchedProperties(){
 		return propertyDAO.getTopSearchedProperties();
+	}
+	
+	public ArrayList<User> getTopSellersPerZipCode(String zipcode){
+		return propertyDAO.getTopSellers(zipcode);
 	}
 }

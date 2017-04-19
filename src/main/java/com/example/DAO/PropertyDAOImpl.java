@@ -350,6 +350,29 @@ public class PropertyDAOImpl implements PropertyDAO{
             }
         });
 	}
+
+	@Override
+	public ArrayList<User> getTopSellers(String zipcode) {
+		String quer = "select distinct(R.REG_USR_ID), R.FIRST_NAME, R.LAST_NAME, R.PHONE_NUMBER, R.EMAIL, t.c from (select p.seller_id as S, p.ZIPCODE, p.property_id, count(p.property_id) as c from query_searched q, Property p where p.property_id = q.property_id and p.zipcode =" + zipcode + " group by p.property_id , p.zipcode, p.SELLER_ID) t , REGISTERED_USER R where R.REG_USR_ID = t.S order by t.c desc";
+		return (ArrayList<User>) jdbcTemplate.query(quer, new ResultSetExtractor<ArrayList<User>>() {
+            public ArrayList<User> extractData(ResultSet rs) throws SQLException, DataAccessException {
+            	ArrayList<User> returnedList = new ArrayList<User>();            	
+                while (rs.next()) {  
+                	User usr = new User();
+                	usr.setId(rs.getString(1));
+                	usr.setFirstName(rs.getString(2));
+                	usr.setLastName(rs.getString(3));
+                	usr.setPhoneNumber(rs.getString(4));
+                	usr.setEmailId(rs.getString(5));
+                	usr.setErrorStatus(rs.getInt(6));
+                	usr.setErrorMessage("Name: " + usr.getFirstName() + " " + usr.getLastName() + " Email: " + usr.getEmailId());
+                	returnedList.add(usr);
+                }                            
+                return returnedList;
+            }
+        });
+		
+	}
 	
 	
 
