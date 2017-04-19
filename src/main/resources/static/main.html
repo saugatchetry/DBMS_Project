@@ -23,16 +23,15 @@
 		</div>
 		<div class="row">
 			<div ng-repeat="property in properties ">
-				<div class="col-sm-4 portfolio-item">
+				<div class="col-md-4 portfolio-item">
 					<a class="portfolio-link" data-target="#propertyModal"
 						data-toggle="modal" ng-click="setProperty(property)">
 						<div class="caption">
 							<div class="caption-content text-left">
 								<i class="fa fa-bed"> {{property.numberOfBedrooms}}</i><br>
 								<i class="fa fa-dollar"> {{property.price}}</i><br>
-
 							</div>
-						</div> <img src="/img/{{property.image}}" class="img-responsive">
+						</div> <img src="/img/{{property.image}}" style="height : 100% !important;width : 100% !important" >
 					</a>
 				</div>
 			</div>
@@ -52,8 +51,8 @@
 			<div ng-repeat="property in recentProperties ">
 				<div class="col-sm-4 portfolio-item">
 					<a class="portfolio-link" data-target="#propertyModal"
-						data-toggle="modal" ng-click="setProperty(property)">
-						<img src="/img/{{property.image}}" class="img-responsive" style="margin:10px">
+						data-toggle="modal" ng-click="setProperty(property, $index)">
+						<img ng-src = "data:image/JPEG;base64,{{recentSearchImage[$index]}}" style="height : 250px !important;width : 100% !important; margin-top:40px;">
 					</a>
 				</div>
 			</div>
@@ -100,8 +99,6 @@
 				<h2>Sign Up</h2>
 				<hr class="star-primary">
 			</div>
-
-
 
 			<!-- To configure the contact form email address, go to mail/contact_me.php and update the email address in the PHP file on line 19. -->
 			<!-- The form should work on most web servers, but if the form is not working you may need to configure your web server differently. -->
@@ -162,7 +159,6 @@
 						ng-click="signUp();" ng-disabled="signUpForm.invalid">Sign
 						Up</button>
 				</div>
-
 			</form>
 		</div>
 	</div>
@@ -220,7 +216,7 @@
                 <div class="row">
                     <div class="col-lg-8 col-lg-offset-2">
                         <div class="modal-body">
-                            <img ng-src="img/{{property.image}}" class="img-responsive img-centered" style="width:75%;height:75%;" alt="">
+                            <img ng-src = "data:image/JPEG;base64,{{property.image}}" class="img-responsive img-centered" style="width:75%;height:75%;" alt="">
                             <p>{{property.description}}</p>
                             <ul class="list-inline item-details">
                                 <li>Year Built:

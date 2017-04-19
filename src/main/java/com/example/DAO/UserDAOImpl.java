@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.example.KeyGenerator;
+import com.example.model.BuyerPreference;
 import com.example.model.User;
 
 import oracle.net.aso.i;
@@ -160,5 +161,23 @@ public class UserDAOImpl implements UserDAO {
 		        return null;
 		
 	}
- 
+	
+	public boolean insertBuyerPref(BuyerPreference buyerPreference){
+		System.out.println("Inserting buyer Preferences");
+        String query = "INSERT into BUYER values(?,?,?,?,?)";
+        try{
+        jdbcTemplate.update(query, new Object[] { buyerPreference.getId(), buyerPreference.getMinArea(), buyerPreference.getMaxArea(),
+        		buyerPreference.getMinBudget(), buyerPreference.getMaxBudget()
+        	});        
+        }
+        catch(InvalidResultSetAccessException e){
+        	System.out.println("Invalid thing Exception is "+e);
+        }
+        catch(DataAccessException e){
+        	
+        	System.out.println("Exception is "+e.getCause().getMessage());        	
+        	return false;
+        }
+        return true;
+	} 
 }

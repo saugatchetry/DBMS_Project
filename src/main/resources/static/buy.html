@@ -2,8 +2,14 @@
 	<h1>HELLO Buyer</h1>
 	<img ng-src="data:image/JPEG;base64,{{image}}">
 </div> -->
-<div class="w3-light-grey" style="margin-top: 100px; padding-top: 10px;">
-	<div style="float:right; padding:10px;">
+<img class = "centerImage" id="mySpinner" src="img/ajax-loader.gif" ng-show="loading" />
+<div class="w3-light-grey" style="margin-top: 100px; padding-top: 10px;">	
+	<div style="float:right; padding:10px;" ng-if = "isNavVisible">			
+		<span>sort by:</span>
+		<span>
+			<select style = "width:150px;" ng-model="orderByPref" ng-options="x.id as x.label for x in orderPreferences" ng-change = changeOrder(orderByPref)></select>
+		</span>
+		&nbsp;
 		<span>
 			<input type="submit" class= "btn btn-primary" id="submit" value="prev" ng-click="prevPage()" />		
 		</span>
@@ -12,8 +18,7 @@
 		</span>
 	</div>
 	<!-- Page Container -->
-	<div class="w3-content w3-margin-top" style="max-width: 1400px;">
-
+	<div class="w3-content w3-margin-top" style="max-width: 1400px;">		
 		<!-- The Grid -->
 		<div class="w3-row-padding">
 			<!-- Left Column -->
@@ -111,17 +116,16 @@
 			<!-- Right Column -->
 			<div class="w3-twothird">
 				
-				<div ng-if="searchedProperties !=null && searchedProperties != undefined && searchedProperties.length == 0" style="text-align:center;">No Records Found</div>
-
+				<div ng-if="searchedProperties !=null && searchedProperties != undefined && searchedProperties.length == 0" style="text-align:center;">No Records Found</div>				
 				<div class="w3-container w3-card-2 w3-white w3-margin-bottom"
 					style="padding: 50px;" ng-repeat="property in searchedProperties">
 
 					<div class="w3-container">									
 
 						<div class="row">
-							<div class="col-md-4" ng-click="openDetailModal(property)">
+							<div class="col-md-4" ng-click="openDetailModal(property, $index)">
 								<div>
-									<img ng-src ="data:image/JPEG;base64,{{property.image}}"
+									<img ng-src ="data:image/JPEG;base64,{{imageList[$index]}}"
 										style="width: 100%; height: auto;" alt="No Image Found"></img>
 								</div>
 							</div>
@@ -144,7 +148,7 @@
 								</div>
 								<div class="row">
 									<div class="col-md-6">
-										<p>Parking : Available</p>
+										<p>Year Built : {{property.yearBuilt}}</p>
 									</div>
 									<div class="col-md-6">
 										<button type="button" class="btn btn-primary" ng-click="provideSellerDetails(property);">
@@ -153,7 +157,6 @@
 									</div>
 								</div>
 							</div>
-
 						</div>
 					</div>
 				</div>
@@ -192,7 +195,7 @@
                 <div class="row">
                     <div class="col-lg-8 col-lg-offset-2">
                         <div class="modal-body">
-                            <img ng-src="img/{{property.image}}" class="img-responsive img-centered" style="width:75%;height:75%;" alt="">
+                            <img ng-src ="data:image/JPEG;base64,{{property.image}}" class="img-responsive img-centered" style="width:75%;height:75%;" alt="">
                             <p>{{property.description}}</p>
                             <ul class="list-inline item-details">
                                 <li>Year Built:

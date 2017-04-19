@@ -11,7 +11,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-route.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
-	
+		
 	<script src="js/rzslider.min.js"></script>
 	<!-- <script src="js/dist/angular-chart.js"></script>--> 
   	<!-- <script src="js/dist/angular-chart.min.js"></script> -->
@@ -235,7 +235,7 @@ app.controller('MainController', ['$rootScope', '$scope', '$http', function($roo
 				method : "GET",
 				url: "getPopularProperties"
 			}).then(function(response){
-				var images = ['prop1.jpg', 'prop2.jpg', 'prop3.jpg', 'prop4.jpg', 'prop5.jpg', 'prop6.png'];
+				var images = ['prop1.jpg', 'prop2.jpg', 'prop3.jpg', 'prop4.jpg', 'prop5.jpg', 'prop6.jpg'];
 				$scope.properties = response.data;
 				console.log($scope.properties);
 				for(i = 0; i<6 ;i++){
@@ -244,10 +244,10 @@ app.controller('MainController', ['$rootScope', '$scope', '$http', function($roo
 			})
 		} 
 
-		$scope.setProperty = function(property){
+		$scope.setProperty = function(property, index){
 			//console.log(index);
 			$scope.property = property;
-			console.log($scope.property);
+			$scope.property.image = $scope.recentSearchImage[index];			
 		}
 		
 		$scope.getPopularProperties();
@@ -263,9 +263,16 @@ app.controller('MainController', ['$rootScope', '$scope', '$http', function($roo
 		        }
 		    }).then(function(response) {
 		       	$scope.recentProperties = response.data;
-		       	var images = ['cake.png','circus.png','submarine.png','game.png','cabin.png','safe.png'];
+		       	//var images = ['cake.png','circus.png','submarine.png','game.png','cabin.png','safe.png'];
+		       	$scope.recentSearchImage = [];
 		       	for(i = 0; i<6 ;i++){
-					$scope.recentProperties[i].image = 'portfolio/' + images[i];
+					//$scope.recentProperties[i].image = 'portfolio/' + images[i];
+					$http({
+						method : "GET",
+						url : "downloadImage/" + $scope.recentProperties[i].id,
+					}).then(function(responses) {			
+						$scope.recentSearchImage.push(responses.data);
+					});		       		
 				}
 		   	});	  
 		}

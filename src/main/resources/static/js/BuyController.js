@@ -1,9 +1,36 @@
-angular.module('myApp').controller('BuyController', ['$rootScope', '$scope', '$http', function($rootScope, $scope, $http) {
+angular.module('myApp').controller('BuyController', ['$rootScope', '$scope', '$http','toastr', function($rootScope, $scope, $http, toastr) {
 	$scope.user = $rootScope.userDetails;
 	
 	$scope.pageNumber = 1;
+	$scope.loading = false;
+	
+	$scope.isNavVisible = false;
+	//$scope.orderByPref = undefined;
+
+	function setOrder(){
+		$scope.orderPreferences = [
+			{
+				label : 'Relevance',
+				id: 0
+			},
+			
+			{
+				label : 'price low to high',
+				id: 1
+			},
+			{
+				label : 'price high to low',
+				id: 2
+			}
+			];		
 		
-	var imageList = [];
+		$scope.orderByPref = $scope.orderPreferences[0].id;
+	}
+	
+	setOrder();
+	
+	
+	$scope.imageList = [];
 	$scope.nextPage = function(){
 		$scope.pageNumber = $scope.pageNumber + 1;
 		$scope.searchProperty(0);
@@ -22,7 +49,7 @@ angular.module('myApp').controller('BuyController', ['$rootScope', '$scope', '$h
 			method : "GET",
 			url : "downloadImage/" + imageId,
 		}).then(function(response) {			
-			imageList.push(response.data);
+			$scope.imageList.push(response.data);
 		});
 	}
 	
@@ -31,17 +58,13 @@ angular.module('myApp').controller('BuyController', ['$rootScope', '$scope', '$h
 			method : "GET",
 			url: "getPopularProperties"
 		}).then(function(response){
-			var images = ['prop1.jpg', 'prop2.jpg', 'prop3.jpg', 'prop4.jpg', 'prop5.jpg', 'prop6.png'];
+			//var images = ['prop1.jpg', 'prop2.jpg', 'prop3.jpg', 'prop4.jpg', 'prop5.jpg', 'prop6.png'];
 			$scope.searchedProperties = response.data;
 			console.log($scope.properties);
+			$scope.imageList = [];
 			for(var c = 1; c <= $scope.searchedProperties.length; c++){
-				$http({
-					method : "GET",
-					url : "downloadImage/" + c,
-				}).then(function(response) {			
-					$scope.searchedProperties[c-1].image = response.data;
-				});
-        	}        	        
+				$scope.loadImage($scope.searchedProperties[c - 1].id);			
+        	}   			
 		})
 	} 
 	
@@ -67,12 +90,32 @@ angular.module('myApp').controller('BuyController', ['$rootScope', '$scope', '$h
 		    }
 	};
 	
-	$scope.searchedProperties = [];
+	$scope.searchedProperties = [];	
+	
+	$scope.changeOrder = function(order){
+		$scope.orderSet = order;
+		$scope.searchProperty(2);
+	}
 	
 	$scope.searchProperty = function(isPageReset){
-		if(isPageReset == 1){
+		$scope.isNavVisible = true;				
+				
+		toastr.info('The Data is being Fetched','Please Wait!', {
+			  allowHtml: true, 
+			  timeOut : 50000,				
+			  preventDuplicates: true,
+			  preventOpenDuplicates: true,
+			  progressBar: true,
+			});		
+		if(isPageReset == 1 || isPageReset == 2){
 			$scope.pageNumber = 1;
 		}
+		
+		if(isPageReset == 1){			
+			setOrder();
+			$scope.orderSet = 0;			
+		}
+				
 		$scope.pageLoad = true;
 		$http({
 	        method : "POST",
@@ -87,19 +130,18 @@ angular.module('myApp').controller('BuyController', ['$rootScope', '$scope', '$h
 	        	'endingSqFt' : $scope.sqFeetSlider.maxValue,
 	        	'currentPageNumber':$scope.pageNumber,
 	        	'zipcode' : $scope.zipcode,
+	        	'orderBy' : $scope.orderSet,
 	        }
 	    }).then(function(response) {
 	    	$scope.pageLoad = false;
 	    	//$scope.searchedProperties = [];
         	$scope.searchedProperties = response.data;
-        	imageList = [];
+        	$scope.imageList = [];
         	for(var c = 1; c <= $scope.searchedProperties.length; c++){
-        		$scope.loadImage(c);
-        	}
+				$scope.loadImage($scope.searchedProperties[c-1].id);			
+        	}   	
         	
-        	for(var c = 0; c < $scope.searchedProperties.length; c++){
-        		$scope.searchedProperties[c].image = imageList[c];
-        	}
+        	toastr.clear();
         	
         	console.log('total records = '+$scope.searchedProperties.length);
     	});
@@ -163,18 +205,36 @@ angular.module('myApp').controller('BuyController', ['$rootScope', '$scope', '$h
 			        	'propertyId' : property.id
 			        }
 			    }).then(function(response) {
-					
+			    	 insertBuyerPreference();
 		    	});
-			  
+			  			 			  
 			  $scope.currentSeller = property.seller;
 			  $scope.sellerDetailsModal = true;
 		  }
 	  }
 	  
-	  $scope.openDetailModal = function(property){
-		  	console.log('modal ki maa ki aankh');
-			$scope.property = property;
-			$scope.propertyModal = true;
-			
+	  function insertBuyerPreference(){
+		  
+		  var buyPref = {
+				  'id':$rootScope.userDetails.id,
+				  'minArea': $scope.sqFeetSlider.minValue,
+				  'maxArea': $scope.sqFeetSlider.maxValue,
+				  'minBudget': $scope.priceSlider.minValue,
+				  'maxBudget':$scope.priceSlider.maxValue,				  
+		  }
+		  
+		  $http({
+		        method : "POST",
+		        url : "insertBuyerPref",
+		        data: buyPref,
+		    }).then(function(response) {
+				console.log('inserted into Buyer table');
+	    	});		  
+	  }
+	  
+	  $scope.openDetailModal = function(property,index){		  	
+			$scope.property = property;	
+			$scope.property.image = $scope.imageList[index];
+			$scope.propertyModal = true;			
 		}
 }]);

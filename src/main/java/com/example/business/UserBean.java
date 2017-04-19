@@ -3,6 +3,7 @@ package com.example.business;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.DAO.UserDAO;
+import com.example.model.BuyerPreference;
 import com.example.model.User;
 
 public class UserBean {
@@ -31,7 +32,7 @@ public class UserBean {
 		return userDAO.insertSearchedProperty(userId,propertyId);
 	}
 	
-	
-
-
+	public boolean insertBuyerPref(BuyerPreference buyerPreference){
+		return userDAO.insertBuyerPref(buyerPreference);		
+	}
 }

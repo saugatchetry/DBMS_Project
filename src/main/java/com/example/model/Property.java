@@ -17,6 +17,7 @@ public class Property {
 	String street;
 	int zipcode;
 	String city;
+	String image;
 	User seller;
 	PropertyFeature feature;
 	
@@ -27,10 +28,7 @@ public class Property {
 	}
 	public void setPropertyFeatures(String propertyFeatures) {
 		this.propertyFeatures = propertyFeatures;
-	}
-	//int sellerId;
-	String image;
-	
+	}	
 	
 	public String getImage() {
 		return image;

@@ -24,6 +24,7 @@ import com.example.business.PropertyBean;
 import com.example.business.SellBean;
 import com.example.business.TrendsBean;
 import com.example.business.UserBean;
+import com.example.model.BuyerPreference;
 import com.example.model.PredictProperty;
 import com.example.model.Property;
 import com.example.model.PropertySearch;
@@ -150,9 +151,9 @@ class DemoController2{
 		return total;
 	}
 
-	@RequestMapping(value = "/insertImageByFile",method=RequestMethod.GET,produces="application/json")
-	public boolean imsertImageData(){
-		Boolean insertionResult = propertyBean.insertImageByFile();
+	@RequestMapping(value = "/insertImageByFile/{imageId}",method=RequestMethod.GET,produces="application/json")
+	public boolean insertImageData(@PathVariable(value="imageId") String imageId){
+		Boolean insertionResult = propertyBean.insertImageByFile(imageId);
 		return insertionResult;
 	}
 	
@@ -174,6 +175,11 @@ class DemoController2{
 		System.out.println("Controller hit");
 		ArrayList<Property> searchedProperty = propertyBean.getSearchedProperties(property);
 		return searchedProperty;
+	}	
+	
+	@RequestMapping(value = "/insertBuyerPref",method=RequestMethod.POST,consumes="application/json",produces="application/json")
+	public boolean getSearchedProperties(@RequestBody BuyerPreference buyerPref){
+		return userBean.insertBuyerPref(buyerPref);		
 	}
 	
 	/*@RequestMapping(value = "/downloadImage", method = RequestMethod.POST, produces = "image/jpeg")
@@ -195,9 +201,9 @@ class DemoController2{
     }*/
 	
 	@RequestMapping(value = "/downloadImage/{imageId}", method = RequestMethod.GET, produces = "image/jpeg")
-    public ResponseEntity<String> getPDF(@PathVariable(value="imageId") String imageid) {        
+    public ResponseEntity<String> getPDF(@PathVariable(value="imageId") String imageId) {        
         try {        	        	
-        	List<byte[]> images = propertyBean.getImages("1");  
+        	List<byte[]> images = propertyBean.getImages(imageId);  
         	System.out.println("Inside this ");
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.parseMediaType("image/jpeg"));
@@ -251,9 +257,15 @@ class DemoController2{
 	}
 	
 	@RequestMapping(value = "/getRecentSearches", method=RequestMethod.GET, produces="application/json")
-	public ArrayList<Property> getSalesByZipcode(@RequestParam("userId") String id){
+	public ArrayList<Property> getRecentSearches(@RequestParam("userId") String id){
 		ArrayList<Property> recentProperty = propertyBean.getRecentProperties(id);
 		return recentProperty;
+	}
+	
+	@RequestMapping(value = "/getTopSearchedHouse", method=RequestMethod.GET, produces="application/json")
+	public ArrayList<ArrayList<String>> getTopSearchedHouse(){
+		ArrayList<ArrayList<String>> topProperties = propertyBean.getTopSearchedProperties();
+		return topProperties;
 	}
 }
 

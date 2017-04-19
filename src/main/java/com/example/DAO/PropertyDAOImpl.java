@@ -43,7 +43,7 @@ public class PropertyDAOImpl implements PropertyDAO{
 	public ArrayList<Property> getProperty() {
 		
 		final Property property = new Property();
-		String quer = "select Property.property_id, YEAR_BUILT, SQ_FT, PRICE,NUMBER_OF_BEDROOMS,NUMBER_OF_BATHROOM, PROPERTY.NUMBER_OF_FLOORS from (select property_id as p , sum(query_count) as counter from query_searched group by PROPERTY_ID order by counter DESC ), PROPERTY where Property.property_id = p  and rownum < 7";
+		String quer = "select Property.property_id, YEAR_BUILT, SQ_FT, PRICE,NUMBER_OF_BEDROOMS,NUMBER_OF_BATHROOM, PROPERTY.NUMBER_OF_FLOORS, R.REG_USR_ID, R.EMAIL, R.PHONE_NUMBER, R.FIRST_NAME, R.LAST_NAME from (select property_id as p , sum(query_count) as counter from query_searched group by PROPERTY_ID order by counter DESC ), PROPERTY, REGISTERED_USER R where Property.property_id = p and Property.SELLER_ID = R.REG_USR_ID  and rownum < 7";
 		return (ArrayList<Property>) jdbcTemplate.query(quer, new ResultSetExtractor<ArrayList<Property>>() {
             public ArrayList<Property> extractData(ResultSet rs) throws SQLException, DataAccessException {
             	ArrayList<Property> returnList = new ArrayList<>();
@@ -56,6 +56,13 @@ public class PropertyDAOImpl implements PropertyDAO{
                 	prop.setNumberOfBedrooms(rs.getInt(5));
                 	prop.setNumberOfBathrooms(rs.getInt(6));
                 	prop.setNumberOfFloors(rs.getInt(7));
+                	User seller = new User();
+                	seller.setId(rs.getString(8));
+                	seller.setEmailId(rs.getString(9));
+                	seller.setPhoneNumber(rs.getString(10));
+                	seller.setFirstName(rs.getString(10));
+                	seller.setLastName(rs.getString(11));
+                	prop.setSeller(seller);
                 	returnList.add(prop);
                 }
                 
@@ -78,9 +85,18 @@ public class PropertyDAOImpl implements PropertyDAO{
 		int endingPrice = propertySearch.getEndingPrice();
 		int startingSqFt = propertySearch.getStartingSqFt();
 		int endingSqFt = propertySearch.getEndingSqFt();
-		int pageNo= propertySearch.getCurrentPageNumber();
+		int pageNo= propertySearch.getCurrentPageNumber();				
+				
 		if(startingPrice==0)
 			startingPrice=1;
+		String orderByStat = "";
+		if(propertySearch.getOrderBy() == 1){
+			orderByStat = "order by PRICE asc";
+		}else if(propertySearch.getOrderBy() == 2){
+			orderByStat = "order by PRICE desc";
+		}		
+		
+		System.out.println(propertySearch.getOrderBy());
 		
 		
 		boolean flag=false;
@@ -138,9 +154,8 @@ public class PropertyDAOImpl implements PropertyDAO{
 		}	
 		
 		query.append("( SQ_FT BETWEEN "+startingSqFt+" AND "+endingSqFt+") AND ( PRICE BETWEEN  "+startingPrice+" AND "+endingPrice+")");
-		query.append("order by price) A ) WHERE R<= ("+pageNo+"*10) and R >= (("+pageNo+"-1)*10+1)");
-		
-		
+		query.append(orderByStat + ") A ) WHERE R<= ("+pageNo+"*10) and R >= (("+pageNo+"-1)*10+1)");
+			
 		System.out.println("query build is "+query);		
 		
 		
@@ -246,15 +261,15 @@ public class PropertyDAOImpl implements PropertyDAO{
 		}		
 	}
 	
-	public boolean insertImageByFile(){		
+	public boolean insertImageByFile(String ImageId){		
 		try {
-			final File image = new File("C:\\Users\\Nishant\\Desktop\\spring17\\DBMSPROJ\\DBMS_Project\\src\\main\\resources\\static\\img\\prop2.jpg");
+			final File image = new File("C:\\Users\\Nishant\\Desktop\\spring17\\DBMSPROJ\\DBMS_Project\\src\\main\\resources\\static\\img\\prop" + ImageId+ ".jpg");
 			final InputStream imageIs = new FileInputStream(image);			
 			LobHandler lobHandler = new DefaultLobHandler(); 
 			int result = jdbcTemplate.update(
 					"INSERT INTO Image (IMAGE_ID, IMAGE_DATA) VALUES (?, ?)",
 					new Object[] {
-							90026,
+							ImageId,
 							new SqlLobValue(imageIs, (int)image.length(), lobHandler),
 					},
 					new int[] {Types.INTEGER, Types.BLOB});
@@ -314,5 +329,28 @@ public class PropertyDAOImpl implements PropertyDAO{
             }
         });
 	}
+	
+	@Override
+	public ArrayList<ArrayList<String>> getTopSearchedProperties() {
+		final Property property = new Property();
+		String quer = "select p.NUMBER_OF_BEDROOMS, p.NUMBER_OF_FLOORS, p.NUMBER_OF_BATHROOM, p.PRICE, p.SQ_FT from (select property_id, count(*) as c from query_searched group by property_id order by c desc) g, property p where p.property_id = g.property_id and rownum < 6";
+		return (ArrayList<ArrayList<String>>) jdbcTemplate.query(quer, new ResultSetExtractor<ArrayList<ArrayList<String>>>() {
+            public ArrayList<ArrayList<String>> extractData(ResultSet rs) throws SQLException, DataAccessException {
+            	ArrayList<ArrayList<String>> returnedList = new ArrayList<ArrayList<String>>();            	
+                while (rs.next()) {                	
+                	ArrayList<String> singlePropertyProp = new ArrayList<String>();
+                	singlePropertyProp.add(Integer.toString(rs.getInt(1)));
+                	singlePropertyProp.add(Integer.toString(rs.getInt(2)));
+                	singlePropertyProp.add(Integer.toString(rs.getInt(3)));
+                	singlePropertyProp.add(Integer.toString(rs.getInt(4)/100000));
+                	singlePropertyProp.add(Integer.toString(rs.getInt(5)/1000));
+                	returnedList.add(singlePropertyProp);
+                }                            
+                return returnedList;
+            }
+        });
+	}
+	
+	
 
 }

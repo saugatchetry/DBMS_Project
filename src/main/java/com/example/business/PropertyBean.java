@@ -2,6 +2,7 @@ package com.example.business;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -31,7 +32,14 @@ public class PropertyBean {
 	}
 	
 	public List<byte[]> getImages(String imageId){
-		return propertyDAO.getImages(imageId);
+		List<byte[]> images = propertyDAO.getImages(imageId);
+		if(images.size() == 0){
+			Random rnd = new Random();
+			int x = rnd.nextInt(10) + 1;
+			return propertyDAO.getImages(Integer.toString(x));			
+		}
+		
+		return images;
 	}
 		
 	public ArrayList<Property> getSearchedProperties(PropertySearch propertySearch){
@@ -45,7 +53,11 @@ public class PropertyBean {
 	public ArrayList<Property> getRecentProperties(String id) {
 		return propertyDAO.getRecentProperties(id);
 	}
-	public boolean insertImageByFile(){
-		return propertyDAO.insertImageByFile();
+	public boolean insertImageByFile(String imageId){
+		return propertyDAO.insertImageByFile(imageId);
+	}
+	
+	public ArrayList<ArrayList<String>> getTopSearchedProperties(){
+		return propertyDAO.getTopSearchedProperties();
 	}
 }

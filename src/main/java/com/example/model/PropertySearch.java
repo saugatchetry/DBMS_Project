@@ -14,7 +14,14 @@ public class PropertySearch {
 	int currentPageNumber;
 	int zipcode;
 	String image;
+	int orderBy;	
 	
+	public int getOrderBy() {
+		return orderBy;
+	}
+	public void setOrderBy(int orderBy) {
+		this.orderBy = orderBy;
+	}
 	public String getImage() {
 		return image;
 	}

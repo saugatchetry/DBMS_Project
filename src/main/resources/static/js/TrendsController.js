@@ -2,14 +2,31 @@ angular.module('myApp').controller(
 		'TrendsController',
 		[
 				'$scope',
-				'$http',
-				function($scope, $http) {
+				'$http',				
+				function($scope, $http) {					
 
 					$scope.lineChartLabels = new Array();
 					$scope.lineChartData = new Array();
 					$scope.lineChartLabels.push(0);
 					$scope.lineChartData.push(0);
 					$scope.lineChartSeries = [ 'Average Price' ];
+					
+					$scope.topFiveHousePorpertieslabels = ["Bedrooms","Floors","Bathrooms", "Price(00000's)", "Square_feet (000's)"];
+					function getTopSearchedProperties(){						
+						$http({
+							method : "GET",
+							url : "getTopSearchedHouse",						
+						}).then(
+								function(response){
+									$scope.topSearchedHouses = response.data;																
+						});
+						
+						/*$scope.labels =["Eating", "Drinking", "Sleeping", "Designing", "Coding", "Cycling", "Running"];
+						  $scope.data = [
+						    [65, 59, 90, 81, 56, 55, 40],
+						    [28, 48, 40, 19, 96, 27, 100]
+						  ];*/
+					}	
 
 					$scope.refreshZipcodeMap = function() {
 						$http({
@@ -143,7 +160,7 @@ angular.module('myApp').controller(
 					
 					$scope.deltaLineChartLabels = [ 0 ];
 					$scope.deltaLineChartData = [ 0 ];
-					
+													
 					$scope.refreshDeltaMap = function(){
 						$http({
 							method : "GET",
@@ -190,6 +207,23 @@ angular.module('myApp').controller(
 					};
 					
 					$scope.pieHeight = window.innerHeight * 0.095;
-					$scope.pieWidth = window.innerWidth * 0.095;
+					$scope.pieWidth = window.innerWidth * 0.095;																
 					
+					getTopSearchedProperties();	
+					function initMap() {
+						alert('hi');
+				        var myLatLng = {lat: -25.363, lng: 131.044};
+
+				        var map = new google.maps.Map(document.getElementById('map'), {
+				          zoom: 4,
+				          center: myLatLng
+				        });
+
+				        var marker = new google.maps.Marker({
+				          position: myLatLng,
+				          map: map,
+				          title: 'Hello World!'
+				        });
+				      }
+															
 				}]);
