@@ -1,162 +1,198 @@
 <div style="margin-top: 120px; margin-left: 10px;">
-	<div class="panel-group" style="margin-left:10px;margin-right:10px;">
+	<div class="panel-group" style="margin-left: 10px; margin-right: 10px;">
 		<div class="panel panel-primary">
-		<div class="panel-heading">Price vs Year</div>
-		<div class="panel-body">
-			<div class="col-md-3 row-middle">
-			Zipcode: <input type="number" placeholder="Enter Zipcode" data-ng-model = "zipcode">
-			<button type="button" class="btn btn-primary" ng-click="refreshZipcodeMap()">GO</button>
-			</div>
-			<div class="col-md-9">
-				<canvas id="line" class="chart chart-line"
-					chart-data="lineChartData" chart-labels="lineChartLabels"
-					chart-series="lineChartSeries" >
-				</canvas>
-			</div>
-			</div>
-		</div>
-		<br/>
-		<div class="panel panel-primary">
-		<div class="panel-heading">Price Rise/Fall by Year</div>
-		<div class="panel-body">
-			<div class="col-md-3 row-middle">
-			Zipcode: <input type="number" placeholder="Enter Zipcode" data-ng-model = "zipcodeDelta">
-			<button type="button" class="btn btn-primary" ng-click="refreshDeltaMap()">GO</button>
-			</div>
-			<div class="col-md-9">
-				<canvas id="line" class="chart chart-line"
-					chart-data="deltaLineChartData" chart-labels="deltaLineChartLabels"
-					chart-series="deltaLineChartSeries">
-				</canvas>
-			</div>
-		</div>
-		</div>
-		<br/>
-		<div class="panel panel-primary">
-		<div class="panel-heading">City-wise Max/Avg/Median Price </div>
-		<div class="panel-body">
-			<div class="col-md-3">City: <input type="text" data-ng-model = "cityName">
-			<button type="button" class="btn btn-primary" ng-click="getCityWidePrices()">GO</button>
-			</div>
-			<div class="col-md-9">
-				<canvas id="pie" class="chart chart-line" chart-data="cityWideLineData"
-					chart-labels="cityWideLineLabels" chart-series="cityWideLineSeries">
-				</canvas>
-			</div>
-		</div>
-		</div>
-		<br/>
-		<div class="panel panel-primary">
-		<div class="panel-heading">Feature-wise Statistics</div>
-		<div class="panel-body">
-			<div class="col-md-3">
-				<input type="checkbox" value="Carpet" data-ng-model="carpet">Carpet</input><br>
-				<input type="checkbox" value="Waterfront" data-ng-model="waterFront">Waterfront</input><br>
-				<input type="checkbox" value="Wooden Flooring" data-ng-model="woodenFlooring">Wooden Flooring</input><br>
-				<input type="checkbox" value="View" data-ng-model="view">View</input><br>
-				<fieldset>
-  				<legend style= "margin-bottom :0px ;width:inherit; border: none">Furnishing:</legend>
-  					<input type = "radio" name = "furnish" value= "Unfurnished" ng-model= "furnishType"/>&nbsp;&nbsp;Un-Furnished
-						<br/>
-					<input type = "radio" name = "furnish" value= "SemiFurnished" ng-model= "furnishType"/>&nbsp;&nbsp;Semi-Furnished
-						<br/>
-					<input type = "radio" name = "furnish" value= "Furnished" ng-model= "furnishType"/>&nbsp;&nbsp;Furnished
-						<br/>
- 				</fieldset> 
- 				<button type="button" class="btn btn-primary" ng-click="getFeatureWidePrices();">GO</button>
-			</div>
-			<div class="col-md-9">
-				<canvas id="doughnut" class="chart chart-doughnut" height = "{{pieHeight}}" width="{{pieWidth}}" ng-if="featureWiseData != undefined"
-				  chart-data="featureWiseData" chart-labels="featureWiseLabels">
-				</canvas> 
-				<div ng-if="featureWiseData == undefined">Nothing Selected</div>
-			</div>
-		</div>
-		</div>
-		<br/>
-		<div class="panel panel-primary">
-		<div class="panel-heading">Sales vs Zipcode</div>
-		<div class="panel-body">
-		<div class="row">
-			<div class="col-lg-3">
-			<div class = "row" style="margin-bottom:5px;margin-left:1px;">Zipcodes: <input type="text" placeholder="Enter Multiple Zipcodes" class=""data-ng-model="zipcodes"></div>
-				<div class = "row" style="margin-bottom:5px;">
-				<div class="col-lg-2">
-				From: </div><div class="col-lg-5"><label for="sel1">MM: </label>
-				
-							  <select data-ng-model="fromMonth" ng-options="x for x in months">
-							  </select></div><div class="col-lg-5">
-							  <label for="sel2"> YY: </label> <input type="text" data-ng-model="fromYear" style="width:inherit"><br></div>
+			<div class="panel-heading">Price vs Year</div>
+			<div class="panel-body">
+				<div class="col-md-3 row-middle">
+					Zipcode: <input type="number" placeholder="Enter Zipcode"
+						data-ng-model="zipcode">
+					<button type="button" class="btn btn-primary"
+						ng-click="refreshZipcodeMap()">GO</button>
 				</div>
-				<div class = "row" style="margin-bottom:5px;">
-				<div class="col-lg-2">							  
-				To: </div><div class="col-lg-5"><label for="sel3">MM:</label>
-							  <select data-ng-model="toMonth" ng-options="x for x in months">
-							  </select></div><div class="col-lg-5"><label for="sel4"> YY: </label> <input type="text" data-ng-model="toYear" style="width:inherit">
-							  </div>
-							  </div>
-							  <div class="row">			  
- 				<button type="button" class="btn btn-primary" ng-click="getSalesByZipcode();" style="margin-left:15px;">GO</button></div>
-			</div>
-			
-			<div class="col-lg-9">
-				<canvas id="pie" class="chart chart-pie" height="{{pieHeight}}" width="{{pieWidth}}" ng-if="salesZipcodeData != undefined"
-				  chart-data="salesZipcodeData" chart-labels="salesZipcodeLabels" style="width:400px;height:400px;">
-				</canvas> 
-				<div ng-if="salesZipcodeData == undefined">Nothing Selected</div>
-			</div>
-		</div>
-		</div>
-		</div>
-		<br/>
-		<div class="panel panel-primary">
-		<div class="panel-heading">Price Statistics based on Zipcode</div>
-		<div class="panel-body">
-			<div class="col-md-12">
-				<canvas id="bar" class="chart chart-bar" chart-data="barChartData"
-					chart-labels="barChartLabels" chart-series="barChartSeries">
+				<div class="col-md-9">
+					<canvas id="line" class="chart chart-line"
+						chart-data="lineChartData" chart-labels="lineChartLabels"
+						chart-series="lineChartSeries">
 				</canvas>
-			</div>
-		</div>		
-		<br/>
-		<div class="panel panel-primary">
-		<div class="panel-heading">Top Searched House Properties</div>
-		<div class="panel-body">
-			<div class="col-md-12">
-				<canvas id="radar" class="chart chart-radar" height = "{{pieHeight}}" width="{{pieWidth}}" chart-data="topSearchedHouses" chart-labels="topFiveHousePorpertieslabels"></canvas> 
+				</div>
 			</div>
 		</div>
-		
-		<br/>
+		<br />
 		<div class="panel panel-primary">
-		<div class="panel-heading">Top Seller Details</div>
-		<div class="panel-body">
-			<div class="col-md-3 row-middle">
-			Zipcode: <input type="number" data-ng-model = "sellerZipCode">
-			<button type="button" class="btn btn-primary" ng-click="topSellersOnZipCode()">GO</button>
+			<div class="panel-heading">Price Rise/Fall by Year</div>
+			<div class="panel-body">
+				<div class="col-md-3 row-middle">
+					Zipcode: <input type="number" placeholder="Enter Zipcode"
+						data-ng-model="zipcodeDelta">
+					<button type="button" class="btn btn-primary"
+						ng-click="refreshDeltaMap()">GO</button>
+				</div>
+				<div class="col-md-9">
+					<canvas id="line" class="chart chart-line"
+						chart-data="deltaLineChartData"
+						chart-labels="deltaLineChartLabels"
+						chart-series="deltaLineChartSeries">
+				</canvas>
+				</div>
 			</div>
-			<div class="col-md-9">
-				<div ng-show="topSellers.length == 0" style="text-align:center;">No Records Found</div>
-							<table class="table table-bordered" ng-show="topSellers !=null && topSellers != undefined && topSellers.length > 0">
-								<thead>
-									<tr>
-										<th>FirstName</th>
-										<th>LastName</th>
-										<th>Email</th>
-										<th>Phone Number</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr ng-repeat="x in topSellers">
-										<td>{{ x.firstName }}</td>
-										<td>{{ x.lastName }}</td>
-										<td>{{ x.emailId}}</td>
-										<td>{{ x.phoneNumber}}</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>			
-		</div>				
-	</div>
+		</div>
+		<br />
+		<div class="panel panel-primary">
+			<div class="panel-heading">City-wise Max/Avg/Median Price</div>
+			<div class="panel-body">
+				<div class="col-md-3">
+					City: <input type="text" data-ng-model="cityName">
+					<button type="button" class="btn btn-primary"
+						ng-click="getCityWidePrices()">GO</button>
+				</div>
+				<div class="col-md-9">
+					<canvas id="pie" class="chart chart-line"
+						chart-data="cityWideLineData" chart-labels="cityWideLineLabels"
+						chart-series="cityWideLineSeries">
+				</canvas>
+				</div>
+			</div>
+		</div>
+		<br />
+		<div class="panel panel-primary">
+			<div class="panel-heading">Feature-wise Statistics</div>
+			<div class="panel-body">
+				<div class="col-md-3">
+					<input type="checkbox" value="Carpet" data-ng-model="carpet">Carpet</input><br>
+					<input type="checkbox" value="Waterfront"
+						data-ng-model="waterFront">Waterfront</input><br> <input
+						type="checkbox" value="Wooden Flooring"
+						data-ng-model="woodenFlooring">Wooden Flooring</input><br> <input
+						type="checkbox" value="View" data-ng-model="view">View</input><br>
+					<fieldset>
+						<legend style="margin-bottom: 0px; width: inherit; border: none">Furnishing:</legend>
+						<input type="radio" name="furnish" value="Unfurnished"
+							ng-model="furnishType" />&nbsp;&nbsp;Un-Furnished <br /> <input
+							type="radio" name="furnish" value="SemiFurnished"
+							ng-model="furnishType" />&nbsp;&nbsp;Semi-Furnished <br /> <input
+							type="radio" name="furnish" value="Furnished"
+							ng-model="furnishType" />&nbsp;&nbsp;Furnished <br />
+					</fieldset>
+					<button type="button" class="btn btn-primary"
+						ng-click="getFeatureWidePrices();">GO</button>
+				</div>
+				<div class="col-md-9">
+					<canvas id="doughnut" class="chart chart-doughnut"
+						height="{{pieHeight}}" width="{{pieWidth}}"
+						ng-if="featureWiseData != undefined" chart-data="featureWiseData"
+						chart-labels="featureWiseLabels">
+				</canvas>
+					<div ng-if="featureWiseData == undefined">Nothing Selected</div>
+				</div>
+			</div>
+		</div>
+		<br />
+		<div class="panel panel-primary">
+			<div class="panel-heading">Sales vs Zipcode</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-lg-3">
+						<div class="row" style="margin-bottom: 5px; margin-left: 1px;">
+							Zipcodes: <input type="text"
+								placeholder="Enter Multiple Zipcodes" class=""
+								data-ng-model="zipcodes">
+						</div>
+						<div class="row" style="margin-bottom: 5px;">
+							<div class="col-lg-2">From:</div>
+							<div class="col-lg-5">
+								<label for="sel1">MM: </label> <select data-ng-model="fromMonth"
+									ng-options="x for x in months">
+								</select>
+							</div>
+							<div class="col-lg-5">
+								<label for="sel2"> YY: </label> <input type="text"
+									data-ng-model="fromYear" style="width: inherit"><br>
+							</div>
+						</div>
+						<div class="row" style="margin-bottom: 5px;">
+							<div class="col-lg-2">To:</div>
+							<div class="col-lg-5">
+								<label for="sel3">MM:</label> <select data-ng-model="toMonth"
+									ng-options="x for x in months">
+								</select>
+							</div>
+							<div class="col-lg-5">
+								<label for="sel4"> YY: </label> <input type="text"
+									data-ng-model="toYear" style="width: inherit">
+							</div>
+						</div>
+						<div class="row">
+							<button type="button" class="btn btn-primary"
+								ng-click="getSalesByZipcode();" style="margin-left: 15px;">GO</button>
+						</div>
+					</div>
+
+					<div class="col-lg-9">
+						<canvas id="pie" class="chart chart-pie" height="{{pieHeight}}"
+							width="{{pieWidth}}" ng-if="salesZipcodeData != undefined"
+							chart-data="salesZipcodeData" chart-labels="salesZipcodeLabels"
+							style="width: 400px; height: 400px;">
+				</canvas>
+						<div ng-if="salesZipcodeData == undefined">Nothing Selected</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<br />
+		<div class="panel panel-primary">
+			<div class="panel-heading">Price Statistics based on Zipcode</div>
+			<div class="panel-body">
+				<div class="col-md-12">
+					<canvas id="bar" class="chart chart-bar" chart-data="barChartData"
+						chart-labels="barChartLabels" chart-series="barChartSeries">
+				</canvas>
+				</div>
+			</div>
+		</div>
+		<br />
+		<div class="panel panel-primary">
+			<div class="panel-heading">Top Searched House Properties</div>
+			<div class="panel-body">
+				<div class="col-md-12">
+					<canvas id="radar" class="chart chart-radar" height="{{pieHeight}}"
+						width="{{pieWidth}}" chart-data="topSearchedHouses"
+						chart-labels="topFiveHousePorpertieslabels"></canvas>
+				</div>
+			</div>
+		</div>
+		<br />
+		<div class="panel panel-primary">
+			<div class="panel-heading">Top Seller Details</div>
+			<div class="panel-body">
+				<div class="col-md-3 row-middle">
+					Zipcode: <input type="number" data-ng-model="sellerZipCode">
+					<button type="button" class="btn btn-primary"
+						ng-click="topSellersOnZipCode()">GO</button>
+				</div>
+				<div class="col-md-9">
+					<div ng-show="topSellers.length == 0" style="text-align: center;">No
+						Records Found</div>
+					<table class="table table-bordered"
+						ng-show="topSellers !=null && topSellers != undefined && topSellers.length > 0">
+						<thead>
+							<tr>
+								<th>FirstName</th>
+								<th>LastName</th>
+								<th>Email</th>
+								<th>Phone Number</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="x in topSellers">
+								<td>{{ x.firstName }}</td>
+								<td>{{ x.lastName }}</td>
+								<td>{{ x.emailId}}</td>
+								<td>{{ x.phoneNumber}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
